@@ -36,4 +36,8 @@ class JasonerImplTest {
         assertTrue(Objects.deepEquals(demoPojo2, obj));
     }
 
+    @Test
+    void should_serialize_and_deserialize_plan_with_pojo() {
+
+    }
 }

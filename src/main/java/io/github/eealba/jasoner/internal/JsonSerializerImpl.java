@@ -14,6 +14,7 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerConfig;
+import io.github.eealba.jasoner.SerializationStrategy;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -79,20 +80,21 @@ class JsonSerializerImpl implements JsonSerializer {
     private void json(Object entity, Writer writer, int indent) throws IOException {
         writer.append('{');
         appendNewLine(writer);
-
-        var valueDataList = new java.util.ArrayList<>(Reflects.getGetterMethods(entity, config.modifierStrategy())
-                .stream()
-                .map((Method method) -> new ValueData(entity, method, null))
-                .toList());
-
-        var fields = Reflects.getFields(entity, config.modifierStrategy())
-                .stream()
-                .filter(fieldPredicate(valueDataList))
-                .map((Field field) -> new ValueData(entity, null, field))
-                .toList();
-
-        valueDataList.addAll(fields);
-
+        var valueDataList = new java.util.ArrayList<ValueData>();
+        if (config.serializationStrategy() == SerializationStrategy.BOTH
+                || config.serializationStrategy() == SerializationStrategy.METHOD) {
+            valueDataList.addAll(Reflects.getGetterMethods(entity, config.modifierStrategy())
+                    .stream()
+                    .map((Method method) -> new ValueData(entity, method, null))
+                    .toList());
+        }
+        if (config.serializationStrategy() == SerializationStrategy.BOTH
+                || config.serializationStrategy() == SerializationStrategy.FIELD) {
+            valueDataList.addAll(Reflects.getFields(entity, config.modifierStrategy())
+                    .stream()
+                    .map((Field field) -> new ValueData(entity, null, field))
+                    .toList());
+        }
         serializeValueData(valueDataList, writer, indent);
 
         appendNewLine(writer);
@@ -100,18 +102,6 @@ class JsonSerializerImpl implements JsonSerializer {
         writer.append('}');
     }
 
-    private Predicate<Field> fieldPredicate(List<ValueData> valueDataList) {
-        return (Field f) -> {
-            boolean found = false;
-            for (ValueData valueData : valueDataList) {
-                if (removePrefix(valueData.getName()).equals(f.getName())) {
-                    found = true;
-                    break;
-                }
-            }
-            return !found;
-        };
-    }
 
     private void serializeValueData(List<ValueData> valueDataList, Writer writer, int indent) throws IOException {
         for (int i = 0; i < valueDataList.size(); i++) {

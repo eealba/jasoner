@@ -16,31 +16,41 @@ package io.github.eealba.jasoner;
 import java.io.Serial;
 
 /**
- * The type Provider not found exception.
+ * The type Json exception.
  * This class is used to handle exceptions in the Jasoner library.
  * @author Edgar Alba
  */
-public class ProviderNotFoundException extends RuntimeException {
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class JasonerException extends RuntimeException {
+
+	@Serial
+	private static final long serialVersionUID = 5997360855269832676L;
 
     /**
-     * Instantiates a new Provider not found exception.
+     * Instantiates a new Json exception.
      *
-     * @param providerName the provider name
+     * @param s the s
+     * @param x the x
      */
-    public ProviderNotFoundException(String providerName) {
-        super("Provider for " + providerName + " not found");
-    }
+    public JasonerException(String s, Throwable x) {
+		super(s, x);
+	}
 
     /**
-     * Instantiates a new Provider not found exception.
+     * Instantiates a new Json exception.
      *
-     * @param providerName the provider name
-     * @param x            the x
+     * @param s the s
      */
-    public ProviderNotFoundException(String providerName, Exception x) {
-        super("Provider for " + providerName + " not found", x);
-    }
+    public JasonerException(String s) {
+		super(s);
+	}
+
+    /**
+     * Instantiates a new Json exception.
+     *
+     * @param x the x
+     */
+    public JasonerException(Throwable x) {
+		super(x);
+	}
 
 }

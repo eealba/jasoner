@@ -1,6 +1,6 @@
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.JsonException;
+import io.github.eealba.jasoner.JasonerException;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.NamingStrategy;
 
@@ -29,7 +29,6 @@ class Reflects {
     private static final Predicate<Method> publicMethod = (Method method) -> Modifier.isPublic(method.getModifiers());
     private static final Predicate<Method> protectedMethod = (Method method) -> Modifier.isProtected(method.getModifiers());
     private static final Predicate<Method> privateMethod = (Method method) -> Modifier.isPrivate(method.getModifiers());
-    private static final Predicate<Method> packageMethod = publicMethod.and(protectedMethod).and(privateMethod).negate();
 
     private static final Predicate<Method> onceParameterMethod = (Method method) -> method.getParameterCount() == 1;
     private static final Predicate<Method> noParameterMethod = (Method method) -> method.getParameterCount() == 0;
@@ -134,7 +133,7 @@ class Reflects {
             try {
                 field.set(entity, value);
             } catch (IllegalAccessException e) {
-                throw new JsonException(e);
+                throw new JasonerException(e);
             }
         }
     }
@@ -155,7 +154,7 @@ class Reflects {
                 try {
                     return clazz.cast(c.newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    throw new JsonException(e);
+                    throw new JasonerException(e);
                 }
 
             }
@@ -167,10 +166,10 @@ class Reflects {
             if (method.trySetAccessible()){
                 return method.invoke(obj, args);
             }else{
-                throw new JsonException(String.format("The method '%s' is not accessible", method.getName()));
+                throw new JasonerException(String.format("The method '%s' is not accessible", method.getName()));
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-           return  new JsonException(e);
+           return  new JasonerException(e);
         }
     }
     static Object invokeMethod(Method method, Object obj) {
@@ -225,7 +224,7 @@ class Reflects {
                 try {
                     clazz = Class.forName(str.substring(p0 + 1, p1));
                 } catch (ClassNotFoundException e) {
-                    throw new JsonException(e);
+                    throw new JasonerException(e);
                 }
             }
 
@@ -259,7 +258,7 @@ class Reflects {
             try {
                 return Optional.of(clazz.cast(constructor.newInstance(values.toArray())));
             } catch (Exception e) {
-                throw new JsonException(e);
+                throw new JasonerException(e);
             }
         }
         throw new IllegalArgumentException(String.format("The constructor of the record class: '%s' is not accessible",

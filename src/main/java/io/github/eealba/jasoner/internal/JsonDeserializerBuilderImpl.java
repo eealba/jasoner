@@ -1,8 +1,5 @@
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.JsonDeserializer;
-import io.github.eealba.jasoner.JsonDeserializerBuilder;
-
 class JsonDeserializerBuilderImpl implements JsonDeserializerBuilder {
 
     @Override

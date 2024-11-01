@@ -1,6 +1,5 @@
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.Token;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

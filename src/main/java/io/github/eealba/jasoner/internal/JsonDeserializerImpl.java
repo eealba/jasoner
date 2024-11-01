@@ -1,11 +1,19 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.Json;
-import io.github.eealba.jasoner.JsonDeserializer;
-import io.github.eealba.jasoner.JsonException;
-import io.github.eealba.jasoner.JsonTokenizer;
-import io.github.eealba.jasoner.Token;
-import io.github.eealba.jasoner.TokenType;
+import io.github.eealba.jasoner.JasonerException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +21,8 @@ import java.util.List;
 
 /**
  * The type Json deserializer.
+ * This class is used to deserialize a JSON string to an object.
+ * @author Edgar Alba
  */
 class JsonDeserializerImpl implements JsonDeserializer {
 	/**
@@ -32,7 +42,7 @@ class JsonDeserializerImpl implements JsonDeserializer {
 	 */
 	@Override
 	public <T> T deserialize(String data, Class<T> clazz) {
-		JsonTokenizer tokenizer = Json.createTokenizer(data);
+		JsonTokenizer tokenizer = new JsonTokenizerImpl(data);
 		expectedToken(tokenizer.next(), TokenType.OBJECT_START);
 		return createObject(clazz, tokenizer);
 	}
@@ -154,10 +164,10 @@ class JsonDeserializerImpl implements JsonDeserializer {
 	 */
 	private static Token expectedToken(Token token, TokenType expected) {
 		if (token == null) {
-			throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, "null"));
+			throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, "null"));
 		}
 		if (token.type() != expected) {
-			throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+			throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
 		}
 		return token;
 	}
@@ -170,12 +180,12 @@ class JsonDeserializerImpl implements JsonDeserializer {
 	 */
 	private static Token expectedTokenValue(Token token) {
 		if (token == null) {
-			throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, "null"));
+			throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, "null"));
 		}
 		if (!(token.type() == TokenType.TEXT || token.type() == TokenType.NUMBER || token.type() == TokenType.TRUE
 				|| token.type() == TokenType.FALSE || token.type() == TokenType.NULL
 				|| token.type() == TokenType.ARRAY_START || token.type() == TokenType.OBJECT_START)) {
-			throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+			throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
 		}
 		return token;
 	}

@@ -11,17 +11,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.github.eealba.jasoner.internal;
 
-package io.github.eealba.jasoner;
 /**
- * The type Jasoner builder.
+ * The interface Json deserializer builder.
  * @author Edgar Alba
+ *
  */
-public class JasonerBuilder {
-    public static Jasoner create(){
-        return create(new JasonerConfig.Builder().build());
-    }
-    public static Jasoner create(JasonerConfig config){
-        return JasonerProvider.provider().createJasoner(config);
-    }
+interface JsonDeserializerBuilder {
+
+    /**
+     * Build json deserializer.
+     *
+     * @return the json deserializer
+     */
+    JsonDeserializer build();
+
+
+
+
 }

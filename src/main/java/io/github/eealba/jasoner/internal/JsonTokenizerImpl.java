@@ -1,6 +1,4 @@
 package io.github.eealba.jasoner.internal;
-import io.github.eealba.jasoner.JsonTokenizer;
-import io.github.eealba.jasoner.Token;
 
 import java.util.List;
 

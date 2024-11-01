@@ -1,3 +1,17 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.eealba.jasoner;
 
 import java.lang.reflect.Constructor;
@@ -10,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The type Providers.
  *
- * @author Edgar Enrique Alba Barrile (eealba@gmail.com)
+ * @author Edgar Alba
  */
 public class Providers {
     private static final Map<String, Object> providers = new ConcurrentHashMap<>();
@@ -47,7 +61,7 @@ public class Providers {
             for (Constructor<?> c : constructors) {
                 if (c.getParameterCount() == 0) {
                     c.setAccessible(true);
-                    providerImpl = provider.cast(c.newInstance(new Object[0]));
+                    providerImpl = provider.cast(c.newInstance());
                     providers.put(provider.getName(), providerImpl);
                     return providerImpl;
                 }

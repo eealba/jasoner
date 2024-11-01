@@ -1,9 +1,7 @@
 package io.github.eealba.jasoner.internal;
 
 
-import io.github.eealba.jasoner.JsonException;
-import io.github.eealba.jasoner.Token;
-import io.github.eealba.jasoner.TokenType;
+import io.github.eealba.jasoner.JasonerException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,19 +49,19 @@ class Tokenizer {
 					validateTokenWithPrevious(token, res.get(res.size() - 1));
 				} else {
 					if (token.type() != TokenType.ARRAY_START && token.type() != TokenType.OBJECT_START) {
-						throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+						throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
 
 					}
 				}
 				res.add(token);
 			}
 		} catch (IOException e) {
-			throw new JsonException(e);
+			throw new JasonerException(e);
 		}
 		if (countObjectToken > 0) {
-			throw new JsonException(String.format(ERROR_EXPECTED_TOKEN, "}"));
+			throw new JasonerException(String.format(ERROR_EXPECTED_TOKEN, "}"));
 		} else if (countObjectToken < 0) {
-			throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, "}"));
+			throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, "}"));
 		}
 
 		return Collections.unmodifiableList(res);
@@ -82,23 +80,23 @@ class Tokenizer {
 		switch (token.type()) {
 		case ARRAY_START:
 			if (previous.type() != TokenType.COLON && previous.type() != TokenType.COMMA) {
-				throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+				throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
 			}
 			break;
 		case OBJECT_START:
 			if (previous.type() != TokenType.COLON && previous.type() != TokenType.COMMA
 					&& previous.type() != TokenType.ARRAY_START) {
-				throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+				throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
 			}
 			break;
 		case COMMA:
 			if (previous.type() == TokenType.OBJECT_START || token.type() == TokenType.ARRAY_START) {
-				throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+				throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
 			}
 			break;
 		case COLON:
 			if (previous.type() != TokenType.TEXT) {
-				throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+				throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
 			}
 			break;
 
@@ -115,7 +113,7 @@ class Tokenizer {
 		unRead();
 		char _ch = readChar();
 		if (res.isEmpty() && _ch != '{' && _ch != '[') {
-			throw new JsonException(String.format(ERROR_UNEXPECTED_TOKEN, _ch));
+			throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, _ch));
 		}
 
 		switch (_ch) {
@@ -125,7 +123,7 @@ class Tokenizer {
 		case '}':
 			countObjectToken--;
 			if (countObjectToken < 0) {
-				throw new JsonException(String.format(ERROR_UNEXPECTED_CHARACTER, _ch, pos));
+				throw new JasonerException(String.format(ERROR_UNEXPECTED_CHARACTER, _ch, pos));
 			}
 			return TokenImpl.OBJECT_END;
 		case '[':
@@ -134,7 +132,7 @@ class Tokenizer {
 		case ']':
 			countArrayToken--;
 			if (countArrayToken < 0) {
-				throw new JsonException(String.format(ERROR_UNEXPECTED_CHARACTER, _ch, pos));
+				throw new JasonerException(String.format(ERROR_UNEXPECTED_CHARACTER, _ch, pos));
 			}
 			return TokenImpl.ARRAY_END;
 		case ',':
@@ -166,7 +164,7 @@ class Tokenizer {
 		case '"':
 			return stringToken();
 		}
-		throw new JsonException(String.format(ERROR_UNEXPECTED_CHARACTER, _ch, pos));
+		throw new JasonerException(String.format(ERROR_UNEXPECTED_CHARACTER, _ch, pos));
 	}
 
 	private void whitespaces() {
@@ -192,7 +190,7 @@ class Tokenizer {
 	private char readChar() {
 		read();
 		if (ch == EOF)
-			throw new JsonException("Unexpected end of file");
+			throw new JasonerException("Unexpected end of file");
 		return (char) ch;
 
 	}
@@ -212,7 +210,7 @@ class Tokenizer {
 			return token;
 
 		}
-		throw new JsonException("Error, Expected token " + val + " but got " + val);
+		throw new JasonerException("Error, Expected token " + val + " but got " + val);
 
 	}
 
@@ -224,8 +222,8 @@ class Tokenizer {
 			char ch = readChar();
 			switch (ch) {
 			case '+':
-				if (buff.length() > 0) {
-					throw new JsonException(String.format(ERROR_UNEXPECTED_CHARACTER, ch, pos));
+				if (!buff.isEmpty()) {
+					throw new JasonerException(String.format(ERROR_UNEXPECTED_CHARACTER, ch, pos));
 				}
 				break;
 			case '-':
@@ -239,14 +237,14 @@ class Tokenizer {
 			case '7':
 			case '8':
 			case '9':
-				if (buff.length() > 0 && ch == '-') {
-					throw new JsonException(String.format(ERROR_UNEXPECTED_CHARACTER, ch, pos));
+				if (!buff.isEmpty() && ch == '-') {
+					throw new JasonerException(String.format(ERROR_UNEXPECTED_CHARACTER, ch, pos));
 				}
 				buff.append(ch);
 				break;
 			case '.':
 				if (exp || buff.indexOf(".") != -1) {
-					throw new JsonException(String.format(ERROR_UNEXPECTED_CHARACTER, ch, pos));
+					throw new JasonerException(String.format(ERROR_UNEXPECTED_CHARACTER, ch, pos));
 				}
 				buff.append(ch);
 				break;

@@ -11,17 +11,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.github.eealba.jasoner.internal;
 
-package io.github.eealba.jasoner;
+import java.nio.charset.StandardCharsets;
+
 /**
- * The type Jasoner builder.
+ * The interface Json serializer.
+ * This interface is used to serialize an object to a JSON string.
  * @author Edgar Alba
  */
-public class JasonerBuilder {
-    public static Jasoner create(){
-        return create(new JasonerConfig.Builder().build());
-    }
-    public static Jasoner create(JasonerConfig config){
-        return JasonerProvider.provider().createJasoner(config);
-    }
+interface JsonSerializer {
+
+    /**
+     * Serialize string.
+     *
+     * @param obj the obj
+     * @return the string
+     */
+    String serialize(Object obj);
+
+    /**
+     * Serialize to byte array byte [ ].
+     *
+     * @param obj the obj
+     * @return the byte [ ]
+     */
+    default byte[] serializeToByteArray(Object obj) {
+		return serialize(obj).getBytes(StandardCharsets.UTF_8);
+	}
+
 }

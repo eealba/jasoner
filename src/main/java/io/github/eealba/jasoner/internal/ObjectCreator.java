@@ -1,7 +1,7 @@
 package io.github.eealba.jasoner.internal;
 
 
-import io.github.eealba.jasoner.JsonException;
+import io.github.eealba.jasoner.JasonerException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ class ObjectCreator<T> {
             obj = new HashMap<String, Object>();
         }else {
             obj = Reflects.createBuilder(clazz).orElseGet(() -> Reflects.createObject(clazz).orElseThrow(
-                    () -> new JsonException("Cannot create instance of " + clazz.getName())));
+                    () -> new JasonerException("Cannot create instance of " + clazz.getName())));
         }
     }
     private Optional<Map<String, Object>> getMap() {
@@ -77,7 +77,7 @@ class ObjectCreator<T> {
             return clazz.cast(obj);
         }
         return Reflects.createObjectFromBuilderInstance(obj, clazz)
-                .orElseThrow(() -> new JsonException("Cannot create instance of " + clazz.getName()));
+                .orElseThrow(() -> new JasonerException("Cannot create instance of " + clazz.getName()));
     }
 
 }

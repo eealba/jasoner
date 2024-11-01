@@ -16,26 +16,13 @@ package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.Jasoner;
 import io.github.eealba.jasoner.JasonerConfig;
-import io.github.eealba.jasoner.JsonDeserializerBuilder;
-import io.github.eealba.jasoner.JsonProvider;
-import io.github.eealba.jasoner.JsonSerializerBuilder;
-import io.github.eealba.jasoner.JsonTokenizer;
+import io.github.eealba.jasoner.JasonerProvider;
 
 /**
  * The type Json provider.
  * @author Edgar Alba
  */
-class JsonProviderImpl extends JsonProvider {
-
-	@Override
-	public JsonSerializerBuilder createSerializerBuilder() {
-		return new JsonSerializerBuilderImpl();
-	}
-
-	@Override
-	public JsonTokenizer createTokenizer(String data) {
-		return new JsonTokenizerImpl(data);
-	}
+class JasonerProviderImpl extends JasonerProvider {
 
 	/**
 	 * Create jasoner jasoner.
@@ -46,11 +33,6 @@ class JsonProviderImpl extends JsonProvider {
 	@Override
 	public Jasoner createJasoner(JasonerConfig config) {
 		return new JasonerImpl(config);
-	}
-
-	@Override
-	public JsonDeserializerBuilder createDeserializerBuilder() {
-		return new JsonDeserializerBuilderImpl();
 	}
 
 }

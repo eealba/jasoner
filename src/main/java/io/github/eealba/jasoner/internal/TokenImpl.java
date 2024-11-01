@@ -1,8 +1,6 @@
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.JsonException;
-import io.github.eealba.jasoner.Token;
-import io.github.eealba.jasoner.TokenType;
+import io.github.eealba.jasoner.JasonerException;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -68,7 +66,7 @@ class TokenImpl implements Token {
 			return Boolean.TRUE;
 		if (type == TokenType.FALSE)
 			return Boolean.FALSE;
-		throw new JsonException("Invalid value for token type: " + type);
+		throw new JasonerException("Invalid value for token type: " + type);
 	}
 
 	@Override
@@ -150,7 +148,7 @@ class TokenImpl implements Token {
 					return e;
 				}
 			}
-			throw new JsonException("Not found enum for: " + data);
+			throw new JasonerException("Not found enum for: " + data);
 
 		}
 		String name = ctype.getSimpleName();

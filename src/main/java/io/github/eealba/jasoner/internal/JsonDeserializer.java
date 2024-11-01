@@ -11,17 +11,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.github.eealba.jasoner.internal;
 
-package io.github.eealba.jasoner;
 /**
- * The type Jasoner builder.
+ * A deserializer receives a json String and converts it to a Java entity.
+ * This interface is used to deserialize a JSON string to an object.
  * @author Edgar Alba
+ *
  */
-public class JasonerBuilder {
-    public static Jasoner create(){
-        return create(new JasonerConfig.Builder().build());
-    }
-    public static Jasoner create(JasonerConfig config){
-        return JasonerProvider.provider().createJasoner(config);
-    }
+interface JsonDeserializer {
+    /**
+     * Returns an entity T from String
+     *
+     * @param data A String data
+     * @return Returns an entity T
+     */
+    <T> T deserialize(String data, Class<T> clazz);
+
 }

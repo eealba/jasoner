@@ -1,6 +1,6 @@
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.JsonException;
+import io.github.eealba.jasoner.JasonerException;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.demo.model1.DemoPojo;
 import org.junit.jupiter.api.Test;
@@ -180,7 +180,7 @@ class ReflectsTest {
         when(method.trySetAccessible()).thenReturn(false);
         when(method.invoke(any(), any())).thenReturn("Hola");
 
-        var res = assertThrows(JsonException.class, () -> Reflects.invokeMethod(method, "dummy",
+        var res = assertThrows(JasonerException.class, () -> Reflects.invokeMethod(method, "dummy",
                 new Object[]{"Pepe"}));
 
         assertEquals("The method 'name' is not accessible", res.getMessage());
@@ -203,7 +203,7 @@ class ReflectsTest {
         when(method.trySetAccessible()).thenReturn(false);
         when(method.invoke(any())).thenReturn("Hola");
 
-        var res = assertThrows(JsonException.class, () -> Reflects.invokeMethod(method, "dummy"));
+        var res = assertThrows(JasonerException.class, () -> Reflects.invokeMethod(method, "dummy"));
 
         assertEquals("The method 'name' is not accessible", res.getMessage());
         verify(method, never()).invoke(any());

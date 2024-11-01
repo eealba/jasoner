@@ -1,6 +1,5 @@
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.JsonSerializer;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.PrefixAccessorStrategy;
 import io.github.eealba.jasoner.SerializationStrategy;

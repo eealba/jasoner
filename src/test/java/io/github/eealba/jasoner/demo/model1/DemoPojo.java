@@ -1,5 +1,7 @@
 package io.github.eealba.jasoner.demo.model1;
 
+import java.util.Objects;
+
 /**
  * The type Demo pojo.
  * For testing java modifier strategy enum (public, protected, package, private)
@@ -52,5 +54,18 @@ public class DemoPojo {
     public DemoPojo setAddress(String address) {
         this.address = address;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DemoPojo demoPojo = (DemoPojo) o;
+        return age == demoPojo.age && Objects.equals(name, demoPojo.name) && Objects.equals(lastName, demoPojo.lastName) && Objects.equals(address, demoPojo.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, lastName, age, address);
     }
 }

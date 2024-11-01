@@ -38,8 +38,17 @@ class Reflects {
     private static final Predicate<Method> noParameterMethod = (Method method) -> method.getParameterCount() == 0;
     private static final Predicate<Method> returnValueMethod = (Method method) -> method.getReturnType() != Void.TYPE;
 
+    private static final Predicate<Method> noOverridedObjectMethod = (Method method) -> {
+        return !(method.getName().equals("hashCode")
+                        || method.getName().equals("toString"));
+    };
+
+
     private static final Predicate<Method> setterMethod = instanceMethod.and(onceParameterMethod);
-    private static final Predicate<Method> getterMethod = instanceMethod.and(noParameterMethod).and(returnValueMethod);
+    private static final Predicate<Method> getterMethod = instanceMethod
+            .and(noParameterMethod)
+            .and(returnValueMethod)
+            .and(noOverridedObjectMethod);
 
     private static final BiPredicate<Parameter, String > hasParameterName = (Parameter p, String name) ->
             p.getName().equals(name)

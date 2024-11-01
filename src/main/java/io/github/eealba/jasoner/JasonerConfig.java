@@ -18,6 +18,16 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Configuration class for Jasoner.
+ * This class holds various configuration options for the Jasoner library.
+ * It includes settings for naming strategy, modifier strategy, charset, and more.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
+ * @see NamingStrategy
+ * @see ModifierStrategy
+ * @see SerializationStrategy
+ *
  * @author Edgar Alba
  */
 public class JasonerConfig {
@@ -87,15 +97,21 @@ public class JasonerConfig {
         return serializationStrategy;
     }
 
+    /**
+     * Checks if JSON should be pretty printed.
+     *
+     * @return true if JSON should be pretty printed, false otherwise
+     */
     public boolean pretty() {
         return pretty;
     }
 
     /**
      * Builder class for JasonerConfig.
+     * This class is used to build instances of JasonerConfig with custom settings.
      */
     public static class Builder {
-        public boolean pretty;
+        private boolean pretty;
         private NamingStrategy namingStrategy = NamingStrategy.NONE;
         private ModifierStrategy modifierStrategy = ModifierStrategy.PUBLIC;
         private boolean removePrefixAccessors = true;
@@ -156,6 +172,7 @@ public class JasonerConfig {
             this.serializationStrategy = serializationStrategy;
             return this;
         }
+
         /**
          * Sets whether to pretty print the JSON.
          *
@@ -166,6 +183,7 @@ public class JasonerConfig {
             this.pretty = pretty;
             return this;
         }
+
         /**
          * Builds the JasonerConfig.
          *

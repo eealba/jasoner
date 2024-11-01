@@ -12,17 +12,47 @@
  * limitations under the License.
  */
 package io.github.eealba.jasoner;
+
 /**
  * The enum Naming strategy.
  * This enum is used to define the naming strategy for the Jasoner library.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
  * @author Edgar Alba
  */
 public enum NamingStrategy {
-    NONE, LOWER_CASE, UPPER_CASE,
+    /**
+     * No naming strategy.
+     */
+    NONE,
+    /**
+     * Lower case naming strategy.
+     */
+    LOWER_CASE,
+    /**
+     * Upper case naming strategy.
+     */
+    UPPER_CASE,
+    /**
+     * Snake case naming strategy.
+     */
     SNAKE_CASE,
+    /**
+     * Upper snake case naming strategy.
+     */
     UPPER_SNAKE_CASE,
+    /**
+     * Kebab case naming strategy.
+     */
     KEBAB_CASE,
+    /**
+     * Upper kebab case naming strategy.
+     */
     UPPER_KEBAB_CASE,
+    /**
+     * Camel case naming strategy.
+     */
     CAMEL_CASE
-
 }

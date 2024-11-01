@@ -16,41 +16,48 @@ package io.github.eealba.jasoner;
 import java.io.Serial;
 
 /**
- * The type Json exception.
+ * The type JasonerException.
  * This class is used to handle exceptions in the Jasoner library.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
+ * @see RuntimeException
+ * @see Throwable
+ * @see Serial
+ *
  * @author Edgar Alba
  */
 public class JasonerException extends RuntimeException {
 
-	@Serial
-	private static final long serialVersionUID = 5997360855269832676L;
+    @Serial
+    private static final long serialVersionUID = 5997360855269832676L;
 
     /**
-     * Instantiates a new Json exception.
+     * Instantiates a new JasonerException with a message and a cause.
      *
-     * @param s the s
-     * @param x the x
+     * @param message the detail message
+     * @param cause the cause of the exception
      */
-    public JasonerException(String s, Throwable x) {
-		super(s, x);
-	}
+    public JasonerException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
     /**
-     * Instantiates a new Json exception.
+     * Instantiates a new JasonerException with a message.
      *
-     * @param s the s
+     * @param message the detail message
      */
-    public JasonerException(String s) {
-		super(s);
-	}
+    public JasonerException(String message) {
+        super(message);
+    }
 
     /**
-     * Instantiates a new Json exception.
+     * Instantiates a new JasonerException with a cause.
      *
-     * @param x the x
+     * @param cause the cause of the exception
      */
-    public JasonerException(Throwable x) {
-		super(x);
-	}
-
+    public JasonerException(Throwable cause) {
+        super(cause);
+    }
 }

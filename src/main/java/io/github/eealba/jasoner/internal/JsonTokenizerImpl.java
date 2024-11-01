@@ -1,9 +1,28 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.eealba.jasoner.internal;
 
 import java.util.List;
 
 /**
- * The type Json tokenizer.
+ * The class JsonTokenizerImpl.
+ * This class implements the JsonTokenizer interface to tokenize a JSON string.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
+ * @author Edgar Alba
  */
 class JsonTokenizerImpl implements JsonTokenizer {
     /**
@@ -16,18 +35,18 @@ class JsonTokenizerImpl implements JsonTokenizer {
     private int pos;
 
     /**
-     * Instantiates a new Json tokenizer.
+     * Instantiates a new JsonTokenizerImpl.
      *
-     * @param data the data
+     * @param data the JSON string to tokenize
      */
     JsonTokenizerImpl(String data) {
         tokens = new Tokenizer(data).tokens();
     }
 
     /**
-     * Next token.
+     * Gets the next token.
      *
-     * @return the token
+     * @return the next token
      */
     @Override
     public Token next() {
@@ -39,9 +58,9 @@ class JsonTokenizerImpl implements JsonTokenizer {
     }
 
     /**
-     * Current token.
+     * Gets the current token.
      *
-     * @return the token
+     * @return the current token
      */
     @Override
     public Token current() {
@@ -53,9 +72,9 @@ class JsonTokenizerImpl implements JsonTokenizer {
     }
 
     /**
-     * Has next boolean.
+     * Checks if there are more tokens.
      *
-     * @return the boolean
+     * @return true if there are more tokens, false otherwise
      */
     @Override
     public boolean hasNext() {
@@ -63,13 +82,12 @@ class JsonTokenizerImpl implements JsonTokenizer {
     }
 
     /**
-     * Tokens list.
+     * Gets the list of tokens.
      *
-     * @return the list
+     * @return the list of tokens
      */
     @Override
     public List<Token> tokens() {
         return tokens;
     }
-
 }

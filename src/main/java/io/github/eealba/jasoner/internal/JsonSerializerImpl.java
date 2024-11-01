@@ -24,21 +24,33 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * The type Json serializer.
- * This class is used to serialize an object to a JSON string.
+ * The class JsonSerializerImpl.
+ * This class implements the JsonSerializer interface to serialize an object to a JSON string.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
  * @author Edgar Alba
  */
 class JsonSerializerImpl implements JsonSerializer {
     private final JasonerConfig config;
+
     /**
-     * Instantiates a new Json serializer.
+     * Instantiates a new JsonSerializerImpl.
      *
-     * @param config the config
+     * @param config the configuration for the serializer
      */
     JsonSerializerImpl(JasonerConfig config) {
         this.config = Objects.requireNonNull(config);
     }
 
+    /**
+     * Serialize an object to a JSON string.
+     *
+     * @param writer the writer to write the JSON string to
+     * @param obj the object to serialize
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     public void serialize(Writer writer, Object obj) throws IOException {
         Objects.requireNonNull(writer);
@@ -79,11 +91,9 @@ class JsonSerializerImpl implements JsonSerializer {
                 .map((Field field) -> new ValueData(entity, null, field))
                 .toList();
 
-
         valueDataList.addAll(fields);
 
         serializeValueData(valueDataList, writer, indent);
-
 
         appendNewLine(writer);
         indent(writer, indent);
@@ -103,10 +113,8 @@ class JsonSerializerImpl implements JsonSerializer {
         };
     }
 
-
-    private void serializeValueData(List<ValueData> valueDataList, Writer writer, int indent)
-            throws IOException {
-        for(int i = 0; i < valueDataList.size(); i++) {
+    private void serializeValueData(List<ValueData> valueDataList, Writer writer, int indent) throws IOException {
+        for (int i = 0; i < valueDataList.size(); i++) {
             var valueData = valueDataList.get(i);
             var value = valueData.getValue();
             if (value != null) {
@@ -117,7 +125,6 @@ class JsonSerializerImpl implements JsonSerializer {
                     writer.append(',');
                 }
                 appendNewLine(writer);
-
             }
         }
     }
@@ -131,19 +138,17 @@ class JsonSerializerImpl implements JsonSerializer {
         }
     }
 
-
     private void propertyName(Writer writer, String name) throws IOException {
         writer.append("\"");
         writer.append(NamingFactory.get(config.namingStrategy()).apply(removePrefix(name)));
         writer.append("\": ");
-
     }
 
     /**
-     * Remove prefix string.
+     * Remove prefix from the given name.
      *
-     * @param name the name
-     * @return the string
+     * @param name the name to remove the prefix from
+     * @return the name without the prefix
      */
     public String removePrefix(String name) {
         Objects.requireNonNull(name);
@@ -155,16 +160,16 @@ class JsonSerializerImpl implements JsonSerializer {
             if (lowercase.startsWith("has") || lowercase.startsWith("get")) {
                 return name.substring(3);
             }
-
         }
         return name;
     }
-    void propertyValue(Writer writer, Object value, int indent) throws IOException {
+
+    private void propertyValue(Writer writer, Object value, int indent) throws IOException {
         boolean quotes = needQuotes(value);
         if (quotes) {
             writer.append("\"");
         }
-        if (value.getClass().isArray()){
+        if (value.getClass().isArray()) {
             value = List.of((Object[]) value);
         }
         if (value instanceof List<?> list) {
@@ -178,7 +183,6 @@ class JsonSerializerImpl implements JsonSerializer {
         if (quotes) {
             writer.append("\"");
         }
-
     }
 
     private boolean needQuotes(Object value) {
@@ -192,7 +196,6 @@ class JsonSerializerImpl implements JsonSerializer {
                 || value.getClass().isArray() || !classIgnoredForSerialization(value.getClass())) {
             com = false;
         }
-
         return com;
     }
 
@@ -202,11 +205,14 @@ class JsonSerializerImpl implements JsonSerializer {
         }
     }
 
-
-
     private boolean classIgnoredForSerialization(Class<?> clazz) {
         return clazz.getName().startsWith("java");
     }
+
+    /**
+     * The type ValueData.
+     * This class holds the value data for serialization.
+     */
     static class ValueData {
         private final Method method;
         private final Field field;
@@ -218,6 +224,11 @@ class JsonSerializerImpl implements JsonSerializer {
             this.entity = entity;
         }
 
+        /**
+         * Gets the value of the field or method.
+         *
+         * @return the value
+         */
         Object getValue() {
             if (method != null) {
                 return Reflects.invokeMethod(method, entity);
@@ -228,6 +239,11 @@ class JsonSerializerImpl implements JsonSerializer {
             return null;
         }
 
+        /**
+         * Gets the name of the field or method.
+         *
+         * @return the name
+         */
         String getName() {
             if (method != null) {
                 return method.getName();
@@ -238,6 +254,4 @@ class JsonSerializerImpl implements JsonSerializer {
             return null;
         }
     }
-
-
 }

@@ -130,6 +130,14 @@ class ReflectsTest {
     }
 
     @Test
+    void should_return_field_value() {
+        var demoPojo = DemoPojo.joeDoe();
+        var field = Reflects.getField(demoPojo, "name");
+
+        assertEquals("John", Reflects.getFieldValue(field.orElseThrow(), demoPojo));
+    }
+
+    @Test
     void should_return_parameter_class2() {
         var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var clazz = Reflects.getSetterMethodParameterClass(plan, "billing_cycles");

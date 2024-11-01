@@ -10,7 +10,7 @@ public class DemoPojo {
     int age;
     public String address;
 
-    public static DemoPojo JoeDoe() {
+    public static DemoPojo joeDoe() {
         return new DemoPojo()
                 .setName("John")
                 .setLastName("Doe")
@@ -22,7 +22,7 @@ public class DemoPojo {
         return name;
     }
 
-    private DemoPojo setName(String name) {
+    DemoPojo setName(String name) {
         this.name = name;
         return this;
     }

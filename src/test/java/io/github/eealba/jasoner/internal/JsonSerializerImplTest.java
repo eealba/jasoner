@@ -5,12 +5,16 @@ import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.NamingStrategy;
 import io.github.eealba.jasoner.SerializationStrategy;
 import io.github.eealba.jasoner.demo.model1.DemoPojo;
+import io.github.eealba.jasoner.demo.model1.DemoPojo2;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 
 class JsonSerializerImplTest {
+    private static final String JSON_DEMO_POJO2_ALL = """
+            {"name":"John","lastName":"Doe","age":30,"address":"New York", "address2":"New Jersey", "profession":"Developer"}""";
+
     private static final String JSON_ALL = """
             {"name":"John","lastName":"Doe","age":30,"address":"New York"}""";
     private static final String JSON_PACKAGE = """
@@ -22,8 +26,8 @@ class JsonSerializerImplTest {
     private static final String JSON_ALL_SNAKE_CASE = """
             {"name":"John","last_name":"Doe","age":30,"address":"New York"}""";
 
-    private final DemoPojo demoPojo = DemoPojo.JoeDoe();
-
+    private final DemoPojo demoPojo = DemoPojo.joeDoe();
+    private final DemoPojo demoPojo2 = DemoPojo2.joeDoe2();
     private static final JsonSerializer privateJsonSerializer = new JsonSerializerImpl(new JasonerConfig.Builder()
             .serializationStrategy(SerializationStrategy.METHOD)
             .modifierStrategy(ModifierStrategy.PRIVATE)
@@ -70,30 +74,45 @@ class JsonSerializerImplTest {
             .build());
 
     @Test
-    void should_serialize_object() throws JSONException {
-        JSONAssert.assertEquals(JSON_ALL, privateJsonSerializer.serialize(demoPojo), true);
+    void should_serialize_object() {
+        jsonAssertEquals(JSON_ALL, privateJsonSerializer.serialize(demoPojo));
     }
     @Test
-    void should_serialize_object_snake_case() throws JSONException {
-        JSONAssert.assertEquals(JSON_ALL_SNAKE_CASE, privateSnakeCaseJsonSerializer.serialize(demoPojo), true);
-    }
-    @Test
-    void should_serialize_object_pretty() throws JSONException {
-        JSONAssert.assertEquals(JSON_ALL, privatePrettyJsonSerializer.serialize(demoPojo), true);
+    void should_serialize_demo_pojo2() {
+        jsonAssertEquals(JSON_DEMO_POJO2_ALL, privateJsonSerializer.serialize(demoPojo2));
     }
 
     @Test
-    void should_serialize_object_with_modifier_protected() throws JSONException {
-        JSONAssert.assertEquals(JSON_PROTECTED, protectedJsonSerializer.serialize(demoPojo), true);
+    void should_serialize_object_snake_case() {
+        jsonAssertEquals(JSON_ALL_SNAKE_CASE, privateSnakeCaseJsonSerializer.serialize(demoPojo));
+    }
+    @Test
+    void should_serialize_object_pretty() {
+        jsonAssertEquals(JSON_ALL, privatePrettyJsonSerializer.serialize(demoPojo));
     }
 
     @Test
-    void should_serialize_object_with_modifier_package() throws JSONException {
-        JSONAssert.assertEquals(JSON_PACKAGE, packageJsonSerializer.serialize(demoPojo), true);
+    void should_serialize_object_with_modifier_protected() {
+        jsonAssertEquals(JSON_PROTECTED, protectedJsonSerializer.serialize(demoPojo));
+    }
+
+    @Test
+    void should_serialize_object_with_modifier_package() {
+        jsonAssertEquals(JSON_PACKAGE, packageJsonSerializer.serialize(demoPojo));
     }
     @Test
-    void should_serialize_object_with_modifier_public() throws JSONException {
-        JSONAssert.assertEquals(JSON_PUBLIC, publicJsonSerializer.serialize(demoPojo), true);
+    void should_serialize_object_with_modifier_public()  {
+        jsonAssertEquals(JSON_PUBLIC, publicJsonSerializer.serialize(demoPojo));
+    }
+    void jsonAssertEquals(String jsonExpected, String jsonActual) {
+        try {
+            System.out.println("Expected: " + jsonExpected);
+            System.out.println("Actual: " + jsonActual);
+            JSONAssert.assertEquals(jsonExpected, jsonActual, true);
+        } catch (JSONException e) {
+            throw new AssertionError(e);
+        }
+        
     }
 
 }

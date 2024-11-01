@@ -14,13 +14,15 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerConfig;
-import io.github.eealba.jasoner.SerializationStrategy;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
+
 /**
  * The type Json serializer.
  * This class is used to serialize an object to a JSON string.
@@ -34,7 +36,7 @@ class JsonSerializerImpl implements JsonSerializer {
      * @param config the config
      */
     JsonSerializerImpl(JasonerConfig config) {
-        this.config = config;
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -65,24 +67,53 @@ class JsonSerializerImpl implements JsonSerializer {
     private void json(Object entity, Writer writer, int indent) throws IOException {
         writer.append('{');
         appendNewLine(writer);
-        if (config.serializationStrategy() == SerializationStrategy.METHOD) {
-            serializeWithMethods(entity, writer, indent);
-        }
+
+        var valueDataList = new java.util.ArrayList<>(Reflects.getGetterMethods(entity, config.modifierStrategy())
+                .stream()
+                .map((Method method) -> new ValueData(entity, method, null))
+                .toList());
+
+        var fields = Reflects.getFields(entity, config.modifierStrategy())
+                .stream()
+                .filter(fieldPredicate(valueDataList))
+                .map((Field field) -> new ValueData(entity, null, field))
+                .toList();
+
+
+        valueDataList.addAll(fields);
+
+        serializeValueData(valueDataList, writer, indent);
+
+
         appendNewLine(writer);
         indent(writer, indent);
         writer.append('}');
     }
 
-    private void serializeWithMethods(Object entity, Writer writer, int indent) throws IOException {
-        List<Method> methods = Reflects.getGetterMethods(entity, config.modifierStrategy());
-        for(int i = 0; i < methods.size(); i++) {
-            var method = methods.get(i);
-            Object value = Reflects.invokeMethod( method, entity);
+    private Predicate<Field> fieldPredicate(List<ValueData> valueDataList) {
+        return (Field f) -> {
+            boolean found = false;
+            for (ValueData valueData : valueDataList) {
+                if (removePrefix(valueData.getName()).equals(f.getName())) {
+                    found = true;
+                    break;
+                }
+            }
+            return !found;
+        };
+    }
+
+
+    private void serializeValueData(List<ValueData> valueDataList, Writer writer, int indent)
+            throws IOException {
+        for(int i = 0; i < valueDataList.size(); i++) {
+            var valueData = valueDataList.get(i);
+            var value = valueData.getValue();
             if (value != null) {
                 indent(writer, indent);
-                propertyName(writer, method.getName());
+                propertyName(writer, valueData.getName());
                 propertyValue(writer, value, indent);
-                if (i < methods.size() - 1) {
+                if (i < valueDataList.size() - 1) {
                     writer.append(',');
                 }
                 appendNewLine(writer);
@@ -133,20 +164,11 @@ class JsonSerializerImpl implements JsonSerializer {
         if (quotes) {
             writer.append("\"");
         }
-        if (value instanceof List<?> list) { // TODO procesar Arrays tb || value.getClass().isArray()
-            writer.append("[");
-            for (int i = 0; i < list.size(); i++) {
-                Object obj = list.get(i);
-                if (obj != null) {
-                    if (i > 0) {
-                        writer.append(',');
-                        appendNewLine(writer);
-                    }
-                    propertyValue(writer, obj, indent);
-                }
-            }
-            writer.append(']');
-
+        if (value.getClass().isArray()){
+            value = List.of((Object[]) value);
+        }
+        if (value instanceof List<?> list) {
+            jsonArray(list, writer);
         } else if (value.getClass().isEnum() || classIgnoredForSerialization(value.getClass())) {
             String _value = value.toString();
             writer.append(_value);
@@ -182,8 +204,39 @@ class JsonSerializerImpl implements JsonSerializer {
 
 
 
-    private boolean classIgnoredForSerialization(Class<?> clase) {
-        return clase.getName().startsWith("java");
+    private boolean classIgnoredForSerialization(Class<?> clazz) {
+        return clazz.getName().startsWith("java");
+    }
+    static class ValueData {
+        private final Method method;
+        private final Field field;
+        private final Object entity;
+
+        private ValueData(Object entity, Method method, Field field) {
+            this.method = method;
+            this.field = field;
+            this.entity = entity;
+        }
+
+        Object getValue() {
+            if (method != null) {
+                return Reflects.invokeMethod(method, entity);
+            }
+            if (field != null) {
+                return Reflects.getFieldValue(field, entity);
+            }
+            return null;
+        }
+
+        String getName() {
+            if (method != null) {
+                return method.getName();
+            }
+            if (field != null) {
+                return field.getName();
+            }
+            return null;
+        }
     }
 
 

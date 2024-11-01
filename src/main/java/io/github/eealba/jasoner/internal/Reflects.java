@@ -30,6 +30,10 @@ class Reflects {
     private static final Predicate<Method> protectedMethod = (Method method) -> Modifier.isProtected(method.getModifiers());
     private static final Predicate<Method> privateMethod = (Method method) -> Modifier.isPrivate(method.getModifiers());
 
+    private static final Predicate<Field> publicField = (Field field) -> Modifier.isPublic(field.getModifiers());
+    private static final Predicate<Field> protectedField = (Field field) -> Modifier.isProtected(field.getModifiers());
+    private static final Predicate<Field> privateField = (Field field) -> Modifier.isPrivate(field.getModifiers());
+
     private static final Predicate<Method> onceParameterMethod = (Method method) -> method.getParameterCount() == 1;
     private static final Predicate<Method> noParameterMethod = (Method method) -> method.getParameterCount() == 0;
     private static final Predicate<Method> returnValueMethod = (Method method) -> method.getReturnType() != Void.TYPE;
@@ -112,9 +116,34 @@ class Reflects {
      * @return the fields
      */
     static List<Field> getFields(Object entity) {
-        Field[] methods = entity.getClass().getDeclaredFields();
-        return Arrays.asList(methods);
+        return getAllFields(new ArrayList<>(), entity.getClass());
     }
+    public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
+        fields.addAll(Arrays.asList(type.getDeclaredFields()));
+
+        if (type.getSuperclass() != null) {
+            getAllFields(fields, type.getSuperclass());
+        }
+
+        return fields;
+    }
+
+    static List<Field> getFields(Object entity, ModifierStrategy modifierStrategy) {
+        var fields = getFields(entity);
+        Predicate<Field> predicate = f -> true;
+        if (modifierStrategy == ModifierStrategy.PUBLIC) {
+            predicate = predicate.and(publicField);
+        }
+        if (modifierStrategy == ModifierStrategy.PROTECTED) {
+            predicate = predicate.and(publicField.or(protectedField));
+        }
+        if (modifierStrategy == ModifierStrategy.PACKAGE) {
+            predicate = predicate.and(privateField.negate());
+        }
+
+        return fields.stream().filter(predicate).toList();
+    }
+
     static Optional<Field> getField(Object entity, String name) {
 
         return getFields(entity).stream()
@@ -290,4 +319,14 @@ class Reflects {
     }
 
 
+    public static Object getFieldValue(Field field, Object source) {
+        if (field.trySetAccessible()){
+            try {
+                return field.get(source);
+            } catch (IllegalAccessException e) {
+                throw new JasonerException(e);
+            }
+        }
+        return null;
+    }
 }

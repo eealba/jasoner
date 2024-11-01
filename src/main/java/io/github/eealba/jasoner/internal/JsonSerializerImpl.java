@@ -4,6 +4,8 @@ import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.PrefixAccessorStrategy;
 import io.github.eealba.jasoner.SerializationStrategy;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
@@ -24,102 +26,103 @@ class JsonSerializerImpl implements JsonSerializer {
     }
 
     @Override
-    public String serialize(Object obj) {
+    public void serialize(Writer writer, Object obj) throws IOException {
+        Objects.requireNonNull(writer);
         Objects.requireNonNull(obj);
-        var buff = new StringBuilder(1000);
         if (obj instanceof List<?> list) {
-            jsonArray(list, buff);
+            jsonArray(list, writer);
         } else {
-            json(obj, buff, 0);
+            json(obj, writer, 0);
         }
-        return buff.toString();
     }
 
-    private void jsonArray(List<?> list, StringBuilder buff) {
-        buff.append('[');
-        list.forEach(ele -> {
-            appendNewLine(buff);
-            json(ele, buff, 0);
-            buff.append(',');
-        });
-        buff.setLength(buff.length() - 1); // delete las (,)
-        appendNewLine(buff);
-        buff.append(']');
+    private void jsonArray(List<?> list, Writer writer) throws IOException {
+        writer.append('[');
+        var size = list.size();
+        for (int i = 0; i < size; i++) {
+            appendNewLine(writer);
+            json(list.get(i), writer, 0);
+            if (i < size - 1) {
+                writer.append(',');
+            }
+        }
+        appendNewLine(writer);
+        writer.append(']');
     }
 
-    private void json(Object entity, StringBuilder buff, int indent) {
-        buff.append('{');
-        appendNewLine(buff);
+    private void json(Object entity, Writer writer, int indent) throws IOException {
+        writer.append('{');
+        appendNewLine(writer);
         if (serializationStrategy == SerializationStrategy.METHOD) {
-            serializeWithMethods(entity, buff, indent);
+            serializeWithMethods(entity, writer, indent);
         }
-        appendNewLine(buff);
-        indent(buff, indent).append('}');
+        appendNewLine(writer);
+        indent(writer, indent);
+        writer.append('}');
     }
 
-    private void serializeWithMethods(Object entity, StringBuilder buff, int indent) {
+    private void serializeWithMethods(Object entity, Writer writer, int indent) throws IOException {
         List<Method> methods = Reflects.getGetterMethods(entity, modifierStrategy);
         for(int i = 0; i < methods.size(); i++) {
             var method = methods.get(i);
             Object value = Reflects.invokeMethod( method, entity);
             if (value != null) {
-                indent(buff, indent);
-                propertyName(buff, method.getName());
-                propertyValue(buff, value, indent);
+                indent(writer, indent);
+                propertyName(writer, method.getName());
+                propertyValue(writer, value, indent);
                 if (i < methods.size() - 1) {
-                    buff.append(',');
+                    writer.append(',');
                 }
-                appendNewLine(buff);
+                appendNewLine(writer);
 
             }
         }
     }
 
-    private StringBuilder indent(StringBuilder buff, int indent) {
+    private void indent(Writer writer, int indent) throws IOException {
         if (pretty) {
             while (indent > 0) {
-                buff.append("  ");
+                writer.append("  ");
                 --indent;
             }
         }
-        return buff;
     }
 
 
-    private void propertyName(StringBuilder buff, String name) {
-        buff.append("\"");
-        buff.append(naming.apply(prefixAccessorStrategy.removePrefix(name)));
-        buff.append("\": ");
+    private void propertyName(Writer writer, String name) throws IOException {
+        writer.append("\"");
+        writer.append(naming.apply(prefixAccessorStrategy.removePrefix(name)));
+        writer.append("\": ");
 
     }
 
-    void propertyValue(StringBuilder buff, Object value, int indent) {
+    void propertyValue(Writer writer, Object value, int indent) throws IOException {
         boolean quotes = needQuotes(value);
         if (quotes) {
-            buff.append("\"");
+            writer.append("\"");
         }
         if (value instanceof List<?> list) { // TODO procesar Arrays tb || value.getClass().isArray()
-            buff.append("[");
+            writer.append("[");
             for (int i = 0; i < list.size(); i++) {
                 Object obj = list.get(i);
                 if (obj != null) {
                     if (i > 0) {
-                        buff.append(',');
-                        appendNewLine(buff);
+                        writer.append(',');
+                        appendNewLine(writer);
                     }
-                    propertyValue(buff, obj, indent);
+                    propertyValue(writer, obj, indent);
                 }
             }
-            buff.append(']');
+            writer.append(']');
 
         } else if (value.getClass().isEnum() || classIgnoredForSerialization(value.getClass())) {
             String _value = value.toString();
-            buff.append(_value);
+            writer.append(_value);
         } else {
-            json(value, buff, indent);
+            json(value, writer, indent);
         }
         if (quotes) {
-            buff.append("\"");
+            writer.append("\"");
         }
 
     }
@@ -139,9 +142,9 @@ class JsonSerializerImpl implements JsonSerializer {
         return com;
     }
 
-    private void appendNewLine(StringBuilder buff) {
+    private void appendNewLine(Writer writer) throws IOException {
         if (pretty) {
-            buff.append('\n');
+            writer.append('\n');
         }
     }
 

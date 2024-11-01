@@ -15,6 +15,8 @@ package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
 
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,10 +43,23 @@ class JsonDeserializerImpl implements JsonDeserializer {
 	 * @return the t
 	 */
 	@Override
-	public <T> T deserialize(String data, Class<T> clazz) {
-		JsonTokenizer tokenizer = new JsonTokenizerImpl(data);
+	public <T> T deserialize(Reader data, Class<T> clazz) {
+		JsonTokenizer tokenizer = new JsonTokenizerImpl(readAll(data));
 		expectedToken(tokenizer.next(), TokenType.OBJECT_START);
 		return createObject(clazz, tokenizer);
+	}
+
+	private String readAll(Reader data) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			int c;
+			while ((c = data.read()) != -1) {
+				sb.append((char) c);
+			}
+		} catch (Exception e) {
+			throw new JasonerException(e);
+		}
+		return sb.toString();
 	}
 
 	/**

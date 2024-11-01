@@ -17,15 +17,29 @@ import io.github.eealba.jasoner.Jasoner;
 import io.github.eealba.jasoner.JasonerConfig;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 /**
  * Implementation of the Jasoner interface.
  * @author Edgar Alba
  */
 class JasonerImpl implements Jasoner {
+    /**
+     * The configuration for the Jasoner library.
+     */
+    private final JasonerConfig config;
+    /**
+     * Instantiates a new Jasoner implementation.
+     *
+     * @param config the configuration for the Jasoner library
+     */
     JasonerImpl(JasonerConfig config) {
+        this.config = config;
     }
 
     /**
@@ -36,7 +50,9 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public String toJson(Object object) {
-        return "";
+        Writer writer = new StringWriter();
+        toJson(object, writer);
+        return writer.toString();
     }
 
     /**
@@ -47,7 +63,8 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public void toJson(Object object, OutputStream stream) {
-
+        Writer writer = new OutputStreamWriter(stream, config.getCharset());
+        toJson(object, writer);
     }
 
     /**
@@ -58,6 +75,7 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public void toJson(Object object, Writer writer) {
+        //Todo: Implement this method
 
     }
 
@@ -70,7 +88,22 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public <T> T fromJson(InputStream stream, Class<T> type) {
-        return null;
+        Reader reader = new InputStreamReader(stream, config.getCharset());
+        return fromJson(reader, type);
+    }
+
+
+    /**
+     * Converts a JSON string to an object of the specified type.
+     *
+     * @param json the JSON string
+     * @param type the class of the object to return
+     * @return the object represented by the JSON
+     */
+    @Override
+    public <T> T fromJson(String json, Class<T> type) {
+        Reader reader = new StringReader(json);
+        return fromJson(reader, type);
     }
 
     /**
@@ -82,18 +115,8 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public <T> T fromJson(Reader reader, Class<T> type) {
+        //Todo: Implement this method
         return null;
     }
 
-    /**
-     * Converts a JSON string to an object of the specified type.
-     *
-     * @param json the JSON string
-     * @param type the class of the object to return
-     * @return the object represented by the JSON
-     */
-    @Override
-    public <T> T fromJson(String json, Class<T> type) {
-        return null;
-    }
 }

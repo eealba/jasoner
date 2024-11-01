@@ -13,7 +13,11 @@
  */
 package io.github.eealba.jasoner.internal;
 
-import java.nio.charset.StandardCharsets;
+import io.github.eealba.jasoner.JasonerException;
+
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 
 /**
  * The interface Json serializer.
@@ -23,21 +27,26 @@ import java.nio.charset.StandardCharsets;
 interface JsonSerializer {
 
     /**
-     * Serialize string.
+     * Serialize an object to a JSON string.
      *
-     * @param obj the obj
-     * @return the string
+     * @param data the writer to write the JSON string to
+     * @param obj the object to serialize
      */
-    String serialize(Object obj);
+    void serialize(Writer data, Object obj) throws IOException;
 
     /**
-     * Serialize to byte array byte [ ].
+     * Serialize an object to a JSON string.
      *
-     * @param obj the obj
-     * @return the byte [ ]
+     * @param obj the object to serialize
+     * @return the JSON string representation of the object
      */
-    default byte[] serializeToByteArray(Object obj) {
-		return serialize(obj).getBytes(StandardCharsets.UTF_8);
-	}
-
+    default String serialize(Object obj) {
+        Writer writer = new StringWriter();
+        try {
+            serialize(writer, obj);
+        } catch (IOException e) {
+            throw new JasonerException(e);
+        }
+        return writer.toString();
+    }
 }

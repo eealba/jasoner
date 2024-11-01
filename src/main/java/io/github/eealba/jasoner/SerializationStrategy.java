@@ -9,8 +9,13 @@ public enum SerializationStrategy {
      */
     METHOD,
     /**
+     * Both serialization strategy.
+     */
+    BOTH,
+    /**
      * Field serialization strategy.
      */
     FIELD;
+
 
 }

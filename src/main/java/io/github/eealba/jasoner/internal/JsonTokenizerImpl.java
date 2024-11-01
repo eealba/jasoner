@@ -37,7 +37,6 @@ class JsonTokenizerImpl implements JsonTokenizer {
         if (pos < tokens.size()) {
             token = tokens.get(pos++);
         }
-        System.out.println("next() Token: " + token + " pos: " + pos);
         return token;
     }
 
@@ -52,7 +51,6 @@ class JsonTokenizerImpl implements JsonTokenizer {
         if (pos != 0) {
             token = tokens.get(pos - 1);
         }
-        System.out.println("current() Token: " + token + " pos: " + pos);
         return token;
     }
 

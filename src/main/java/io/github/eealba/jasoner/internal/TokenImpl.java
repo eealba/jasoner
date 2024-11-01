@@ -68,7 +68,7 @@ class TokenImpl implements Token {
 			return Boolean.TRUE;
 		if (type == TokenType.FALSE)
 			return Boolean.FALSE;
-		throw new RuntimeException("Invalid value for token type: " + type);
+		throw new JsonException("Invalid value for token type: " + type);
 	}
 
 	@Override

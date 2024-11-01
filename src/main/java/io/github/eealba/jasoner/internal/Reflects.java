@@ -134,7 +134,7 @@ class Reflects {
             try {
                 field.set(entity, value);
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
+                throw new JsonException(e);
             }
         }
     }
@@ -155,7 +155,7 @@ class Reflects {
                 try {
                     return clazz.cast(c.newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
+                    throw new JsonException(e);
                 }
 
             }
@@ -225,7 +225,7 @@ class Reflects {
                 try {
                     clazz = Class.forName(str.substring(p0 + 1, p1));
                 } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
+                    throw new JsonException(e);
                 }
             }
 
@@ -259,7 +259,7 @@ class Reflects {
             try {
                 return Optional.of(clazz.cast(constructor.newInstance(values.toArray())));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new JsonException(e);
             }
         }
         throw new IllegalArgumentException(String.format("The constructor of the record class: '%s' is not accessible",

@@ -15,7 +15,9 @@ package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.Jasoner;
 import io.github.eealba.jasoner.JasonerConfig;
+import io.github.eealba.jasoner.JasonerException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -33,6 +35,8 @@ class JasonerImpl implements Jasoner {
      * The configuration for the Jasoner library.
      */
     private final JasonerConfig config;
+    private final JsonSerializer serializer;
+    private final JsonDeserializer deserializer;
     /**
      * Instantiates a new Jasoner implementation.
      *
@@ -40,6 +44,8 @@ class JasonerImpl implements Jasoner {
      */
     JasonerImpl(JasonerConfig config) {
         this.config = config;
+        this.serializer = new JsonSerializerImpl(config);
+        this.deserializer = new JsonDeserializerImpl();
     }
 
     /**
@@ -63,7 +69,7 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public void toJson(Object object, OutputStream stream) {
-        Writer writer = new OutputStreamWriter(stream, config.getCharset());
+        Writer writer = new OutputStreamWriter(stream, config.charset());
         toJson(object, writer);
     }
 
@@ -75,7 +81,11 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public void toJson(Object object, Writer writer) {
-        //Todo: Implement this method
+        try {
+            serializer.serialize(writer, object);
+        } catch (IOException e) {
+            throw new JasonerException(e);
+        }
 
     }
 
@@ -88,7 +98,7 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public <T> T fromJson(InputStream stream, Class<T> type) {
-        Reader reader = new InputStreamReader(stream, config.getCharset());
+        Reader reader = new InputStreamReader(stream, config.charset());
         return fromJson(reader, type);
     }
 
@@ -115,8 +125,7 @@ class JasonerImpl implements Jasoner {
      */
     @Override
     public <T> T fromJson(Reader reader, Class<T> type) {
-        //Todo: Implement this method
-        return null;
+        return deserializer.deserialize(reader, type);
     }
 
 }

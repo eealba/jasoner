@@ -76,7 +76,7 @@ class JsonDeserializerImplTest {
         assertEquals("P-5ML4271244454362WXNWU5NQ", res.id());
     }
     private static <T> T deserialize(String data, Class<T> clazz) {
-        JsonDeserializer deserializer = new JsonDeserializerBuilderImpl().build();
+        JsonDeserializer deserializer = new JsonDeserializerImpl();
         return deserializer.deserialize(data, clazz);
     }
 

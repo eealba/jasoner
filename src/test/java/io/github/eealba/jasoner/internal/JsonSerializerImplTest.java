@@ -1,8 +1,8 @@
 package io.github.eealba.jasoner.internal;
 
+import io.github.eealba.jasoner.JasonerConfig;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.NamingStrategy;
-import io.github.eealba.jasoner.PrefixAccessorStrategy;
 import io.github.eealba.jasoner.SerializationStrategy;
 import io.github.eealba.jasoner.demo.model1.DemoPojo;
 import org.json.JSONException;
@@ -24,50 +24,50 @@ class JsonSerializerImplTest {
 
     private final DemoPojo demoPojo = DemoPojo.JoeDoe();
 
-    private static final JsonSerializer privateJsonSerializer = new JsonSerializerBuilderImpl()
+    private static final JsonSerializer privateJsonSerializer = new JsonSerializerImpl(new JasonerConfig.Builder()
             .serializationStrategy(SerializationStrategy.METHOD)
             .modifierStrategy(ModifierStrategy.PRIVATE)
             .namingStrategy(NamingStrategy.CAMEL_CASE)
-            .prefixAccessorStrategy(PrefixAccessorStrategy.REMOVE)
+            .removePrefixAccessors(true)
             .pretty(false)
-            .build();
-    private static final JsonSerializer privateSnakeCaseJsonSerializer = new JsonSerializerBuilderImpl()
+            .build());
+    private static final JsonSerializer privateSnakeCaseJsonSerializer = new JsonSerializerImpl(new JasonerConfig.Builder()
             .serializationStrategy(SerializationStrategy.METHOD)
             .modifierStrategy(ModifierStrategy.PRIVATE)
             .namingStrategy(NamingStrategy.SNAKE_CASE)
-            .prefixAccessorStrategy(PrefixAccessorStrategy.REMOVE)
+            .removePrefixAccessors(true)
             .pretty(false)
-            .build();
-    private static final JsonSerializer privatePrettyJsonSerializer = new JsonSerializerBuilderImpl()
+            .build());
+    private static final JsonSerializer privatePrettyJsonSerializer = new JsonSerializerImpl(new JasonerConfig.Builder()
             .serializationStrategy(SerializationStrategy.METHOD)
             .modifierStrategy(ModifierStrategy.PRIVATE)
             .namingStrategy(NamingStrategy.CAMEL_CASE)
-            .prefixAccessorStrategy(PrefixAccessorStrategy.REMOVE)
+            .removePrefixAccessors(true)
             .pretty(true)
-            .build();
-    private static final JsonSerializer protectedJsonSerializer = new JsonSerializerBuilderImpl()
+            .build());
+    private static final JsonSerializer protectedJsonSerializer = new JsonSerializerImpl(new JasonerConfig.Builder()
             .serializationStrategy(SerializationStrategy.METHOD)
             .modifierStrategy(ModifierStrategy.PROTECTED)
             .namingStrategy(NamingStrategy.CAMEL_CASE)
-            .prefixAccessorStrategy(PrefixAccessorStrategy.REMOVE)
+            .removePrefixAccessors(true)
             .pretty(false)
-            .build();
+            .build());
 
-    private static final JsonSerializer packageJsonSerializer = new JsonSerializerBuilderImpl()
+    private static final JsonSerializer packageJsonSerializer = new JsonSerializerImpl(new JasonerConfig.Builder()
             .serializationStrategy(SerializationStrategy.METHOD)
             .modifierStrategy(ModifierStrategy.PACKAGE)
             .namingStrategy(NamingStrategy.CAMEL_CASE)
-            .prefixAccessorStrategy(PrefixAccessorStrategy.REMOVE)
+            .removePrefixAccessors(true)
             .pretty(false)
-            .build();
+            .build());
 
-    private static final JsonSerializer publicJsonSerializer = new JsonSerializerBuilderImpl()
+    private static final JsonSerializer publicJsonSerializer = new JsonSerializerImpl(new JasonerConfig.Builder()
             .serializationStrategy(SerializationStrategy.METHOD)
             .modifierStrategy(ModifierStrategy.PUBLIC)
             .namingStrategy(NamingStrategy.CAMEL_CASE)
-            .prefixAccessorStrategy(PrefixAccessorStrategy.REMOVE)
+            .removePrefixAccessors(true)
             .pretty(false)
-            .build();
+            .build());
 
     @Test
     void should_serialize_object() throws JSONException {

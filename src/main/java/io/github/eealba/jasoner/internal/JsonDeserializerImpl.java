@@ -16,7 +16,6 @@ package io.github.eealba.jasoner.internal;
 import io.github.eealba.jasoner.JasonerException;
 
 import java.io.Reader;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -1,7 +1,19 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.eealba.jasoner.internal;
 
-import io.github.eealba.jasoner.ModifierStrategy;
-import io.github.eealba.jasoner.PrefixAccessorStrategy;
+import io.github.eealba.jasoner.JasonerConfig;
 import io.github.eealba.jasoner.SerializationStrategy;
 
 import java.io.IOException;
@@ -9,20 +21,20 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
-
+/**
+ * The type Json serializer.
+ * This class is used to serialize an object to a JSON string.
+ * @author Edgar Alba
+ */
 class JsonSerializerImpl implements JsonSerializer {
-    private final Naming naming;
-    private final SerializationStrategy serializationStrategy;
-    private final ModifierStrategy modifierStrategy;
-    private final PrefixAccessorStrategy prefixAccessorStrategy;
-    private final boolean pretty;
-
-    JsonSerializerImpl(JsonSerializerBuilderImpl builder) {
-        naming = NamingFactory.get(builder.ns);
-        serializationStrategy = builder.ss;
-        modifierStrategy = builder.ms;
-        prefixAccessorStrategy = builder.pas;
-        pretty = builder.pretty;
+    private final JasonerConfig config;
+    /**
+     * Instantiates a new Json serializer.
+     *
+     * @param config the config
+     */
+    JsonSerializerImpl(JasonerConfig config) {
+        this.config = config;
     }
 
     @Override
@@ -53,7 +65,7 @@ class JsonSerializerImpl implements JsonSerializer {
     private void json(Object entity, Writer writer, int indent) throws IOException {
         writer.append('{');
         appendNewLine(writer);
-        if (serializationStrategy == SerializationStrategy.METHOD) {
+        if (config.serializationStrategy() == SerializationStrategy.METHOD) {
             serializeWithMethods(entity, writer, indent);
         }
         appendNewLine(writer);
@@ -62,7 +74,7 @@ class JsonSerializerImpl implements JsonSerializer {
     }
 
     private void serializeWithMethods(Object entity, Writer writer, int indent) throws IOException {
-        List<Method> methods = Reflects.getGetterMethods(entity, modifierStrategy);
+        List<Method> methods = Reflects.getGetterMethods(entity, config.modifierStrategy());
         for(int i = 0; i < methods.size(); i++) {
             var method = methods.get(i);
             Object value = Reflects.invokeMethod( method, entity);
@@ -80,7 +92,7 @@ class JsonSerializerImpl implements JsonSerializer {
     }
 
     private void indent(Writer writer, int indent) throws IOException {
-        if (pretty) {
+        if (config.pretty()) {
             while (indent > 0) {
                 writer.append("  ");
                 --indent;
@@ -91,11 +103,31 @@ class JsonSerializerImpl implements JsonSerializer {
 
     private void propertyName(Writer writer, String name) throws IOException {
         writer.append("\"");
-        writer.append(naming.apply(prefixAccessorStrategy.removePrefix(name)));
+        writer.append(NamingFactory.get(config.namingStrategy()).apply(removePrefix(name)));
         writer.append("\": ");
 
     }
 
+    /**
+     * Remove prefix string.
+     *
+     * @param name the name
+     * @return the string
+     */
+    public String removePrefix(String name) {
+        Objects.requireNonNull(name);
+        if (config.removePrefixAccessors()) {
+            String lowercase = name.toLowerCase();
+            if (lowercase.startsWith("is")) {
+                return name.substring(2);
+            }
+            if (lowercase.startsWith("has") || lowercase.startsWith("get")) {
+                return name.substring(3);
+            }
+
+        }
+        return name;
+    }
     void propertyValue(Writer writer, Object value, int indent) throws IOException {
         boolean quotes = needQuotes(value);
         if (quotes) {
@@ -143,7 +175,7 @@ class JsonSerializerImpl implements JsonSerializer {
     }
 
     private void appendNewLine(Writer writer) throws IOException {
-        if (pretty) {
+        if (config.pretty()) {
             writer.append('\n');
         }
     }

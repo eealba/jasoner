@@ -11,7 +11,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.eealba.jasoner;
 
 import java.nio.charset.Charset;
@@ -27,6 +26,7 @@ public class JasonerConfig {
     private final boolean removePrefixAccessors;
     private final Charset charset;
     private final SerializationStrategy serializationStrategy;
+    private final boolean pretty;
 
     /**
      * Private constructor for JasonerConfig.
@@ -39,6 +39,7 @@ public class JasonerConfig {
         this.removePrefixAccessors = builder.removePrefixAccessors;
         this.charset = builder.charset;
         this.serializationStrategy = builder.serializationStrategy;
+        this.pretty = builder.pretty;
     }
 
     /**
@@ -46,7 +47,7 @@ public class JasonerConfig {
      *
      * @return the naming strategy
      */
-    public NamingStrategy getNamingStrategy() {
+    public NamingStrategy namingStrategy() {
         return namingStrategy;
     }
 
@@ -55,7 +56,7 @@ public class JasonerConfig {
      *
      * @return the modifier strategy
      */
-    public ModifierStrategy getModifierStrategy() {
+    public ModifierStrategy modifierStrategy() {
         return modifierStrategy;
     }
 
@@ -64,7 +65,7 @@ public class JasonerConfig {
      *
      * @return true if prefix accessors should be removed, false otherwise
      */
-    public boolean isRemovePrefixAccessors() {
+    public boolean removePrefixAccessors() {
         return removePrefixAccessors;
     }
 
@@ -73,7 +74,7 @@ public class JasonerConfig {
      *
      * @return the charset
      */
-    public Charset getCharset() {
+    public Charset charset() {
         return charset;
     }
 
@@ -82,14 +83,19 @@ public class JasonerConfig {
      *
      * @return the serialization strategy
      */
-    public SerializationStrategy getSerializationStrategy() {
+    public SerializationStrategy serializationStrategy() {
         return serializationStrategy;
+    }
+
+    public boolean pretty() {
+        return pretty;
     }
 
     /**
      * Builder class for JasonerConfig.
      */
     public static class Builder {
+        public boolean pretty;
         private NamingStrategy namingStrategy = NamingStrategy.NONE;
         private ModifierStrategy modifierStrategy = ModifierStrategy.PUBLIC;
         private boolean removePrefixAccessors = true;
@@ -150,7 +156,16 @@ public class JasonerConfig {
             this.serializationStrategy = serializationStrategy;
             return this;
         }
-
+        /**
+         * Sets whether to pretty print the JSON.
+         *
+         * @param pretty true to pretty print the JSON, false otherwise
+         * @return the builder
+         */
+        public Builder pretty(boolean pretty) {
+            this.pretty = pretty;
+            return this;
+        }
         /**
          * Builds the JasonerConfig.
          *

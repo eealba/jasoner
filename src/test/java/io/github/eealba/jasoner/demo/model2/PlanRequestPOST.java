@@ -1,0 +1,129 @@
+package io.github.eealba.jasoner.demo.model2;
+
+import java.util.List;
+import java.util.Objects;
+
+public class PlanRequestPOST {
+
+    private final String productId;
+    private final String name;
+    private final Status status;
+    private final String description;
+    private final List<BillingCycle> billingCycles;
+    private final PaymentPreferences paymentPreferences;
+    private final Taxes taxes;
+    private final Boolean quantitySupported;
+
+    private PlanRequestPOST(Builder builder) {
+        status = builder.status;
+        description = builder.description;
+        taxes = builder.taxes;
+        quantitySupported = builder.quantitySupported;
+        productId = Objects.requireNonNull(builder.productId);
+        name = Objects.requireNonNull(builder.name);
+        billingCycles = Objects.requireNonNull(builder.billingCycles);
+        paymentPreferences = Objects.requireNonNull(builder.paymentPreferences);
+    }
+
+    public String productId() {
+        return productId;
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public Status status() {
+        return status;
+    }
+
+    public String description() {
+        return description;
+    }
+
+    public List<BillingCycle> billingCycles() {
+        return billingCycles;
+    }
+
+    public PaymentPreferences paymentPreferences() {
+        return paymentPreferences;
+    }
+
+    public Taxes taxes() {
+        return taxes;
+    }
+
+    public Boolean quantitySupported() {
+        return quantitySupported;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private String productId;
+        private String name;
+        private Status status;
+        private String description;
+        private List<BillingCycle> billingCycles;
+        private PaymentPreferences paymentPreferences;
+        private Taxes taxes;
+        private Boolean quantitySupported;
+
+        public Builder productId(String value) {
+            productId = value;
+            return this;
+        }
+
+        public Builder name(String value) {
+            name = value;
+            return this;
+        }
+
+        public Builder status(Status value) {
+            status = value;
+            return this;
+        }
+
+        public Builder description(String value) {
+            description = value;
+            return this;
+        }
+
+        public Builder billingCycles(List<BillingCycle> value) {
+            billingCycles = value;
+            return this;
+        }
+
+        public Builder paymentPreferences(PaymentPreferences value) {
+            paymentPreferences = value;
+            return this;
+        }
+
+        public Builder taxes(Taxes value) {
+            taxes = value;
+            return this;
+        }
+
+        public Builder quantitySupported(Boolean value) {
+            quantitySupported = value;
+            return this;
+        }
+
+        public PlanRequestPOST build() {
+            return new PlanRequestPOST(this);
+        }
+
+    }
+    /**
+     * The initial state of the plan. Allowed input values are CREATED and ACTIVE.
+     */
+    public enum Status {
+        CREATED,
+        INACTIVE,
+        ACTIVE
+    }
+}
+

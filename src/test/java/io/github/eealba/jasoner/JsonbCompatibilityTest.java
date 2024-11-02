@@ -9,7 +9,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JsonbCompatibilityTest {
     private static final Jasoner jasoner = JasonerBuilder.create();
@@ -30,24 +29,41 @@ public class JsonbCompatibilityTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
-    void should_serialize_and_deserialize_dogs_list() {
-// List of dogs
-        @SuppressWarnings("rawtypes")
-        List dogs = new ArrayList();
-        dogs.add(falco());
-        dogs.add(cassidy());
+    void should_serialize_and_deserialize_raw_list() {
+        String result = serializeDogsList();
 
-// Create Jsonb and serialize
-        String result = jasoner.toJson(dogs);
-
-// We can also deserialize back into a raw collection, but since there is no way to infer a type here,
-// the result will be a list of java.util.Map instances with string keys.
+        // We can also deserialize back into a raw collection, but since there is no way to infer a type here,
+        // the result will be a list of java.util.Map instances with string keys.
         var arrayList = jasoner.fromJson(result, ArrayList.class);
 
         assertEquals(2, arrayList.size());
         assertInstanceOf(Map.class, arrayList.get(0));
         assertEquals("Falco", ((Map) arrayList.get(0)).get("name"));
+    }
+    @Test
+    void should_serialize_and_deserialize_dog_list() {
+        String result = serializeDogsList();
+
+        // We can also deserialize back into a raw collection, but since there is no way to infer a type here,
+        // the result will be a list of java.util.Map instances with string keys.
+        List<Dog> arrayList = jasoner.fromJson(result, new ArrayList<Dog>(){}.getClass().getGenericSuperclass());
+
+        assertEquals(2, arrayList.size());
+        assertInstanceOf(Dog.class, arrayList.get(0));
+        assertEquals("Falco", arrayList.get(0).name);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    private static String serializeDogsList() {
+        // List of dogs
+        @SuppressWarnings("rawtypes")
+        List dogs = new ArrayList();
+        dogs.add(falco());
+        dogs.add(cassidy());
+
+        // Serialize
+        return jasoner.toJson(dogs);
     }
 
     private static Dog falco() {

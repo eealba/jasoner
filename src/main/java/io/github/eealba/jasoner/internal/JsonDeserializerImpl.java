@@ -16,6 +16,7 @@ package io.github.eealba.jasoner.internal;
 import io.github.eealba.jasoner.JasonerException;
 
 import java.io.Reader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,9 +57,21 @@ class JsonDeserializerImpl implements JsonDeserializer {
         if (token.type() == TokenType.OBJECT_START) {
             return deserializeObject(tokenizer, clazz);
         } else if (token.type() == TokenType.ARRAY_START) {
-            return deserializeArray(tokenizer, clazz);
+            return deserializeArray(tokenizer, clazz, HashMap.class);
         }
         throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T deserialize(Reader data, Type genericSuperclass) {
+        JsonTokenizer tokenizer = new JsonTokenizerImpl(readAll(data));
+        var token = tokenizer.next();
+        expectedToken(tokenizer.current(), TokenType.ARRAY_START);
+        if (token.type() == TokenType.ARRAY_START) {
+            Class<?> classType = Reflects.getClass(genericSuperclass.getTypeName());
+            return (T) deserializeArray(tokenizer, ArrayList.class, classType);
+        }
+        return null;
     }
 
 
@@ -66,10 +79,10 @@ class JsonDeserializerImpl implements JsonDeserializer {
         expectedToken(tokenizer.current(), TokenType.OBJECT_START);
         return createObject(clazz, tokenizer);
     }
-    private <T> T deserializeArray(JsonTokenizer tokenizer, Class<T> clazz) {
+    private <T> T deserializeArray(JsonTokenizer tokenizer, Class<T> clazz, Class<?> clazz2) {
         expectedToken(tokenizer.current(), TokenType.ARRAY_START);
         List<Object> list = new ArrayList<>();
-        moveArrayValues(list, tokenizer, HashMap.class);
+        moveArrayValues(list, tokenizer, clazz2);
         return clazz.cast(list);
     }
 

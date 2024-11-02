@@ -370,18 +370,22 @@ class Reflects {
     private static Class<?> getClass(Parameter parameter) {
         Class<?> clazz = parameter.getType();
         if (clazz == List.class){
-            String str = parameter.toString();
-            int p0 = str.indexOf("<");
-            int p1 = str.lastIndexOf(">");
-            if (p0 != -1 && p1 != -1){
-                try {
-                    clazz = Class.forName(str.substring(p0 + 1, p1));
-                } catch (ClassNotFoundException e) {
-                    throw new JasonerException(e);
-                }
-            }
+            clazz = getClass(parameter.toString());
         }
         return clazz;
+    }
+
+    static Class<?> getClass(String str) {
+        int p0 = str.indexOf("<");
+        int p1 = str.lastIndexOf(">");
+        if (p0 != -1 && p1 != -1){
+            try {
+                return Class.forName(str.substring(p0 + 1, p1));
+            } catch (ClassNotFoundException e) {
+                throw new JasonerException(e);
+            }
+        }
+        return null;
     }
 
     /**

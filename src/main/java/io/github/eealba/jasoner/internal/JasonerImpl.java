@@ -125,9 +125,9 @@ class JasonerImpl implements Jasoner {
      * @param genericSuperclass the class of the object to return
      */
     @Override
-    public void fromJson(String result, Type genericSuperclass) {
+    public <T> T fromJson(String result, Type genericSuperclass) {
         Reader reader = new StringReader(result);
-   //     deserializer.deserialize(reader, genericSuperclass);
+        return deserializer.deserialize(reader, genericSuperclass);
     }
 
     /**

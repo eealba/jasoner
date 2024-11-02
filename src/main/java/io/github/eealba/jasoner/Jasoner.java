@@ -85,5 +85,5 @@ public interface Jasoner {
      * @param result the JSON string
      * @param genericSuperclass the class of the object to return
      */
-    void fromJson(String result, Type genericSuperclass);
+    <T> T  fromJson(String result, Type genericSuperclass);
 }

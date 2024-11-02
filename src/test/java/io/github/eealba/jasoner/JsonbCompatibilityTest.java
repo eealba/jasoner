@@ -1,6 +1,9 @@
 package io.github.eealba.jasoner;
 
+import io.github.eealba.jasoner.demo.model1.Person;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JsonbCompatibilityTest {
     private static final Jasoner jasoner = JasonerBuilder.create();
@@ -51,6 +55,29 @@ public class JsonbCompatibilityTest {
         assertEquals(2, arrayList.size());
         assertInstanceOf(Dog.class, arrayList.get(0));
         assertEquals("Falco", arrayList.get(0).name);
+    }
+
+    @Test
+    void should_serialize_and_deserialize_person() throws JSONException {
+        String expected = "{\"name\":\"John\",\"age\":30,\"developer\":true,\"hobbies\":[\"Soccer\",\"Guitar\"],\"socialMedia\":{\"twitter\":\"@john\",\"linkedin\":\"john\"}}";
+        Person person = new Person();
+        person.setName("John");
+        person.setAge(30);
+        person.setDeveloper(true);
+        person.setHobbies(List.of("Soccer", "Guitar"));
+        person.setSocialMedia(Map.of("twitter", "@john", "linkedin", "john"));
+
+        // Serialize
+        String result = jasoner.toJson(person);
+        // Verify the result
+        JSONAssert.assertEquals(expected, result, true);
+        // Deserialize back
+        person = jasoner.fromJson(expected, Person.class);
+        assertEquals("John", person.getName());
+        assertEquals(30, person.getAge());
+        assertTrue(person.isDeveloper());
+        assertEquals(List.of("Soccer", "Guitar"), person.getHobbies());
+        assertEquals(Map.of("twitter", "@john", "linkedin", "john"), person.getSocialMedia());
     }
 
 

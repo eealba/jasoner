@@ -133,7 +133,7 @@ class ObjectCreator<T> {
     }
 
     private T createInstance() {
-        if (obj.getClass().equals(clazz)) {
+        if (obj.getClass().equals(clazz) || clazz.isInstance(obj)) {
             return clazz.cast(obj);
         }
         return Reflects.createObjectFromBuilderInstance(obj, clazz)

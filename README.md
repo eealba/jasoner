@@ -1,13 +1,11 @@
 # JaSONer - A Spartan JSON Library
 
 ## Features
-- **Lightweight**: Minimal dependencies and small footprint.
+- **Lightweight**: Zero dependencies and small footprint.
 - **Fast**: Optimized for performance.
-- **Flexible**: Supports custom serialization and deserialization.
-- **Easy to Use**: Simple API for common JSON operations.
+- **Easy to Use**: Simple API for common JSON operations, Api syntax compatible with Json-B.
 - **Compliant**: Adheres to JSON standards.
-- **Java 17**: Built with Java 17.
-- **Open Source**: Apache License 2.0.
+- **Java 17+**: Built with Java 17+.
 - **thread-safe**: Jasoner is thread-safe.
 - **Ideal for**: Immutable objects, DTOs, and POJOs.
 
@@ -19,7 +17,8 @@
 - **Arrays**: Primitive and Object arrays.
 - **Enums**: Enumerations.
 - **Records**: Java Records.
-- **Joshua Bloch**: Builder Pattern.
+- **Joshua Bloch Builder Pattern**: Perfect for immutable objects.
+- **Value Objects**: Objects with value semantics.
 
 ## Installation
 Add the following dependency to your `pom.xml` file:

@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Type;
 
 /**
  * Interface for converting objects to JSON and vice versa.
@@ -78,4 +79,11 @@ public interface Jasoner {
      * @return the object represented by the JSON
      */
     <T> T fromJson(String json, Class<T> type);
+    /**
+     * Converts a JSON string to an object of the specified type.
+     *
+     * @param result the JSON string
+     * @param genericSuperclass the class of the object to return
+     */
+    <T> T  fromJson(String result, Type genericSuperclass);
 }

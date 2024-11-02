@@ -15,6 +15,7 @@ package io.github.eealba.jasoner.internal;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 
 /**
  * A deserializer receives a json String and converts it to a Java entity.
@@ -32,6 +33,17 @@ interface JsonDeserializer {
      * @return the object represented by the JSON
      */
     <T> T deserialize(Reader data, Class<T> clazz);
+
+    /**
+     * Deserialize an object from a JSON string.
+     *
+     * @param <T> the type of the object to return
+     * @param data the JSON string to deserialize
+     * @param genericSuperclass the class of the object to return
+     * @return the object represented by the JSON
+     */
+    <T> T deserialize(Reader data, Type genericSuperclass);
+
     /**
      * Deserialize an object from a JSON string.
      *

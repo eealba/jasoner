@@ -47,6 +47,9 @@ class ObjectCreator<T> {
                     () -> new JasonerException("Cannot create instance of " + clazz.getName())));
         }
     }
+    boolean isMap() {
+        return obj instanceof Map;
+    }
 
     private Optional<Map<String, Object>> getMap() {
         if (obj instanceof Map) {
@@ -65,9 +68,14 @@ class ObjectCreator<T> {
      */
     void setValue(String name, Object valueArg) {
         var parameterClass = getParameterClass(name);
-        var value = convertValue(parameterClass.orElseThrow(), valueArg);
-        if (clazz.isRecord()) {
-            getMap().ifPresent(m -> m.put(name, value));
+        Object value;
+        if (parameterClass.isPresent()) {
+            value = convertValue(parameterClass.get(), valueArg);
+        }else{
+            value = valueArg;
+        }
+        if (isMap()) {
+            getMap().orElseThrow().put(name, value);
         } else {
             var setter = Reflects.getSetterMethod(obj, name, value);
             if (setter.isPresent()) {

@@ -32,7 +32,7 @@ public class JasonerBuilder {
      * @return the Jasoner instance
      */
     public static Jasoner create() {
-        return create(new JasonerConfig.Builder().build());
+        return create(JasonerConfig.DEFAULT);
     }
 
     /**

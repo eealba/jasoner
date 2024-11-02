@@ -31,12 +31,15 @@ import java.nio.charset.StandardCharsets;
  * @author Edgar Alba
  */
 public class JasonerConfig {
+    public final static JasonerConfig DEFAULT = new Builder().build();
+
     private final NamingStrategy namingStrategy;
     private final ModifierStrategy modifierStrategy;
     private final boolean removePrefixAccessors;
     private final Charset charset;
     private final SerializationStrategy serializationStrategy;
     private final boolean pretty;
+    private final boolean unWrapSingleValueClasses;
 
     /**
      * Private constructor for JasonerConfig.
@@ -50,6 +53,7 @@ public class JasonerConfig {
         this.charset = builder.charset;
         this.serializationStrategy = builder.serializationStrategy;
         this.pretty = builder.pretty;
+        this.unWrapSingleValueClasses = builder.unWrapSingleValueClasses;
     }
 
     /**
@@ -105,12 +109,21 @@ public class JasonerConfig {
     public boolean pretty() {
         return pretty;
     }
+    /**
+     * Checks if single value classes should be unwrapped.
+     *
+     * @return true if single value classes should be unwrapped, false otherwise
+     */
+    public boolean unWrapSingleValueClasses() {
+        return unWrapSingleValueClasses;
+    }
 
     /**
      * Builder class for JasonerConfig.
      * This class is used to build instances of JasonerConfig with custom settings.
      */
     public static class Builder {
+        public boolean unWrapSingleValueClasses = true;
         private boolean pretty;
         private NamingStrategy namingStrategy = NamingStrategy.NONE;
         private ModifierStrategy modifierStrategy = ModifierStrategy.PUBLIC;
@@ -181,6 +194,16 @@ public class JasonerConfig {
          */
         public Builder pretty(boolean pretty) {
             this.pretty = pretty;
+            return this;
+        }
+        /**
+         * Sets whether to unwrap single value classes.
+         *
+         * @param unWrapSingleValueClasses true to unwrap single value classes, false otherwise
+         * @return the builder
+         */
+        public Builder unWrapSingleValueClasses(boolean unWrapSingleValueClasses) {
+            this.unWrapSingleValueClasses = unWrapSingleValueClasses;
             return this;
         }
 

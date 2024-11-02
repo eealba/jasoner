@@ -11,17 +11,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.eealba.jasoner;
+
 /**
  * The type Jasoner builder.
+ * This class is used to create instances of the Jasoner interface.
+ * It provides methods to create a Jasoner with default or custom configurations.
+ *
+ * @see Jasoner
+ * @see JasonerConfig
+ * @see JasonerProvider
+ *
  * @author Edgar Alba
  */
 public class JasonerBuilder {
-    public static Jasoner create(){
-        return create(new JasonerConfig.Builder().build());
+
+    /**
+     * Create a Jasoner instance with default configuration.
+     *
+     * @return the Jasoner instance
+     */
+    public static Jasoner create() {
+        return create(JasonerConfig.DEFAULT);
     }
-    public static Jasoner create(JasonerConfig config){
+
+    /**
+     * Create a Jasoner instance with custom configuration.
+     *
+     * @param config the custom configuration
+     * @return the Jasoner instance
+     */
+    public static Jasoner create(JasonerConfig config) {
         return JasonerProvider.provider().createJasoner(config);
     }
 }

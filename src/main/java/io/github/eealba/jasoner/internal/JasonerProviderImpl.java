@@ -19,20 +19,24 @@ import io.github.eealba.jasoner.JasonerConfig;
 import io.github.eealba.jasoner.JasonerProvider;
 
 /**
- * The type Json provider.
+ * The class JasonerProviderImpl.
+ * This class extends the JasonerProvider to provide an implementation for creating Jasoner instances.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
  * @author Edgar Alba
  */
 class JasonerProviderImpl extends JasonerProvider {
 
-	/**
-	 * Create jasoner jasoner.
-	 *
-	 * @param config the config
-	 * @return the jasoner
-	 */
-	@Override
-	public Jasoner createJasoner(JasonerConfig config) {
-		return new JasonerImpl(config);
-	}
-
+    /**
+     * Creates a new Jasoner instance with the specified configuration.
+     *
+     * @param config the configuration for the Jasoner instance
+     * @return the created Jasoner instance
+     */
+    @Override
+    public Jasoner createJasoner(JasonerConfig config) {
+        return new JasonerImpl(config);
+    }
 }

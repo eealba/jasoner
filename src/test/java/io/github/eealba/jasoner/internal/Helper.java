@@ -9,14 +9,13 @@ import io.github.eealba.jasoner.SerializationStrategy;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 class Helper {
     static final Jasoner PRIVATE_JASONER = JasonerBuilder.create(new JasonerConfig.Builder()
-            .serializationStrategy(SerializationStrategy.METHOD)
+            .serializationStrategy(SerializationStrategy.BOTH)
             .modifierStrategy(ModifierStrategy.PRIVATE)
             .namingStrategy(NamingStrategy.CAMEL_CASE)
             .removePrefixAccessors(true)
@@ -24,7 +23,7 @@ class Helper {
             .build());
 
     static final JsonSerializer PRIVATE_JSON_SERIALIZER = new JsonSerializerImpl(new JasonerConfig.Builder()
-            .serializationStrategy(SerializationStrategy.METHOD)
+            .serializationStrategy(SerializationStrategy.BOTH)
             .modifierStrategy(ModifierStrategy.PRIVATE)
             .namingStrategy(NamingStrategy.CAMEL_CASE)
             .removePrefixAccessors(true)

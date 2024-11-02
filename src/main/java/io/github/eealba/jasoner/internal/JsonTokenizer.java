@@ -16,13 +16,40 @@ package io.github.eealba.jasoner.internal;
 import java.util.List;
 
 /**
- * The interface Json tokenizer.
+ * The interface JsonTokenizer.
  * This interface is used to tokenize a JSON string.
+ *
+ * @since 1.0
+ * @version 1.0
+ *
  * @author Edgar Alba
  */
 interface JsonTokenizer {
+    /**
+     * Gets the next token.
+     *
+     * @return the next token
+     */
     Token next();
+
+    /**
+     * Gets the current token.
+     *
+     * @return the current token
+     */
     Token current();
+
+    /**
+     * Checks if there are more tokens.
+     *
+     * @return true if there are more tokens, false otherwise
+     */
     boolean hasNext();
+
+    /**
+     * Gets the list of tokens.
+     *
+     * @return the list of tokens
+     */
     List<Token> tokens();
 }

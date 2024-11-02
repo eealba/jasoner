@@ -20,7 +20,7 @@ import java.io.Serial;
  * This class is used to handle exceptions in the Jasoner library.
  * @author Edgar Alba
  */
-public class ProviderNotFoundException extends RuntimeException {
+class ProviderNotFoundException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class ProviderNotFoundException extends RuntimeException {
      *
      * @param providerName the provider name
      */
-    public ProviderNotFoundException(String providerName) {
+    ProviderNotFoundException(String providerName) {
         super("Provider for " + providerName + " not found");
     }
 
@@ -39,7 +39,7 @@ public class ProviderNotFoundException extends RuntimeException {
      * @param providerName the provider name
      * @param x            the x
      */
-    public ProviderNotFoundException(String providerName, Exception x) {
+    ProviderNotFoundException(String providerName, Exception x) {
         super("Provider for " + providerName + " not found", x);
     }
 

@@ -26,6 +26,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Type;
+
 /**
  * Implementation of the Jasoner interface.
  * @author Edgar Alba
@@ -114,6 +116,18 @@ class JasonerImpl implements Jasoner {
     public <T> T fromJson(String json, Class<T> type) {
         Reader reader = new StringReader(json);
         return fromJson(reader, type);
+    }
+
+    /**
+     * Converts a JSON string to an object of the specified type.
+     *
+     * @param result            the JSON string
+     * @param genericSuperclass the class of the object to return
+     */
+    @Override
+    public void fromJson(String result, Type genericSuperclass) {
+        Reader reader = new StringReader(result);
+   //     deserializer.deserialize(reader, genericSuperclass);
     }
 
     /**

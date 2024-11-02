@@ -52,8 +52,25 @@ class JsonDeserializerImpl implements JsonDeserializer {
     @Override
     public <T> T deserialize(Reader data, Class<T> clazz) {
         JsonTokenizer tokenizer = new JsonTokenizerImpl(readAll(data));
-        expectedToken(tokenizer.next(), TokenType.OBJECT_START);
+        var token = tokenizer.next();
+        if (token.type() == TokenType.OBJECT_START) {
+            return deserializeObject(tokenizer, clazz);
+        } else if (token.type() == TokenType.ARRAY_START) {
+            return deserializeArray(tokenizer, clazz);
+        }
+        throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+    }
+
+
+    private <T> T deserializeObject(JsonTokenizer tokenizer, Class<T> clazz) {
+        expectedToken(tokenizer.current(), TokenType.OBJECT_START);
         return createObject(clazz, tokenizer);
+    }
+    private <T> T deserializeArray(JsonTokenizer tokenizer, Class<T> clazz) {
+        expectedToken(tokenizer.current(), TokenType.ARRAY_START);
+        List<Object> list = new ArrayList<>();
+        moveArrayValues(list, tokenizer, HashMap.class);
+        return clazz.cast(list);
     }
 
     private String readAll(Reader data) {
@@ -99,7 +116,10 @@ class JsonDeserializerImpl implements JsonDeserializer {
             obj.setValue(name, value);
         } else {
             // consume the value
-            getValue(tokenizer, HashMap.class);
+            Object value = getValue(tokenizer, HashMap.class);
+            if (obj.isMap()) {
+                obj.setValue(name, value);
+            }
         }
     }
 

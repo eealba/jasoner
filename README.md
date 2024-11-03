@@ -134,3 +134,18 @@ public class Address {
     }
 }
 ```
+Naming Strategy
+Jasoner provides various naming strategies to customize the JSON property names during serialization and deserialization. You can choose from the following naming strategies:  
+ - **NONE**: No naming strategy applied.
+ - **LOWER_CASE**: Converts property names to lower case.
+ - **UPPER_CASE**: Converts property names to upper case.
+ - **SNAKE_CASE**: Converts property names to snake case (e.g., firstName becomes first\_name).
+ - **UPPER_SNAKE_CASE**: Converts property names to upper snake case (e.g., firstName becomes FIRST\_NAME).
+ - **KEBAB_CASE**: Converts property names to kebab case (e.g., firstName becomes first-name).
+ - **UPPER_KEBAB_CASE**: Converts property names to upper kebab case (e.g., firstName becomes FIRST-NAME).
+ - **CAMEL_CASE**: Converts property names to camel case (e.g., FirstName becomes firstName).
+
+To use a naming strategy, configure it when creating the Jasoner instance:
+```java
+Jasoner jasoner = JasonerBuilder.create(new JasonerConfig.Builder().namingStrategy(NamingStrategy.SNAKE_CASE).build());
+```

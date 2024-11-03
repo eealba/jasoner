@@ -2,7 +2,6 @@ package io.github.eealba.example;
 
 import io.github.eealba.jasoner.Jasoner;
 import io.github.eealba.jasoner.JasonerBuilder;
-import io.github.eealba.jasoner.JsonbCompatibilityTest;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;

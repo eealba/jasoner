@@ -14,8 +14,9 @@ public class MyArchitectureTest {
     static final ArchRule layer_dependencies_are_respected = layeredArchitecture().consideringAllDependencies()
 
             .layer("api").definedBy("io.github.eealba.jasoner")
+            .layer("example").definedBy("io.github.eealba.example..")
             .layer("api-impl").definedBy("io.github.eealba.jasoner.internal..")
-            .whereLayer("api").mayOnlyBeAccessedByLayers("api-impl")
+            .whereLayer("api").mayOnlyBeAccessedByLayers("api-impl", "example")
             .whereLayer("api-impl").mayNotBeAccessedByAnyLayer();
 
 

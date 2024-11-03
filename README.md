@@ -49,7 +49,7 @@ import io.github.eealba.jasoner.JasonerBuilder;
 public class Person {
     private String name;
     private int age;
-    private boolean isDeveloper;
+    private boolean developer;
     private List<String> hobbies;
     private Map<String, String> socialMedia;
 
@@ -64,15 +64,41 @@ public class Main {
 
         // Create a new Person object
         Person person = new Person();
-        person.setName("John Doe");
+        person.setName("John");
         person.setAge(30);
         person.setDeveloper(true);
-        person.setHobbies(List.of("Reading", "Gaming", "Traveling"));
-        person.setSocialMedia(Map.of("Twitter", "@johndoe", "GitHub", "johndoe"));
+        person.setHobbies(List.of("Soccer", "Guitar"));
+        person.setSocialMedia(Map.of("twitter", "@john", "linkedin", "john"));
 
         // Serialize the Person object to a JSON string
         String json = jasoner.toJson(person);
         System.out.println(json);
+        // Deserialize the JSON string to a Person object
+        Person newPerson = jasoner.fromJson(json, Person.class);
+    }
+}
+```
+Mapping a collection
+```java
+import io.github.eealba.jasoner.Jasoner;
+import io.github.eealba.jasoner.JasonerBuilder;
+
+public class Main {
+    public static void main(String[] args) {
+        // Create a new Jasoner instance
+        Jasoner jasoner = JasonerBuilder.create();
+
+        // Create a list of Person objects
+        List<Person> persons = List.of(
+            new Person("John", 30, true, List.of("Soccer", "Guitar"), Map.of("twitter", "@john", "linkedin", "john")),
+            new Person("Jane", 25, false, List.of("Reading", "Painting"), Map.of("twitter", "@jane", "linkedin", "jane"))
+        );
+
+        // Serialize the list of Person objects to a JSON string
+        String json = jasoner.toJson(persons);
+        System.out.println(json);
+        // Deserialize the JSON string to a list of Person objects
+        List<Person> newPersons = jasoner.fromJson(json, new ArrayList<Person>(){}.getClass().getGenericSuperclass());
     }
 }
 ```

@@ -1,10 +1,15 @@
 package io.github.eealba.jasoner.internal;
 
+import io.github.eealba.jasoner.Jasoner;
 import io.github.eealba.jasoner.JasonerBuilder;
 import io.github.eealba.jasoner.JasonerConfig;
+import io.github.eealba.jasoner.JasonerTransient;
+import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.NamingStrategy;
+import io.github.eealba.jasoner.SerializationStrategy;
 import io.github.eealba.jasoner.demo.model1.DemoPojo;
 import io.github.eealba.jasoner.demo.model1.DemoPojo2;
+import lombok.Data;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -57,6 +62,84 @@ class JasonerImplTest {
         serializeAndDeserialize(jsonPlanExpected,  io.github.eealba.jasoner.demo.model2.Plan.class);
     }
 
+    @Test
+    void should_not_serialize_field_with_JasonerTransient(){
+        var user = getUser();
+
+        var jasoner = JasonerBuilder.create(JasonerConfig.builder()
+                .serializationStrategy(SerializationStrategy.FIELD)
+                .modifierStrategy(ModifierStrategy.PRIVATE).build());
+
+        var json = jasoner.toJson(user);
+
+        assertFalse(json.contains("password"));
+
+        assertNotNull(json);
+
+        var user2 = jasoner.fromJson(json, User.class);
+        assertNotNull(user2);
+        assertEquals(user.getName(), user2.getName());
+        assertEquals(user.getAge(), user2.getAge());
+        assertNull(user2.getPassword());
+    }
+    @Test
+    void should_not_deserialize_field_with_JasonerTransient(){
+        String json = "{\"name\":\"John\",\"age\":30,\"password\":\"123456\"}";
+        Jasoner jasoner = JasonerBuilder.create(JasonerConfig.builder()
+                .serializationStrategy(SerializationStrategy.FIELD)
+                .modifierStrategy(ModifierStrategy.PRIVATE).build());
+
+        var user = jasoner.fromJson(json, User.class);
+        assertNotNull(user);
+        assertEquals("John", user.getName());
+        assertEquals(30, user.getAge());
+        assertNull(user.getPassword());
+    }
+
+    @Test
+    void should_not_serialize_method_with_JasonerTransient(){
+        var user = getUser();
+
+        var jasoner = JasonerBuilder.create();
+
+        var json = jasoner.toJson(user);
+
+        assertFalse(json.contains("password"));
+
+        assertNotNull(json);
+
+        var user2 = jasoner.fromJson(json, User.class);
+        assertNotNull(user2);
+        assertEquals(user.getName(), user2.getName());
+        assertEquals(user.getAge(), user2.getAge());
+        assertNull(user2.getPassword());
+    }
+
+    @Test
+    void should_not_deserialize_method_with_JasonerTransient(){
+        String json = "{\"name\":\"John\",\"age\":30,\"password\":\"123456\"}";
+        Jasoner jasoner = JasonerBuilder.create();
+
+        var user = jasoner.fromJson(json, User.class);
+        assertNotNull(user);
+        assertEquals("John", user.getName());
+        assertEquals(30, user.getAge());
+        assertNull(user.getPassword());
+
+
+    }
+
+
+
+
+    private static User getUser() {
+        var user = new User();
+        user.setName("John");
+        user.setAge(30);
+        user.setPassword("123456");
+        return user;
+    }
+
     private void serializeAndDeserialize(String jsonPlanExpected, Class<?> clazz) {
         var jasoner = JasonerBuilder.create(new JasonerConfig.Builder()
                 .pretty(true)
@@ -82,5 +165,22 @@ class JasonerImplTest {
         }
 
     }
+    @Data
+    static class User {
+        private String name;
+        private int age;
+        @JasonerTransient
+        private String password;
+        // Getters and setters
+        @JasonerTransient
+        public String getPassword() {
+            return password;
+        }
+        @JasonerTransient
+        public void setPassword(String password) {
+            this.password = password;
+        }
+    }
+
 
 }

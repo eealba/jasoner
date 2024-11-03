@@ -117,6 +117,14 @@ public class JasonerConfig {
     public boolean unWrapSingleValueClasses() {
         return unWrapSingleValueClasses;
     }
+    /**
+     * Creates a new Builder instance for JasonerConfig.
+     *
+     * @return the builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Builder class for JasonerConfig.

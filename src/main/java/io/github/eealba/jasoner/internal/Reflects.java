@@ -15,6 +15,7 @@ package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
 import io.github.eealba.jasoner.JasonerProperty;
+import io.github.eealba.jasoner.JasonerTransient;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.NamingStrategy;
 
@@ -110,7 +111,7 @@ class Reflects {
      * @return the getter methods
      */
     static List<Method> getGetterMethods(Object entity, ModifierStrategy modifierStrategy) {
-        var predicate = getterMethod;
+        var predicate = getterMethod.and(ignoreTransientMethod());
         if (modifierStrategy == ModifierStrategy.PUBLIC) {
             predicate = predicate.and(publicMethod);
         }
@@ -146,6 +147,7 @@ class Reflects {
         var methods = getMethods(entity, setterMethod).stream()
                 .filter(m -> value == null || m.getParameterTypes()[0].isInstance(value))
                 .filter(filterMethodName(name).or(filterMethodWithJasonerProperty(name)))
+                .filter(ignoreTransientMethod())
                 .toList();
         return methods.stream().findFirst();
     }
@@ -159,6 +161,10 @@ class Reflects {
                 || m.getName().equals("set" + capitalizeFirstLetter(
                 NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)));
     }
+    private static Predicate<Method> ignoreTransientMethod() {
+        return m -> m.getDeclaredAnnotation(JasonerTransient.class) == null;
+    }
+
     private static Predicate<Method> filterMethodWithJasonerProperty(String name) {
         return m -> {
             var annotations = m.getDeclaredAnnotation(JasonerProperty.class);
@@ -218,7 +224,7 @@ class Reflects {
      */
     static List<Field> getFields(Object entity, ModifierStrategy modifierStrategy) {
         var fields = getFields(entity);
-        Predicate<Field> predicate = f -> true;
+        Predicate<Field> predicate = ignoreTransientField();
         if (modifierStrategy == ModifierStrategy.PUBLIC) {
             predicate = predicate.and(publicField);
         }
@@ -242,6 +248,7 @@ class Reflects {
     static Optional<Field> getField(Object entity, String name) {
         return getFields(entity).stream()
                 .filter(fieldFieldName(name).or(fieldFieldWithJasonerProperty(name)))
+                .filter(ignoreTransientField())
                 .findFirst();
     }
 
@@ -260,6 +267,10 @@ class Reflects {
                     || fieldName.equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name));
         };
     }
+    private static Predicate<Field> ignoreTransientField() {
+        return f -> f.getDeclaredAnnotation(JasonerTransient.class) == null;
+    }
+
 
 
     /**

@@ -245,7 +245,54 @@ class Person {
 
 In this example, the `ModifierStrategy.PRIVATE` strategy is used, which means that all fields and methods, including private ones, will be included during serialization and deserialization.
 
+### `JasonerTransient` Annotation
 
+The `JasonerTransient` annotation is used to mark fields or methods that should be ignored during JSON serialization and deserialization. When a field or method is annotated with `JasonerTransient`, it will not be included in the JSON output and will not be populated from the JSON input.
+
+### Example
+
+Here is an example demonstrating how to use the `JasonerTransient` annotation:
+
+```java
+import io.github.eealba.jasoner.Jasoner;
+import io.github.eealba.jasoner.JasonerBuilder;
+import io.github.eealba.jasoner.JasonerTransient;
+
+public class Main {
+    public static void main(String[] args) {
+        // Create a new Jasoner instance
+        Jasoner jasoner = JasonerBuilder.create();
+
+        // Create a new User object
+        User user = new User("John", "password123", "john@example.com");
+
+        // Serialize the User object to a JSON string
+        String json = jasoner.toJson(user);
+        System.out.println("Serialized JSON: " + json);
+
+        // Deserialize the JSON string back to a User object
+        User deserializedUser = jasoner.fromJson(json, User.class);
+        System.out.println("Deserialized User: " + deserializedUser.getName());
+    }
+}
+
+class User {
+    public String name;
+
+    @JasonerTransient
+    public String password;
+
+    public String email;
+
+    public User(String name, String password, String email) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+    }
+}
+```
+
+In this example, the `password` field is annotated with `JasonerTransient`, so it will be ignored during serialization and deserialization. The resulting JSON string will not include the `password` field, and the `password` field will not be populated when deserializing the JSON string back to a `User` object.
 
 
 ### Features

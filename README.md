@@ -102,3 +102,35 @@ public class Main {
     }
 }
 ```
+Changing property names with annotations in fields
+```java
+public class Address {
+    @JasonerProperty("calle")
+    public String street;
+
+    @JasonerProperty("ciudad")
+    public String city;
+
+    public String state;
+    public String zip;
+}
+```
+Changing property names with annotations in methods
+```java
+public class Address {
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
+
+    @JasonerProperty("calle")
+    public String getStreet() {
+        return street;
+    }
+
+    @JasonerProperty("ciudad")
+    public String getCity() {
+        return city;
+    }
+}
+```

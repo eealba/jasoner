@@ -33,11 +33,11 @@ public class JasonerExampleTest {
     }
 
     @Test
-    void should_deserialize_person_to_map() throws JSONException {
+    void should_deserialize_person_to_map(){
         String expected = "{\"name\":\"John\",\"age\":30,\"developer\":true,\"hobbies\":[\"Soccer\",\"Guitar\"],\"socialMedia\":{\"twitter\":\"@john\",\"linkedin\":\"john\"}}";
         Jasoner jasoner = JasonerBuilder.create();
         // Deserialize back to a map
-        var person = jasoner.fromJson(expected, Map.class);
+        Map person = jasoner.fromJson(expected, Map.class);
 
         assertEquals("John", person.get("name"));
         assertEquals(BigDecimal.valueOf(30), person.get("age"));
@@ -46,6 +46,21 @@ public class JasonerExampleTest {
         assertEquals(Map.of("twitter", "@john", "linkedin", "john"), person.get("socialMedia"));
     }
 
+    @Test
+    void should_deserialize_person_with_immnutable_class_with_joshua_bloch_builder() {
+        String expected = "{\"name\":\"John\",\"age\":30,\"developer\":true,\"hobbies\":[\"Soccer\",\"Guitar\"],\"socialMedia\":{\"twitter\":\"@john\",\"linkedin\":\"john\"}}";
+        // Create a new Jasoner instance
+        Jasoner jasoner = JasonerBuilder.create();
+        // Deserialize back to a ImmutablePerson
+        ImmutablePerson person = jasoner.fromJson(expected, ImmutablePerson.class);
+
+        assertEquals("John", person.getName());
+        assertEquals(30, person.getAge());
+        assertTrue(person.isDeveloper());
+        assertEquals(List.of("Soccer", "Guitar"), person.getHobbies());
+        assertEquals(Map.of("twitter", "@john", "linkedin", "john"), person.getSocialMedia());
+
+    }
     @Test
     void should_mapping_a_collection() throws JSONException {
 

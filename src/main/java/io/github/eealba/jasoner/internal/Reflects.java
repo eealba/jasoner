@@ -14,6 +14,7 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
+import io.github.eealba.jasoner.JasonerProperty;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.NamingStrategy;
 
@@ -144,16 +145,31 @@ class Reflects {
     static Optional<Method> getSetterMethod(Object entity, String name, Object value) {
         var methods = getMethods(entity, setterMethod).stream()
                 .filter(m -> value == null || m.getParameterTypes()[0].isInstance(value))
-                .filter(m -> m.getName().equals(name)
-                        || m.getName().equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
-                        || m.getName().equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name))
-                        || m.getName().equals("set" + capitalizeFirstLetter(
-                                NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name)))
-                        || m.getName().equals("set" + capitalizeFirstLetter(
-                        NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)))
-                )
+                .filter(filterMethodName(name).or(filterMethodWithJasonerProperty(name)))
                 .toList();
         return methods.stream().findFirst();
+    }
+
+    private static Predicate<Method> filterMethodName(String name) {
+        return m -> m.getName().equals(name)
+                || m.getName().equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
+                || m.getName().equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name))
+                || m.getName().equals("set" + capitalizeFirstLetter(
+                NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name)))
+                || m.getName().equals("set" + capitalizeFirstLetter(
+                NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)));
+    }
+    private static Predicate<Method> filterMethodWithJasonerProperty(String name) {
+        return m -> {
+            var annotations = m.getDeclaredAnnotation(JasonerProperty.class);
+            var mName = annotations != null ? annotations.value() : m.getName();
+
+            return mName.equals(name)
+                || mName.equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
+                || mName.equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name))
+                || mName.equals("set" + capitalizeFirstLetter(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name)))
+                || mName.equals("set" + capitalizeFirstLetter(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)));
+        };
     }
 
     /**
@@ -225,11 +241,26 @@ class Reflects {
      */
     static Optional<Field> getField(Object entity, String name) {
         return getFields(entity).stream()
-                .filter(f -> f.getName().equals(name)
-                        || f.getName().equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
-                        || f.getName().equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)))
+                .filter(fieldFieldName(name).or(fieldFieldWithJasonerProperty(name)))
                 .findFirst();
     }
+
+    private static Predicate<Field> fieldFieldName(String name) {
+        return f -> f.getName().equals(name)
+                || f.getName().equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
+                || f.getName().equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name));
+    }
+    private static Predicate<Field> fieldFieldWithJasonerProperty(String name) {
+        return f -> {
+            var annotation = f.getDeclaredAnnotation(JasonerProperty.class);
+            var fieldName = annotation != null ? annotation.value() : f.getName();
+
+            return fieldName.equals(name)
+                    || fieldName.equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
+                    || fieldName.equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name));
+        };
+    }
+
 
     /**
      * Gets the parameter class of a field.

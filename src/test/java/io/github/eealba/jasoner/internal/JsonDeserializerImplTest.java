@@ -1,5 +1,6 @@
 package io.github.eealba.jasoner.internal;
 
+import io.github.eealba.jasoner.JasonerProperty;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -58,6 +59,18 @@ class JsonDeserializerImplTest {
         assertEquals("Not satisfied with the service", res2.reason());
 
     }
+    @Test
+    void deserialize_dog_with_JasonerProperty() {
+        String data = """
+                {
+                  "dog-name": "Falco",
+                  "age": 4
+                }
+                """;
+        var res = deserialize(data, Dog1.class);
+
+        assertEquals("Falco", res.name);
+    }
 
     @Test
     void deserialize_with_immutable_builder_paypal_plan_with_extra_object_does_not_exists() {
@@ -78,6 +91,12 @@ class JsonDeserializerImplTest {
     private static <T> T deserialize(String data, Class<T> clazz) {
         JsonDeserializer deserializer = new JsonDeserializerImpl();
         return deserializer.deserialize(data, clazz);
+    }
+
+    static class Dog1 {
+        @JasonerProperty("dog-name")
+        public String name;
+        public int age;
     }
 
 }

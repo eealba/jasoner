@@ -22,6 +22,48 @@ import java.lang.reflect.Type;
 
 /**
  * Interface for converting objects to JSON and vice versa.
+ * <p>
+ * Example usage:
+ * <pre>
+ * {@code
+ * public class Main {
+ *     public static void main(String[] args) {
+ *         // Create a new Jasoner instance
+ *         Jasoner jasoner = JasonerBuilder.create();
+ *
+ *         // Create a new Person object
+ *         Person person = new Person();
+ *         person.setName("John Doe");
+ *         person.setAge(30);
+ *         person.setDeveloper(true);
+ *         person.setHobbies(List.of("Reading", "Gaming", "Traveling"));
+ *         person.setSocialMedia(Map.of("Twitter", "@johndoe", "GitHub", "johndoe"));
+ *
+ *         // Serialize the Person object to a JSON string
+ *         String json = jasoner.toJson(person);
+ *         System.out.println(json);
+ *
+ *         // Deserialize the JSON string back to a Person object
+ *         Person deserializedPerson = jasoner.fromJson(json, Person.class);
+ *         System.out.println(deserializedPerson.getName());
+ *     }
+ * }
+ *
+ * class Person {
+ *     private String name;
+ *     private int age;
+ *     private boolean isDeveloper;
+ *     private List<String> hobbies;
+ *     private Map<String, String> socialMedia;
+ *
+ *     // Getters and Setters
+ *     //...
+ * }
+ * }
+ * </pre>
+ * </p>
+ * @since 1.0
+ * @version 1.0
  * @author Edgar Alba
  */
 public interface Jasoner {

@@ -14,6 +14,7 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerConfig;
+import io.github.eealba.jasoner.JasonerProperty;
 import io.github.eealba.jasoner.SerializationStrategy;
 
 import java.io.IOException;
@@ -283,10 +284,12 @@ class JsonSerializerImpl implements JsonSerializer {
          */
         String getName() {
             if (method != null) {
-                return method.getName();
+                var jasonerProperty = method.getAnnotation(JasonerProperty.class);
+                return jasonerProperty != null ? jasonerProperty.value() : method.getName();
             }
             if (field != null) {
-                return field.getName();
+                var jasonerProperty = field.getAnnotation(JasonerProperty.class);
+                return jasonerProperty != null ? jasonerProperty.value() : field.getName();
             }
             return null;
         }

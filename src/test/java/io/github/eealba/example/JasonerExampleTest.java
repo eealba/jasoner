@@ -83,6 +83,39 @@ public class JasonerExampleTest {
         assertEquals("John", newPersons.get(0).getName());
         assertEquals(30, newPersons.get(0).getAge());
     }
+    @Test
+    void serialize_address_with_JasonProperties() throws JSONException {
+        String expected = """
+                {
+                  "calle": "123 Main St",
+                  "city": "Springfield",
+                  "state": "IL",
+                  "zip": "62701"
+                }
+                """;
+        Address address = new Address("123 Main St", "Springfield", "IL", "62701");
+        Jasoner jasoner = JasonerBuilder.create();
+        String result = jasoner.toJson(address);
+        JSONAssert.assertEquals(expected, result, true);
+    }
+    @Test
+    void deserialize_address_with_JasonProperties() throws JSONException {
+        String json = """
+                {
+                  "street": "123 Main St",
+                  "city": "Springfield",
+                  "estado": "IL",
+                  "zip": "62701"
+                }
+                """;
+        Jasoner jasoner = JasonerBuilder.create();
+        Address address = jasoner.fromJson(json, Address.class);
+
+        assertEquals("123 Main St", address.getStreet());
+        assertEquals("Springfield", address.getCity());
+        assertEquals("IL", address.getState());
+        assertEquals("62701", address.getZip());
+    }
 
     private static Person person() {
         Person person = new Person();

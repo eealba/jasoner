@@ -1,6 +1,7 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
+import io.github.eealba.jasoner.JasonerProperty;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.demo.model1.DemoPojo;
 import org.junit.jupiter.api.Test;
@@ -234,6 +235,33 @@ class ReflectsTest {
     @Test
     void should_return_all_getters() {
         assertEquals(4, Reflects.getGetterMethods( new DemoPojo(), ModifierStrategy.PRIVATE).size());
+    }
+    @Test
+    void should_return_field_with_annotation_JasonerProperty() {
+        assertTrue(Reflects.getField( new AddressWithJasonerProperties(), "ciudad").isPresent());
+    }
+    @Test
+    void should_return_setter_with_annotation_JasonerProperty() {
+        assertTrue(Reflects.getSetterMethod(new AddressWithJasonerProperties(), "calle", "Nápoles").isPresent());
+    }
+
+
+
+    static class AddressWithJasonerProperties {
+        String street;
+
+        @JasonerProperty("ciudad")
+        String city;
+        String state;
+        String zip;
+
+        @JasonerProperty("calle")
+        void setStreet(String street) {
+            this.street = street;
+        }
+        void setCity(String city) {
+            this.city = city;
+        }
     }
 
 }

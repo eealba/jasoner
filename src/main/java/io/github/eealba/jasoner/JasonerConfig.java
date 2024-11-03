@@ -117,6 +117,14 @@ public class JasonerConfig {
     public boolean unWrapSingleValueClasses() {
         return unWrapSingleValueClasses;
     }
+    /**
+     * Creates a new Builder instance for JasonerConfig.
+     *
+     * @return the builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Builder class for JasonerConfig.
@@ -125,7 +133,7 @@ public class JasonerConfig {
     public static class Builder {
         public boolean unWrapSingleValueClasses = true;
         private boolean pretty;
-        private NamingStrategy namingStrategy = NamingStrategy.NONE;
+        private NamingStrategy namingStrategy = NamingStrategy.CAMEL_CASE;
         private ModifierStrategy modifierStrategy = ModifierStrategy.PUBLIC;
         private boolean removePrefixAccessors = true;
         private Charset charset = StandardCharsets.UTF_8;

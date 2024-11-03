@@ -7,9 +7,36 @@
     <artifactId>jasoner</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
-    <name>jasoner</name>
+    <name>JaSONer</name>
     <url>https://github.com/eealba/jasoner</url>
-
+    <description>JaSONer is a lightweight and fast JSON library designed for simplicity and performance.
+        It offers a user-friendly API compatible with Json-B, making it easy to integrate into
+        your Java projects. Built with Java 17+,
+        JaSONer is thread-safe and ideal for handling immutable objects, DTOs, and POJOs.</description>
+    <organization>
+        <name>Edgar Enrique Alba Barrile</name>
+        <url>https://github.com/eealba</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Edgar Enrique Alba Barrile</name>
+            <email>eealba@gmail.com</email>
+            <url>https://github.com/eealba</url>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/eealba/jasoner</url>
+        <connection>scm:git:git@github.com:eealba/jasoner.git</connection>
+        <developerConnection>scm:git:git@github.com:eealba/jasoner.git</developerConnection>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
@@ -56,7 +83,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -105,5 +132,26 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!-- GENERATE JAVADOC -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <destDir>${project.basedir}/target/classes/static/apidocs</destDir>
+                    <excludePackageNames>io.github.eealba.jasoner.internal</excludePackageNames>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
     </build>
 </project>

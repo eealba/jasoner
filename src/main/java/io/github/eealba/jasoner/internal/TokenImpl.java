@@ -16,6 +16,7 @@ package io.github.eealba.jasoner.internal;
 import io.github.eealba.jasoner.JasonerException;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -196,7 +197,7 @@ class TokenImpl implements Token {
         if (type() == TokenType.NULL) {
             return null;
         }
-        if (ctype == null) {
+        if (ctype == null || Map.class.isAssignableFrom(ctype)) {
             return value();
         }
         if (ctype.isEnum()) {

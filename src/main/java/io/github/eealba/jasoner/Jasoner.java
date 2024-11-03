@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
 
 /**
  * Interface for converting objects to JSON and vice versa.
- * <p>
+ *
  * Example usage:
  * <pre>
  * {@code
@@ -61,7 +61,7 @@ import java.lang.reflect.Type;
  * }
  * }
  * </pre>
- * </p>
+ *
  * @since 1.0
  * @version 1.0
  * @author Edgar Alba

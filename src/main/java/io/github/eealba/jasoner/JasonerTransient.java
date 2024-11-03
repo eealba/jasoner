@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * Fields or methods annotated with {@code @JasonerTransient} will not be included in the JSON output
  * and will not be populated from the JSON input.
  * </p>
- * <p>
+ *
  * Example usage:
  * <pre>
  * {@code
@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  * }
  * }
  * </pre>
- * </p>
+ *
  *
  * @since 1.0
  * @version 1.0

@@ -22,6 +22,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -235,6 +236,9 @@ class JsonSerializerImpl implements JsonSerializer {
         }
         if (value instanceof Boolean bool) {
             return Optional.of(TokenImpl.createBooleanToken(bool.toString()));
+        }
+        if (value instanceof Date date) {
+            return Optional.of(TokenImpl.createTextToken(date.toInstant().toString()));
         }
         if(!value.getClass().isArray() && classIgnoredForSerialization(value.getClass())){
             return Optional.of(TokenImpl.createTextToken(value.toString()));

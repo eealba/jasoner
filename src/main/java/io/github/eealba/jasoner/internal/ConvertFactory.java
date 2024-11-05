@@ -15,6 +15,12 @@ package io.github.eealba.jasoner.internal;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -45,9 +51,13 @@ class ConvertFactory {
             case "long", "Long" -> (Object data) -> Long.parseLong(data.toString());
             case "float", "Float" -> (Object data) -> Float.parseFloat(data.toString());
             case "double", "Double" -> (Object data) -> Double.parseDouble(data.toString());
-            case "String" -> Object::toString;
             case "BigDecimal" -> (Object data) -> numericValue(data.toString());
             case "boolean", "Boolean" -> (Object data) -> Boolean.parseBoolean(data.toString());
+            case "LocalDate" -> (Object data) -> LocalDate.parse(data.toString());
+            case "LocalDateTime" -> (Object data) -> LocalDateTime.parse(data.toString());
+            case "LocalTime" -> (Object data) -> LocalTime.parse(data.toString());
+            case "Date" -> (Object data) -> Date.from(Instant.parse(data.toString()));
+            case "OffsetDateTime" -> (Object data) -> OffsetDateTime.parse(data.toString());
             default -> null;
         };
         if (convert != null) {

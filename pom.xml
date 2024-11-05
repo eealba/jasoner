@@ -5,7 +5,7 @@
 
     <groupId>io.github.eealba</groupId>
     <artifactId>jasoner</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 
     <name>JaSONer</name>
     <url>https://github.com/eealba/jasoner</url>

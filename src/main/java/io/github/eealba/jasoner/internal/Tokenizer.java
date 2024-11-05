@@ -246,7 +246,8 @@ class Tokenizer {
                 case '7':
                 case '8':
                 case '9':
-                    if (!buff.isEmpty() && ch == '-') {
+                    if (!buff.isEmpty() && ch == '-' &&
+                            !buff.substring(buff.length() - 1).equalsIgnoreCase("e")) {
                         throw new JasonerException(String.format(ERROR_UNEXPECTED_CHARACTER, ch, pos));
                     }
                     buff.append(ch);

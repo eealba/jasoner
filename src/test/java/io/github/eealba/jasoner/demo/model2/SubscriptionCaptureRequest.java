@@ -1,11 +1,12 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
 
 /**
  * The charge amount from the subscriber.
  */
-public record SubscriptionCaptureRequest(String note, String captureType, Money amount) {
+public record SubscriptionCaptureRequest(String note, @JasonerProperty("capture_type") String captureType, Money amount) {
 
     public SubscriptionCaptureRequest(String note, String captureType, Money amount) {
         if (note == null) {

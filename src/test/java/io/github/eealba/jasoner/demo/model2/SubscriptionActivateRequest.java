@@ -4,6 +4,7 @@ package io.github.eealba.jasoner.demo.model2;
 
 public class SubscriptionActivateRequest {
 
+    
     private final String reason;
 
     private SubscriptionActivateRequest(Builder builder) {
@@ -11,6 +12,7 @@ public class SubscriptionActivateRequest {
 
     }
 
+    
     public String reason() {
         return reason;
     }
@@ -23,6 +25,7 @@ public class SubscriptionActivateRequest {
 
         private String reason;
 
+        
         public Builder reason(String value) {
             reason = value;
             return this;

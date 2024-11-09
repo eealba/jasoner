@@ -5,10 +5,15 @@ import java.util.Objects;
 
 public class ErrorDetails {
 
+    
     private final String field;
+    
     private final String value;
+    
     private final String location;
+    
     private final String issue;
+    
     private final String description;
 
     private ErrorDetails(Builder builder) {
@@ -19,22 +24,27 @@ public class ErrorDetails {
         issue = Objects.requireNonNull(builder.issue);
     }
 
+    
     public String field() {
         return field;
     }
 
+    
     public String value() {
         return value;
     }
 
+    
     public String location() {
         return location;
     }
 
+    
     public String issue() {
         return issue;
     }
 
+    
     public String description() {
         return description;
     }
@@ -51,26 +61,31 @@ public class ErrorDetails {
         private String issue;
         private String description;
 
+        
         public Builder field(String value) {
             field = value;
             return this;
         }
 
+        
         public Builder value(String value) {
             value = value;
             return this;
         }
 
+        
         public Builder location(String value) {
             location = value;
             return this;
         }
 
+        
         public Builder issue(String value) {
             issue = value;
             return this;
         }
 
+        
         public Builder description(String value) {
             description = value;
             return this;

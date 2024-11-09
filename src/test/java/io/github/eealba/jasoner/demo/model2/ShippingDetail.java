@@ -4,8 +4,11 @@ package io.github.eealba.jasoner.demo.model2;
 
 public class ShippingDetail {
 
+    
     private final Name name;
+    
     private final Type type;
+    
     private final AddressPortable address;
 
     private ShippingDetail(Builder builder) {
@@ -15,14 +18,17 @@ public class ShippingDetail {
 
     }
 
+    
     public Name name() {
         return name;
     }
 
+    
     public Type type() {
         return type;
     }
 
+    
     public AddressPortable address() {
         return address;
     }
@@ -37,16 +43,19 @@ public class ShippingDetail {
         private Type type;
         private AddressPortable address;
 
+        
         public Builder name(Name value) {
             name = value;
             return this;
         }
 
+        
         public Builder type(Type value) {
             type = value;
             return this;
         }
 
+        
         public Builder address(AddressPortable value) {
             address = value;
             return this;

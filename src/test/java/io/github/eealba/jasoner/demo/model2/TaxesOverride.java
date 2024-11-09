@@ -4,7 +4,9 @@ package io.github.eealba.jasoner.demo.model2;
 
 public class TaxesOverride {
 
+    
     private final Percentage percentage;
+    
     private final Boolean inclusive;
 
     private TaxesOverride(Builder builder) {
@@ -13,10 +15,12 @@ public class TaxesOverride {
 
     }
 
+    
     public Percentage percentage() {
         return percentage;
     }
 
+    
     public Boolean inclusive() {
         return inclusive;
     }
@@ -30,11 +34,13 @@ public class TaxesOverride {
         private Percentage percentage;
         private Boolean inclusive;
 
+        
         public Builder percentage(Percentage value) {
             percentage = value;
             return this;
         }
 
+        
         public Builder inclusive(Boolean value) {
             inclusive = value;
             return this;

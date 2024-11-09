@@ -1,12 +1,17 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
 
 public class PaymentPreferences {
 
+    @JasonerProperty("auto_bill_outstanding")
     private final Boolean autoBillOutstanding;
+    @JasonerProperty("setup_fee")
     private final Money setupFee;
+    @JasonerProperty("setup_fee_failure_action")
     private final SetupFeeFailureAction setupFeeFailureAction;
+    @JasonerProperty("payment_failure_threshold")
     private final Integer paymentFailureThreshold;
 
     private PaymentPreferences(Builder builder) {
@@ -17,18 +22,22 @@ public class PaymentPreferences {
 
     }
 
+    @JasonerProperty("auto_bill_outstanding")
     public Boolean autoBillOutstanding() {
         return autoBillOutstanding;
     }
 
+    @JasonerProperty("setup_fee")
     public Money setupFee() {
         return setupFee;
     }
 
+    @JasonerProperty("setup_fee_failure_action")
     public SetupFeeFailureAction setupFeeFailureAction() {
         return setupFeeFailureAction;
     }
 
+    @JasonerProperty("payment_failure_threshold")
     public Integer paymentFailureThreshold() {
         return paymentFailureThreshold;
     }
@@ -44,21 +53,25 @@ public class PaymentPreferences {
         private SetupFeeFailureAction setupFeeFailureAction;
         private Integer paymentFailureThreshold;
 
+        @JasonerProperty("auto_bill_outstanding")
         public Builder autoBillOutstanding(Boolean value) {
             autoBillOutstanding = value;
             return this;
         }
 
+        @JasonerProperty("setup_fee")
         public Builder setupFee(Money value) {
             setupFee = value;
             return this;
         }
 
+        @JasonerProperty("setup_fee_failure_action")
         public Builder setupFeeFailureAction(SetupFeeFailureAction value) {
             setupFeeFailureAction = value;
             return this;
         }
 
+        @JasonerProperty("payment_failure_threshold")
         public Builder paymentFailureThreshold(Integer value) {
             paymentFailureThreshold = value;
             return this;

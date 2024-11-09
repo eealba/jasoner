@@ -4,6 +4,7 @@ package io.github.eealba.jasoner.demo.model2;
 
 public class PaymentSourceResponse {
 
+    
     private final CardResponseWithBillingAddress card;
 
     private PaymentSourceResponse(Builder builder) {
@@ -11,6 +12,7 @@ public class PaymentSourceResponse {
 
     }
 
+    
     public CardResponseWithBillingAddress card() {
         return card;
     }
@@ -23,6 +25,7 @@ public class PaymentSourceResponse {
 
         private CardResponseWithBillingAddress card;
 
+        
         public Builder card(CardResponseWithBillingAddress value) {
             card = value;
             return this;

@@ -5,7 +5,9 @@ import java.util.Objects;
 
 public class Taxes {
 
+    
     private final Percentage percentage;
+    
     private final Boolean inclusive;
 
     private Taxes(Builder builder) {
@@ -13,10 +15,12 @@ public class Taxes {
         percentage = Objects.requireNonNull(builder.percentage);
     }
 
+    
     public Percentage percentage() {
         return percentage;
     }
 
+    
     public Boolean inclusive() {
         return inclusive;
     }
@@ -30,11 +34,13 @@ public class Taxes {
         private Percentage percentage;
         private Boolean inclusive;
 
+        
         public Builder percentage(Percentage value) {
             percentage = value;
             return this;
         }
 
+        
         public Builder inclusive(Boolean value) {
             inclusive = value;
             return this;

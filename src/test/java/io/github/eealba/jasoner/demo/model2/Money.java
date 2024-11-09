@@ -1,11 +1,12 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
 
 /**
  * The currency and amount for a financial transaction, such as a balance or payment due.
  */
-public record Money(CurrencyCode currencyCode, String value) {
+public record Money(@JasonerProperty("currency_code") CurrencyCode currencyCode, String value) {
 
     public Money(CurrencyCode currencyCode, String value) {
         if (currencyCode == null) {

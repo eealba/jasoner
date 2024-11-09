@@ -1,11 +1,16 @@
 package io.github.eealba.jasoner.demo.model2;
 
+import io.github.eealba.jasoner.JasonerProperty;
+
 import java.util.List;
 
 public class PlanOverride {
 
+    @JasonerProperty("billing_cycles")
     private final List<BillingCycleOverride> billingCycles;
+    @JasonerProperty("payment_preferences")
     private final PaymentPreferencesOverride paymentPreferences;
+    
     private final TaxesOverride taxes;
 
     private PlanOverride(Builder builder) {
@@ -15,14 +20,17 @@ public class PlanOverride {
 
     }
 
+    @JasonerProperty("billing_cycles")
     public List<BillingCycleOverride> billingCycles() {
         return billingCycles;
     }
 
+    @JasonerProperty("payment_preferences")
     public PaymentPreferencesOverride paymentPreferences() {
         return paymentPreferences;
     }
 
+    
     public TaxesOverride taxes() {
         return taxes;
     }
@@ -37,16 +45,19 @@ public class PlanOverride {
         private PaymentPreferencesOverride paymentPreferences;
         private TaxesOverride taxes;
 
+        @JasonerProperty("billing_cycles")
         public Builder billingCycles(List<BillingCycleOverride> value) {
             billingCycles = value;
             return this;
         }
 
+        @JasonerProperty("payment_preferences")
         public Builder paymentPreferences(PaymentPreferencesOverride value) {
             paymentPreferences = value;
             return this;
         }
 
+        
         public Builder taxes(TaxesOverride value) {
             taxes = value;
             return this;

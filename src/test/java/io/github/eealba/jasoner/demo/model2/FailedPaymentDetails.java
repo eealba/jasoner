@@ -1,13 +1,19 @@
 package io.github.eealba.jasoner.demo.model2;
 
+import io.github.eealba.jasoner.JasonerProperty;
+
 import java.time.Instant;
 import java.util.Objects;
 
 public class FailedPaymentDetails {
 
+    
     private final Money amount;
+    
     private final Instant time;
+    @JasonerProperty("reason_code")
     private final ReasonCode reasonCode;
+    @JasonerProperty("next_payment_retry_time")
     private final Instant nextPaymentRetryTime;
 
     private FailedPaymentDetails(Builder builder) {
@@ -17,18 +23,22 @@ public class FailedPaymentDetails {
         time = Objects.requireNonNull(builder.time);
     }
 
+    
     public Money amount() {
         return amount;
     }
 
+    
     public Instant time() {
         return time;
     }
 
+    @JasonerProperty("reason_code")
     public ReasonCode reasonCode() {
         return reasonCode;
     }
 
+    @JasonerProperty("next_payment_retry_time")
     public Instant nextPaymentRetryTime() {
         return nextPaymentRetryTime;
     }
@@ -44,21 +54,25 @@ public class FailedPaymentDetails {
         private ReasonCode reasonCode;
         private Instant nextPaymentRetryTime;
 
+        
         public Builder amount(Money value) {
             amount = value;
             return this;
         }
 
+        
         public Builder time(Instant value) {
             time = value;
             return this;
         }
 
+        @JasonerProperty("reason_code")
         public Builder reasonCode(ReasonCode value) {
             reasonCode = value;
             return this;
         }
 
+        @JasonerProperty("next_payment_retry_time")
         public Builder nextPaymentRetryTime(Instant value) {
             nextPaymentRetryTime = value;
             return this;

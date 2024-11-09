@@ -1,15 +1,23 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
+
 import java.util.Objects;
 
 public class CycleExecution {
 
+    @JasonerProperty("tenure_type")
     private final TenureType tenureType;
+    
     private final Integer sequence;
+    @JasonerProperty("cycles_completed")
     private final Integer cyclesCompleted;
+    @JasonerProperty("cycles_remaining")
     private final Integer cyclesRemaining;
+    @JasonerProperty("current_pricing_scheme_version")
     private final Integer currentPricingSchemeVersion;
+    @JasonerProperty("total_cycles")
     private final Integer totalCycles;
 
     private CycleExecution(Builder builder) {
@@ -21,26 +29,32 @@ public class CycleExecution {
         cyclesCompleted = Objects.requireNonNull(builder.cyclesCompleted);
     }
 
+    @JasonerProperty("tenure_type")
     public TenureType tenureType() {
         return tenureType;
     }
 
+    
     public Integer sequence() {
         return sequence;
     }
 
+    @JasonerProperty("cycles_completed")
     public Integer cyclesCompleted() {
         return cyclesCompleted;
     }
 
+    @JasonerProperty("cycles_remaining")
     public Integer cyclesRemaining() {
         return cyclesRemaining;
     }
 
+    @JasonerProperty("current_pricing_scheme_version")
     public Integer currentPricingSchemeVersion() {
         return currentPricingSchemeVersion;
     }
 
+    @JasonerProperty("total_cycles")
     public Integer totalCycles() {
         return totalCycles;
     }
@@ -58,31 +72,37 @@ public class CycleExecution {
         private Integer currentPricingSchemeVersion;
         private Integer totalCycles;
 
+        @JasonerProperty("tenure_type")
         public Builder tenureType(TenureType value) {
             tenureType = value;
             return this;
         }
 
+        
         public Builder sequence(Integer value) {
             sequence = value;
             return this;
         }
 
+        @JasonerProperty("cycles_completed")
         public Builder cyclesCompleted(Integer value) {
             cyclesCompleted = value;
             return this;
         }
 
+        @JasonerProperty("cycles_remaining")
         public Builder cyclesRemaining(Integer value) {
             cyclesRemaining = value;
             return this;
         }
 
+        @JasonerProperty("current_pricing_scheme_version")
         public Builder currentPricingSchemeVersion(Integer value) {
             currentPricingSchemeVersion = value;
             return this;
         }
 
+        @JasonerProperty("total_cycles")
         public Builder totalCycles(Integer value) {
             totalCycles = value;
             return this;

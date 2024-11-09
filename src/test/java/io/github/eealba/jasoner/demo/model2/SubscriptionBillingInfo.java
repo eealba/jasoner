@@ -1,17 +1,26 @@
 package io.github.eealba.jasoner.demo.model2;
 
+import io.github.eealba.jasoner.JasonerProperty;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
 public class SubscriptionBillingInfo {
 
+    @JasonerProperty("outstanding_balance")
     private final Money outstandingBalance;
+    @JasonerProperty("cycle_executions")
     private final List<CycleExecution> cycleExecutions;
+    @JasonerProperty("last_payment")
     private final LastPaymentDetails lastPayment;
+    @JasonerProperty("next_billing_time")
     private final Instant nextBillingTime;
+    @JasonerProperty("final_payment_time")
     private final Instant finalPaymentTime;
+    @JasonerProperty("failed_payments_count")
     private final Integer failedPaymentsCount;
+    @JasonerProperty("last_failed_payment")
     private final FailedPaymentDetails lastFailedPayment;
 
     private SubscriptionBillingInfo(Builder builder) {
@@ -24,30 +33,37 @@ public class SubscriptionBillingInfo {
         failedPaymentsCount = Objects.requireNonNull(builder.failedPaymentsCount);
     }
 
+    @JasonerProperty("outstanding_balance")
     public Money outstandingBalance() {
         return outstandingBalance;
     }
 
+    @JasonerProperty("cycle_executions")
     public List<CycleExecution> cycleExecutions() {
         return cycleExecutions;
     }
 
+    @JasonerProperty("last_payment")
     public LastPaymentDetails lastPayment() {
         return lastPayment;
     }
 
+    @JasonerProperty("next_billing_time")
     public Instant nextBillingTime() {
         return nextBillingTime;
     }
 
+    @JasonerProperty("final_payment_time")
     public Instant finalPaymentTime() {
         return finalPaymentTime;
     }
 
+    @JasonerProperty("failed_payments_count")
     public Integer failedPaymentsCount() {
         return failedPaymentsCount;
     }
 
+    @JasonerProperty("last_failed_payment")
     public FailedPaymentDetails lastFailedPayment() {
         return lastFailedPayment;
     }
@@ -66,36 +82,43 @@ public class SubscriptionBillingInfo {
         private Integer failedPaymentsCount;
         private FailedPaymentDetails lastFailedPayment;
 
+        @JasonerProperty("outstanding_balance")
         public Builder outstandingBalance(Money value) {
             outstandingBalance = value;
             return this;
         }
 
+        @JasonerProperty("cycle_executions")
         public Builder cycleExecutions(List<CycleExecution> value) {
             cycleExecutions = value;
             return this;
         }
 
+        @JasonerProperty("last_payment")
         public Builder lastPayment(LastPaymentDetails value) {
             lastPayment = value;
             return this;
         }
 
+        @JasonerProperty("next_billing_time")
         public Builder nextBillingTime(Instant value) {
             nextBillingTime = value;
             return this;
         }
 
+        @JasonerProperty("final_payment_time")
         public Builder finalPaymentTime(Instant value) {
             finalPaymentTime = value;
             return this;
         }
 
+        @JasonerProperty("failed_payments_count")
         public Builder failedPaymentsCount(Integer value) {
             failedPaymentsCount = value;
             return this;
         }
 
+        @JasonerProperty("last_failed_payment")
         public Builder lastFailedPayment(FailedPaymentDetails value) {
             lastFailedPayment = value;
             return this;

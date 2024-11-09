@@ -76,7 +76,13 @@ class NamingFactoryTest {
     @Test
     void camelCase() {
         Naming naming = NamingFactory.get(NamingStrategy.CAMEL_CASE);
-        
+
+        Assertions.assertEquals("addressLine1", naming.apply( "address_line_1"));
+        Assertions.assertEquals("addressLine1", naming.apply( "address-line-1"));
+        Assertions.assertEquals("addressLine1", naming.apply( "addressLine1"));
+        Assertions.assertEquals("addressLine1", naming.apply( "AddressLine1"));
+        Assertions.assertEquals("addressLine1", naming.apply( "ADDRESS_LINE_1"));
+
         Assertions.assertEquals("holaMundo", naming.apply("holaMundo"));
         Assertions.assertEquals("holaMundo", naming.apply("HolaMundo"));
         Assertions.assertEquals("holaMundo", naming.apply("Hola-Mundo"));
@@ -90,6 +96,7 @@ class NamingFactoryTest {
         Assertions.assertEquals("productId", naming.apply( "product_id"));
         Assertions.assertEquals("productId", naming.apply( "ProductId"));
         Assertions.assertEquals("productId", naming.apply( "PRODUCT_ID"));
+
 
     }
 

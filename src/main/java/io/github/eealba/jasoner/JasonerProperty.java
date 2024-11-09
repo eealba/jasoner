@@ -43,7 +43,7 @@ import java.lang.annotation.Target;
  * @version 1.0
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER, ElementType.RECORD_COMPONENT})
 public @interface JasonerProperty {
     /**
      * Specifies the custom property name to be used during JSON serialization and deserialization.

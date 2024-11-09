@@ -10,7 +10,7 @@ thread-safe and ideal for handling immutable objects, DTOs, and POJOs.
 <dependency>
     <groupId>io.github.eealba</groupId>
     <artifactId>jasoner</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
 </dependency>
 
 ```

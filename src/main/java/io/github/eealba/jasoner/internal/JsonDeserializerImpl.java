@@ -57,10 +57,25 @@ class JsonDeserializerImpl implements JsonDeserializer {
         if (token.type() == TokenType.OBJECT_START) {
             return deserializeObject(tokenizer, clazz);
         } else if (token.type() == TokenType.ARRAY_START) {
-            return deserializeArray(tokenizer, clazz, HashMap.class);
+            Class<?> arrayElementClass = getArrayElementClass(clazz);
+            if (clazz.isRecord()){
+                var values = deserializeArray(tokenizer, ArrayList.class, arrayElementClass);
+                return clazz.cast(Reflects.createSingleRecord(clazz, values).orElseThrow());
+            }
+            return deserializeArray(tokenizer, clazz, arrayElementClass);
         }
         throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
     }
+
+    private Class<?> getArrayElementClass(Class<?> clazz) {
+        if (clazz.isRecord()){
+            if (Reflects.getSingleRecordParameterClass(clazz).isPresent()){
+                return Reflects.getSingleRecordParameterClass(clazz).get();
+            }
+        }
+        return HashMap.class;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public <T> T deserialize(Reader data, Type genericSuperclass) {

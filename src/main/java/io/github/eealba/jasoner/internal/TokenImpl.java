@@ -218,7 +218,7 @@ class TokenImpl implements Token {
             case "String" -> data;
             case "BigDecimal" -> numericValue();
             case "boolean", "Boolean" -> Boolean.parseBoolean(data);
-            default -> data;
+            default -> value();
         };
     }
 

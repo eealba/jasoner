@@ -61,6 +61,15 @@ class JsonSerializerImpl implements JsonSerializer {
 
         Objects.requireNonNull(obj);
         var jsonWriter = new JsonWriter(Objects.requireNonNull(writer), config.pretty());
+        //TODO Maybe its better to use a different approach for record that have a single value to represent V.O.
+        if (obj.getClass().isRecord() ){
+            if (Reflects.getSingleRecordParameterClass(obj.getClass()).isPresent()){
+                var valueData = valueDataList(obj).get(0);
+                if (valueData.getName().equals("value") && valueData.getValue() instanceof List<?>){
+                    obj = valueData.getValue();
+                }
+            }
+        }
         if (obj instanceof List<?> list) {
             jsonArray(list, jsonWriter);
         } else {

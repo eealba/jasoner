@@ -450,6 +450,17 @@ class Reflects {
         }
         return Optional.empty();
     }
+    static Optional<Class<?>> getSingleRecordParameterClass(Class<?> clazz){
+        if (!clazz.isRecord()) {
+            throw new IllegalArgumentException(String.format("The class: '%s' is not a record", clazz.getName()));
+        }
+        var constructor = clazz.getDeclaredConstructors()[0];
+        var parameters = constructor.getParameters();
+        if (parameters.length == 1){
+            return Optional.of(getClass(parameters[0]));
+        }
+        return Optional.empty();
+    }
 
     /**
      * Creates an instance of a record.
@@ -468,6 +479,21 @@ class Reflects {
             List<Object> values = getConstructorArgs(map, constructor);
             try {
                 return Optional.of(clazz.cast(constructor.newInstance(values.toArray())));
+            } catch (Exception e) {
+                throw new JasonerException(e);
+            }
+        }
+        throw new IllegalArgumentException(String.format("The constructor of the record class: '%s' is not accessible",
+                clazz.getName()));
+    }
+    static <T> Optional<T> createSingleRecord(Class<T> clazz, Object value){
+        if (!clazz.isRecord()) {
+            throw new IllegalArgumentException(String.format("The class: '%s' is not a record", clazz.getName()));
+        }
+        var constructor = clazz.getDeclaredConstructors()[0];
+        if (constructor.trySetAccessible()){
+            try {
+                return Optional.of(clazz.cast(constructor.newInstance(value)));
             } catch (Exception e) {
                 throw new JasonerException(e);
             }

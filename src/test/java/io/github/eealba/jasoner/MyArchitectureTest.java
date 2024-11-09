@@ -15,8 +15,9 @@ public class MyArchitectureTest {
 
             .layer("api").definedBy("io.github.eealba.jasoner")
             .layer("example").definedBy("io.github.eealba.example..")
+            .layer("demo").definedBy("io.github.eealba.jasoner.demo..")
             .layer("api-impl").definedBy("io.github.eealba.jasoner.internal..")
-            .whereLayer("api").mayOnlyBeAccessedByLayers("api-impl", "example")
+            .whereLayer("api").mayOnlyBeAccessedByLayers("api-impl", "example", "demo")
             .whereLayer("api-impl").mayNotBeAccessedByAnyLayer();
 
 

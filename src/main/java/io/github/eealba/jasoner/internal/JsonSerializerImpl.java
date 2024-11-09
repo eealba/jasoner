@@ -116,19 +116,19 @@ class JsonSerializerImpl implements JsonSerializer {
     }
 
 
-    private void serializeValueData(List<ValueData> valueDataList, JsonWriter writer) throws IOException {
-        for (int i = 0; i < valueDataList.size(); i++) {
-            var valueData = valueDataList.get(i);
+    private void serializeValueData(List<ValueData> arrList, JsonWriter writer) throws IOException {
+       var dataList = arrList.stream().filter((ValueData vd) -> vd.getValue() != null).toList();
+
+        for (int i = 0; i < dataList.size(); i++) {
+            var valueData = dataList.get(i);
             var value = valueData.getValue();
-            if (value != null) {
                 var name = NamingFactory.get(config.namingStrategy()).apply(removePrefix(valueData.getName()));
                 writer.append(TokenImpl.createTextToken(name));
                 writer.append(TokenImpl.COLON);
                 propertyValue(writer, value);
-                if (i < valueDataList.size() - 1) {
+                if (i < dataList.size() - 1) {
                     writer.append(TokenImpl.COMMA);
                 }
-            }
         }
     }
 

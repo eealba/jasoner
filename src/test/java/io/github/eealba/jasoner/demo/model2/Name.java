@@ -1,15 +1,23 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
 
 public class Name {
 
+    
     private final String prefix;
+    @JasonerProperty("given_name")
     private final String givenName;
+    
     private final String surname;
+    @JasonerProperty("middle_name")
     private final String middleName;
+    
     private final String suffix;
+    @JasonerProperty("alternate_full_name")
     private final String alternateFullName;
+    @JasonerProperty("full_name")
     private final String fullName;
 
     private Name(Builder builder) {
@@ -23,30 +31,37 @@ public class Name {
 
     }
 
+    
     public String prefix() {
         return prefix;
     }
 
+    @JasonerProperty("given_name")
     public String givenName() {
         return givenName;
     }
 
+    
     public String surname() {
         return surname;
     }
 
+    @JasonerProperty("middle_name")
     public String middleName() {
         return middleName;
     }
 
+    
     public String suffix() {
         return suffix;
     }
 
+    @JasonerProperty("alternate_full_name")
     public String alternateFullName() {
         return alternateFullName;
     }
 
+    @JasonerProperty("full_name")
     public String fullName() {
         return fullName;
     }
@@ -65,36 +80,43 @@ public class Name {
         private String alternateFullName;
         private String fullName;
 
+        
         public Builder prefix(String value) {
             prefix = value;
             return this;
         }
 
+        @JasonerProperty("given_name")
         public Builder givenName(String value) {
             givenName = value;
             return this;
         }
 
+        
         public Builder surname(String value) {
             surname = value;
             return this;
         }
 
+        @JasonerProperty("middle_name")
         public Builder middleName(String value) {
             middleName = value;
             return this;
         }
 
+        
         public Builder suffix(String value) {
             suffix = value;
             return this;
         }
 
+        @JasonerProperty("alternate_full_name")
         public Builder alternateFullName(String value) {
             alternateFullName = value;
             return this;
         }
 
+        @JasonerProperty("full_name")
         public Builder fullName(String value) {
             fullName = value;
             return this;

@@ -4,7 +4,9 @@ import java.time.Instant;
 
 public class LastPaymentDetails {
 
+    
     private final Money amount;
+    
     private final Instant time;
 
     private LastPaymentDetails(Builder builder) {
@@ -13,10 +15,12 @@ public class LastPaymentDetails {
 
     }
 
+    
     public Money amount() {
         return amount;
     }
 
+    
     public Instant time() {
         return time;
     }
@@ -30,11 +34,13 @@ public class LastPaymentDetails {
         private Money amount;
         private Instant time;
 
+        
         public Builder amount(Money value) {
             amount = value;
             return this;
         }
 
+        
         public Builder time(Instant value) {
             time = value;
             return this;

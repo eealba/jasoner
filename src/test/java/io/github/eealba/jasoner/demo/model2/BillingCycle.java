@@ -1,14 +1,21 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
+
 import java.util.Objects;
 
 public class BillingCycle {
 
+    @JasonerProperty("pricing_scheme")
     private final PricingScheme pricingScheme;
+    
     private final Frequency frequency;
+    @JasonerProperty("tenure_type")
     private final TenureType tenureType;
+    
     private final Integer sequence;
+    @JasonerProperty("total_cycles")
     private final Integer totalCycles;
 
     private BillingCycle(Builder builder) {
@@ -19,22 +26,27 @@ public class BillingCycle {
         sequence = Objects.requireNonNull(builder.sequence);
     }
 
+    @JasonerProperty("pricing_scheme")
     public PricingScheme pricingScheme() {
         return pricingScheme;
     }
 
+    
     public Frequency frequency() {
         return frequency;
     }
 
+    @JasonerProperty("tenure_type")
     public TenureType tenureType() {
         return tenureType;
     }
 
+    
     public Integer sequence() {
         return sequence;
     }
 
+    @JasonerProperty("total_cycles")
     public Integer totalCycles() {
         return totalCycles;
     }
@@ -51,26 +63,31 @@ public class BillingCycle {
         private Integer sequence;
         private Integer totalCycles;
 
+        @JasonerProperty("pricing_scheme")
         public Builder pricingScheme(PricingScheme value) {
             pricingScheme = value;
             return this;
         }
 
+        
         public Builder frequency(Frequency value) {
             frequency = value;
             return this;
         }
 
+        @JasonerProperty("tenure_type")
         public Builder tenureType(TenureType value) {
             tenureType = value;
             return this;
         }
 
+        
         public Builder sequence(Integer value) {
             sequence = value;
             return this;
         }
 
+        @JasonerProperty("total_cycles")
         public Builder totalCycles(Integer value) {
             totalCycles = value;
             return this;

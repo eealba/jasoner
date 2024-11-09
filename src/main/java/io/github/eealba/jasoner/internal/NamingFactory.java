@@ -80,7 +80,7 @@ class NamingFactory {
         }
 
         str = str.toLowerCase(); // Convert the entire string to lowercase first
-        Pattern pattern = Pattern.compile("([_\\-])([a-zA-Z])");
+        Pattern pattern = Pattern.compile("([_\\-])([a-zA-Z0-9])");
         Matcher matcher = pattern.matcher(str);
         StringBuilder camelCase = new StringBuilder();
 

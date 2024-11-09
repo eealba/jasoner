@@ -1,11 +1,15 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
 
 public class PaymentMethod {
 
+    @JasonerProperty("payer_selected")
     private final String payerSelected;
+    @JasonerProperty("payee_preferred")
     private final PayeePaymentMethodPreference payeePreferred;
+    @JasonerProperty("standard_entry_class_code")
     private final StandardEntryClassCode standardEntryClassCode;
 
     private PaymentMethod(Builder builder) {
@@ -15,14 +19,17 @@ public class PaymentMethod {
 
     }
 
+    @JasonerProperty("payer_selected")
     public String payerSelected() {
         return payerSelected;
     }
 
+    @JasonerProperty("payee_preferred")
     public PayeePaymentMethodPreference payeePreferred() {
         return payeePreferred;
     }
 
+    @JasonerProperty("standard_entry_class_code")
     public StandardEntryClassCode standardEntryClassCode() {
         return standardEntryClassCode;
     }
@@ -37,16 +44,19 @@ public class PaymentMethod {
         private PayeePaymentMethodPreference payeePreferred;
         private StandardEntryClassCode standardEntryClassCode;
 
+        @JasonerProperty("payer_selected")
         public Builder payerSelected(String value) {
             payerSelected = value;
             return this;
         }
 
+        @JasonerProperty("payee_preferred")
         public Builder payeePreferred(PayeePaymentMethodPreference value) {
             payeePreferred = value;
             return this;
         }
 
+        @JasonerProperty("standard_entry_class_code")
         public Builder standardEntryClassCode(StandardEntryClassCode value) {
             standardEntryClassCode = value;
             return this;

@@ -1,11 +1,13 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
 
 /**
  * The update pricing scheme request details.
  */
-public record UpdatePricingSchemeRequest(Integer billingCycleSequence, PricingScheme pricingScheme) {
+public record UpdatePricingSchemeRequest(@JasonerProperty("billing_cycle_sequence") Integer billingCycleSequence, @JasonerProperty("pricing_scheme") 
+PricingScheme pricingScheme) {
 
     public UpdatePricingSchemeRequest(Integer billingCycleSequence, PricingScheme pricingScheme) {
         if (billingCycleSequence == null) {

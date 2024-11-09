@@ -1,11 +1,15 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
+
 import java.util.Objects;
 
 public class Frequency {
 
+    @JasonerProperty("interval_unit")
     private final IntervalUnit intervalUnit;
+    @JasonerProperty("interval_count")
     private final Integer intervalCount;
 
     private Frequency(Builder builder) {
@@ -13,10 +17,12 @@ public class Frequency {
         intervalUnit = Objects.requireNonNull(builder.intervalUnit);
     }
 
+    @JasonerProperty("interval_unit")
     public IntervalUnit intervalUnit() {
         return intervalUnit;
     }
 
+    @JasonerProperty("interval_count")
     public Integer intervalCount() {
         return intervalCount;
     }
@@ -30,11 +36,13 @@ public class Frequency {
         private IntervalUnit intervalUnit;
         private Integer intervalCount;
 
+        @JasonerProperty("interval_unit")
         public Builder intervalUnit(IntervalUnit value) {
             intervalUnit = value;
             return this;
         }
 
+        @JasonerProperty("interval_count")
         public Builder intervalCount(Integer value) {
             intervalCount = value;
             return this;

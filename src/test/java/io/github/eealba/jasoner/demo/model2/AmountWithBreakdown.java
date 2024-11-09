@@ -1,15 +1,23 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerProperty;
+
 import java.util.Objects;
 
 public class AmountWithBreakdown {
 
+    @JasonerProperty("gross_amount")
     private final Money grossAmount;
+    @JasonerProperty("total_item_amount")
     private final Money totalItemAmount;
+    @JasonerProperty("fee_amount")
     private final Money feeAmount;
+    @JasonerProperty("shipping_amount")
     private final Money shippingAmount;
+    @JasonerProperty("tax_amount")
     private final Money taxAmount;
+    @JasonerProperty("net_amount")
     private final Money netAmount;
 
     private AmountWithBreakdown(Builder builder) {
@@ -21,26 +29,32 @@ public class AmountWithBreakdown {
         grossAmount = Objects.requireNonNull(builder.grossAmount);
     }
 
+    @JasonerProperty("gross_amount")
     public Money grossAmount() {
         return grossAmount;
     }
 
+    @JasonerProperty("total_item_amount")
     public Money totalItemAmount() {
         return totalItemAmount;
     }
 
+    @JasonerProperty("fee_amount")
     public Money feeAmount() {
         return feeAmount;
     }
 
+    @JasonerProperty("shipping_amount")
     public Money shippingAmount() {
         return shippingAmount;
     }
 
+    @JasonerProperty("tax_amount")
     public Money taxAmount() {
         return taxAmount;
     }
 
+    @JasonerProperty("net_amount")
     public Money netAmount() {
         return netAmount;
     }
@@ -58,31 +72,37 @@ public class AmountWithBreakdown {
         private Money taxAmount;
         private Money netAmount;
 
+        @JasonerProperty("gross_amount")
         public Builder grossAmount(Money value) {
             grossAmount = value;
             return this;
         }
 
+        @JasonerProperty("total_item_amount")
         public Builder totalItemAmount(Money value) {
             totalItemAmount = value;
             return this;
         }
 
+        @JasonerProperty("fee_amount")
         public Builder feeAmount(Money value) {
             feeAmount = value;
             return this;
         }
 
+        @JasonerProperty("shipping_amount")
         public Builder shippingAmount(Money value) {
             shippingAmount = value;
             return this;
         }
 
+        @JasonerProperty("tax_amount")
         public Builder taxAmount(Money value) {
             taxAmount = value;
             return this;
         }
 
+        @JasonerProperty("net_amount")
         public Builder netAmount(Money value) {
             netAmount = value;
             return this;

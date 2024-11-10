@@ -1,6 +1,6 @@
 # JaSONer - A Spartan JSON Library
-![Coverage](.github/badges/jacoco.svg)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.eealba/jasoner.svg?label=Maven%20Central)](https://mvnrepository.com/artifact/io.github.eealba/jasoner)
+[![Coverage](.github/badges/jacoco.svg)](https://github.com/eealba/jasoner/actions/workflows/github_action.yaml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.eealba/jasoner.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.eealba/jasoner)
 [![Javadoc](https://javadoc.io/badge2/io.github.eealba/jasoner/javadoc.io.svg)](https://javadoc.io/doc/io.github.eealba/jasoner)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Java Version](https://img.shields.io/badge/Java-17%2B-brightgreen)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)

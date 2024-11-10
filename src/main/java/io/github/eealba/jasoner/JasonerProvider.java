@@ -12,14 +12,13 @@
  * limitations under the License.
  */
 package io.github.eealba.jasoner;
-
-
 import java.lang.reflect.Constructor;
-import java.util.Iterator;
-import java.util.ServiceLoader;
 
 /**
  * The type Json provider.
+ * This class is used to create instances of the Jasoner interface.
+ * @since 1.0
+ * @version 1.0
  *
  * @author Edgar Alba
  */

@@ -27,7 +27,7 @@ public class PaypalPayloadTest {
             .namingStrategy(NamingStrategy.SNAKE_CASE)
             .pretty(true)
             .build());
-    private static final String EXAMPLES = "/PAYPAL/";
+    private static final String EXAMPLES = "/paypal/";
 
     @Test
     void should_serialize_and_deserialize_paypal_patch_request() throws IOException, JSONException {

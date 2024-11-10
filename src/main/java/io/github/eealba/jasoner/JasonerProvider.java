@@ -12,18 +12,32 @@
  * limitations under the License.
  */
 package io.github.eealba.jasoner;
-
+import java.lang.reflect.Constructor;
 
 /**
  * The type Json provider.
+ * This class is used to create instances of the Jasoner interface.
+ * @since 1.0
+ * @version 1.0
+ *
  * @author Edgar Alba
  */
 public abstract class JasonerProvider {
+    /**
+     * The providerImpl.
+     */
+    private static JasonerProvider providerImpl;
     /**
      * A constant representing the name of the default {@code JsonProvider}
      * implementation class.
      */
     private static final String DEFAULT_PROVIDER = "io.github.eealba.jasoner.internal.JasonerProviderImpl";
+
+    /**
+     * Instantiates a new Json provider.
+     */
+    public JasonerProvider() {
+    }
 
     /**
      * Creates a JSON provider object. If there are no available service providers,
@@ -32,7 +46,23 @@ public abstract class JasonerProvider {
      * @return a JSON provider
      */
     public static JasonerProvider provider() {
-        return Providers.getProvider(JasonerProvider.class, DEFAULT_PROVIDER);
+        if (providerImpl != null) {
+            return providerImpl;
+        }
+        try {
+            Class<?> clazz = Class.forName(DEFAULT_PROVIDER);
+            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            for (Constructor<?> c : constructors) {
+                if (c.getParameterCount() == 0) {
+                    c.setAccessible(true);
+                    providerImpl = (JasonerProvider) c.newInstance();
+                    return providerImpl;
+                }
+            }
+        } catch (Exception x) {
+            throw new JasonerException("Provider for JasonerProvider not found", x);
+        }
+        throw new JasonerException("Provider for JasonerProvider not found");
     }
 
 
@@ -43,4 +73,5 @@ public abstract class JasonerProvider {
      * @return the jasoner
      */
     public abstract Jasoner createJasoner(JasonerConfig config);
+
 }

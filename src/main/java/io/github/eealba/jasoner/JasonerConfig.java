@@ -31,6 +31,9 @@ import java.nio.charset.StandardCharsets;
  * @author Edgar Alba
  */
 public class JasonerConfig {
+    /**
+     * Default configuration for Jasoner.
+     */
     public final static JasonerConfig DEFAULT = new Builder().build();
 
     private final NamingStrategy namingStrategy;
@@ -109,6 +112,7 @@ public class JasonerConfig {
     public boolean pretty() {
         return pretty;
     }
+
     /**
      * Checks if single value classes should be unwrapped.
      *
@@ -117,6 +121,7 @@ public class JasonerConfig {
     public boolean unWrapSingleValueClasses() {
         return unWrapSingleValueClasses;
     }
+
     /**
      * Creates a new Builder instance for JasonerConfig.
      *
@@ -131,14 +136,19 @@ public class JasonerConfig {
      * This class is used to build instances of JasonerConfig with custom settings.
      */
     public static class Builder {
-        public boolean unWrapSingleValueClasses = true;
+        private boolean unWrapSingleValueClasses = true;
         private boolean pretty;
         private NamingStrategy namingStrategy = NamingStrategy.CAMEL_CASE;
         private ModifierStrategy modifierStrategy = ModifierStrategy.PUBLIC;
         private boolean removePrefixAccessors = true;
         private Charset charset = StandardCharsets.UTF_8;
         private SerializationStrategy serializationStrategy = SerializationStrategy.BOTH;
+        /**
+         * Default constructor for Builder.
+         */
+        public Builder() {
 
+        }
         /**
          * Sets the naming strategy.
          *
@@ -204,6 +214,7 @@ public class JasonerConfig {
             this.pretty = pretty;
             return this;
         }
+
         /**
          * Sets whether to unwrap single value classes.
          *

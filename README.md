@@ -1,4 +1,10 @@
 # JaSONer - A Spartan JSON Library
+![Coverage](.github/badges/jacoco.svg)
+![Maven Central](https://img.shields.io/maven-central/v/io.github.eealba/jasoner.svg?label=Maven%20Central)
+![License](https://img.shields.io/github/license/eealba/jasoner.svg?label=License)
+![Java Version](https://img.shields.io/badge/Java-17%2B-brightgreen)
+![Build Status](https://github.com/eealba/jasoner/actions/workflows/github_action.yaml/badge.svg)
+
 JaSONer is a lightweight and fast JSON library designed for simplicity and 
 performance. It offers a user-friendly API compatible with Json-B, making it 
 easy to integrate into your Java projects. Built with Java 17+, JaSONer is 

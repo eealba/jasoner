@@ -25,6 +25,11 @@ package io.github.eealba.jasoner;
  * @author Edgar Alba
  */
 public class JasonerBuilder {
+    /**
+     * Private constructor for JasonerBuilder.
+     */
+    private JasonerBuilder() {
+    }
 
     /**
      * Create a Jasoner instance with default configuration.

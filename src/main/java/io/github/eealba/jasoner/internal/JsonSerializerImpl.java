@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * The class JsonSerializerImpl.
@@ -65,7 +66,7 @@ class JsonSerializerImpl implements JsonSerializer {
         if (obj.getClass().isRecord() ){
             if (Reflects.getSingleRecordParameterClass(obj.getClass()).isPresent()){
                 var valueData = valueDataList(obj).get(0);
-                if (valueData.getName().equals("value") && valueData.getValue() instanceof List<?>){
+                if (valueData.getName((s) -> s).equals("value") && valueData.getValue() instanceof List<?>){
                     obj = valueData.getValue();
                 }
             }
@@ -131,7 +132,7 @@ class JsonSerializerImpl implements JsonSerializer {
         for (int i = 0; i < dataList.size(); i++) {
             var valueData = dataList.get(i);
             var value = valueData.getValue();
-                var name = NamingFactory.get(config.namingStrategy()).apply(removePrefix(valueData.getName()));
+            var name = valueData.getName(getNamingFunction());
                 writer.append(TokenImpl.createTextToken(name));
                 writer.append(TokenImpl.COLON);
                 propertyValue(writer, value);
@@ -139,6 +140,9 @@ class JsonSerializerImpl implements JsonSerializer {
                     writer.append(TokenImpl.COMMA);
                 }
         }
+    }
+    private Function<String, String> getNamingFunction() {
+        return (String source) -> NamingFactory.get(config.namingStrategy()).apply(removePrefix(source));
     }
 
 
@@ -295,14 +299,14 @@ class JsonSerializerImpl implements JsonSerializer {
          *
          * @return the name
          */
-        String getName() {
+        String getName(Function<String, String> namingFunction) {
             if (method != null) {
                 var jasonerProperty = method.getAnnotation(JasonerProperty.class);
-                return jasonerProperty != null ? jasonerProperty.value() : method.getName();
+                return jasonerProperty != null ? jasonerProperty.value() : namingFunction.apply(method.getName());
             }
             if (field != null) {
                 var jasonerProperty = field.getAnnotation(JasonerProperty.class);
-                return jasonerProperty != null ? jasonerProperty.value() : field.getName();
+                return jasonerProperty != null ? jasonerProperty.value() : namingFunction.apply(field.getName());
             }
             return null;
         }

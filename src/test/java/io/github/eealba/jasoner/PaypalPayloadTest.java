@@ -27,6 +27,9 @@ public class PaypalPayloadTest {
             .namingStrategy(NamingStrategy.SNAKE_CASE)
             .pretty(true)
             .build());
+    private static final Jasoner JASONER2 = JasonerBuilder.create(JasonerConfig.builder()
+           .pretty(true)
+            .build());
     private static final String EXAMPLES = "/paypal/";
 
     @Test
@@ -42,6 +45,7 @@ public class PaypalPayloadTest {
     void should_serialize_and_deserialize_paypal_plan_request_POST() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "plan_request_POST.json"), PlanRequestPOST.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_subscription() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription.json"), Subscription.class);
@@ -90,9 +94,20 @@ public class PaypalPayloadTest {
     }
 
     private static void executeAndCompare(String json, Class<?> clazz) throws JSONException {
+        executeAndCompare2(json, clazz);
+        executeAndCompare1(json, clazz);
+    }
+    private static void executeAndCompare1(String json, Class<?> clazz) throws JSONException {
         var subscription = JASONER.fromJson(json, clazz);
         assertNotNull(subscription);
         String newJson = JASONER.toJson(subscription);
+        JSONAssert.assertEquals(json, newJson, true);
+
+    }
+    private static void executeAndCompare2(String json, Class<?> clazz) throws JSONException {
+        var subscription = JASONER2.fromJson(json, clazz);
+        assertNotNull(subscription);
+        String newJson = JASONER2.toJson(subscription);
         JSONAssert.assertEquals(json, newJson, true);
     }
 

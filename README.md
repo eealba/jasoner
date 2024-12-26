@@ -18,7 +18,7 @@ thread-safe and ideal for handling immutable objects, DTOs, and POJOs.
 <dependency>
     <groupId>io.github.eealba</groupId>
     <artifactId>jasoner</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 
 ```

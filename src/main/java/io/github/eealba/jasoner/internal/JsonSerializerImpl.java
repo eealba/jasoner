@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static io.github.eealba.jasoner.internal.Reflects.getJasonerProperty;
+
 /**
  * The class JsonSerializerImpl.
  * This class implements the JsonSerializer interface to serialize an object to a JSON string.
@@ -242,7 +244,10 @@ class JsonSerializerImpl implements JsonSerializer {
             if (tmp.equals("true")|| tmp.equals("false")) {
                 return Optional.of(TokenImpl.createBooleanToken(tmp));
             }
-            return Optional.of(TokenImpl.createTextToken(tmp));
+            var jasonerProperty = getJasonerProperty(value.getClass(), enu);
+            return jasonerProperty.map(property -> TokenImpl.createTextToken(property.value()))
+                    .or(() -> Optional.of(TokenImpl.createTextToken(tmp)));
+
         }
         if (value instanceof Number number){
             return Optional.of(TokenImpl.createNumberToken(number.toString()));

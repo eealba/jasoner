@@ -14,11 +14,12 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
-
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static io.github.eealba.jasoner.internal.Reflects.getJasonerProperty;
 
 /**
  * The class TokenImpl.
@@ -146,14 +147,6 @@ class TokenImpl implements Token {
         return new TokenImpl(value.equals("true") ? TokenType.TRUE : TokenType.FALSE, value);
     }
 
-    /**
-     * Creates a null token.
-     *
-     * @return the null token
-     */
-    static Token createNullToken() {
-        return new TokenImpl(TokenType.NULL, "null");
-    }
 
     /**
      * Creates a number token.
@@ -206,6 +199,10 @@ class TokenImpl implements Token {
                 if (e.name().equals(data)) {
                     return e;
                 }
+                var jasonerProperty = getJasonerProperty(ctype, e);
+                if (jasonerProperty.isPresent() && jasonerProperty.get().value().equals(data)) {
+                    return e;
+                }
             }
             throw new JasonerException("Not found enum for: " + data);
         }
@@ -221,6 +218,7 @@ class TokenImpl implements Token {
             default -> value();
         };
     }
+
 
     /**
      * Gets the value of the token.

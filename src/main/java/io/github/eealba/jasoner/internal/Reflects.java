@@ -59,10 +59,8 @@ class Reflects {
     private static final Predicate<Method> noParameterMethod = (Method method) -> method.getParameterCount() == 0;
     private static final Predicate<Method> returnValueMethod = (Method method) -> method.getReturnType() != Void.TYPE;
 
-    private static final Predicate<Method> noOverridedObjectMethod = (Method method) -> {
-        return !(method.getName().equals("hashCode")
-                        || method.getName().equals("toString"));
-    };
+    private static final Predicate<Method> noOverridedObjectMethod = (Method method) -> !(method.getName().equals("hashCode")
+                    || method.getName().equals("toString"));
 
     private static final Predicate<Method> setterMethod = instanceMethod.and(onceParameterMethod);
     private static final Predicate<Method> getterMethod = instanceMethod
@@ -544,4 +542,14 @@ class Reflects {
         }
         return null;
     }
+
+    static Optional<JasonerProperty> getJasonerProperty(Class<?> ctype, Enum<?> e) {
+        try {
+            var field = ctype.getField(e.name());
+            return Optional.ofNullable(field.getAnnotation(JasonerProperty.class));
+        } catch (NoSuchFieldException ex) {
+            return Optional.empty();
+        }
+    }
+
 }

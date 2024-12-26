@@ -14,13 +14,12 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
-import io.github.eealba.jasoner.JasonerProperty;
-
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static io.github.eealba.jasoner.internal.Reflects.getJasonerProperty;
 
 /**
  * The class TokenImpl.
@@ -148,14 +147,6 @@ class TokenImpl implements Token {
         return new TokenImpl(value.equals("true") ? TokenType.TRUE : TokenType.FALSE, value);
     }
 
-    /**
-     * Creates a null token.
-     *
-     * @return the null token
-     */
-    static Token createNullToken() {
-        return new TokenImpl(TokenType.NULL, "null");
-    }
 
     /**
      * Creates a number token.
@@ -228,14 +219,6 @@ class TokenImpl implements Token {
         };
     }
 
-    private static Optional<JasonerProperty> getJasonerProperty(Class<?> ctype, Enum<?> e) {
-        try {
-            var field = ctype.getField(e.name());
-            return Optional.ofNullable(field.getAnnotation(JasonerProperty.class));
-        } catch (NoSuchFieldException ex) {
-            return Optional.empty();
-        }
-    }
 
     /**
      * Gets the value of the token.

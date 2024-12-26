@@ -58,6 +58,6 @@ public class JasonerException extends RuntimeException {
      * @param cause the cause of the exception
      */
     public JasonerException(Throwable cause) {
-        super(cause);
+        super(cause.getMessage(), cause);
     }
 }

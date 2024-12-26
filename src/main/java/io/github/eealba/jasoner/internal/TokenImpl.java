@@ -14,7 +14,9 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
+import io.github.eealba.jasoner.JasonerProperty;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
@@ -206,6 +208,10 @@ class TokenImpl implements Token {
                 if (e.name().equals(data)) {
                     return e;
                 }
+                var jasonerProperty = getJasonerProperty(ctype, e);
+                if (jasonerProperty.isPresent() && jasonerProperty.get().value().equals(data)) {
+                    return e;
+                }
             }
             throw new JasonerException("Not found enum for: " + data);
         }
@@ -220,6 +226,15 @@ class TokenImpl implements Token {
             case "boolean", "Boolean" -> Boolean.parseBoolean(data);
             default -> value();
         };
+    }
+
+    private static Optional<JasonerProperty> getJasonerProperty(Class<?> ctype, Enum<?> e) {
+        try {
+            var field = ctype.getField(e.name());
+            return Optional.ofNullable(field.getAnnotation(JasonerProperty.class));
+        } catch (NoSuchFieldException ex) {
+            return Optional.empty();
+        }
     }
 
     /**

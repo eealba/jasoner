@@ -495,7 +495,9 @@ class Reflects {
             try {
                 return Optional.of(clazz.cast(constructor.newInstance(value)));
             } catch (Exception e) {
-                throw new JasonerException(e);
+                var msg = String.format("Error to create new instance of class: %s with value: %s, cause: %s",
+                        clazz.getName(), value, e.getMessage());
+                throw new JasonerException(msg);
             }
         }
         throw new IllegalArgumentException(String.format("The constructor of the record class: '%s' is not accessible",

@@ -157,7 +157,6 @@ class TokenImpl implements Token {
     static Token createNumberToken(String value) {
         return new TokenImpl(TokenType.NUMBER, value);
     }
-
     /**
      * Creates a text token.
      *

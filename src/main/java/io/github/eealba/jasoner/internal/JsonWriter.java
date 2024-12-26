@@ -29,6 +29,7 @@ class JsonWriter {
     private final Writer writer;
     private final boolean pretty;
     private int indent = 0;
+    private static final String escape = String.valueOf(new char[] {'\\', '\\', '"'});
 
     /**
      * Instantiates a new JsonWriter.
@@ -69,12 +70,14 @@ class JsonWriter {
         if (c.type() == TokenType.TEXT) {
             writer.write('"');
         }
-
-        writer.write(c.stringValue());
+        writer.write(escapeQuotes(c.stringValue()));
 
         if (c.type() == TokenType.TEXT) {
             writer.write('"');
         }
+    }
+    private String escapeQuotes(String value) {
+        return value.replaceAll("(?<!\\\\)\"", "\\\\\"");
     }
 
     private void putTrailing(Token c) throws IOException {

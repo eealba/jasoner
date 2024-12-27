@@ -1,6 +1,7 @@
 package io.github.eealba.jasoner;
 
 import io.github.eealba.example.Blik;
+import io.github.eealba.example.ErrorDefault;
 import io.github.eealba.example.PaymentInstruction;
 import io.github.eealba.example.ProcessorResponse;
 import io.github.eealba.jasoner.demo.model2.PatchRequest;
@@ -116,6 +117,10 @@ public class PaypalPayloadTest {
     @Test
     void should_serialize_and_deserialize_paypal_blik() throws IOException, JSONException {
         executeAndCompare(readResource("/blik.json"), Blik.class);
+    }
+    @Test
+    void error_serialize_deserialize() throws IOException, JSONException {
+        executeAndCompare(readResource("/error.json"), ErrorDefault.class);
     }
 
 

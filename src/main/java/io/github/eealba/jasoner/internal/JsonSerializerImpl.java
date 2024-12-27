@@ -157,13 +157,7 @@ class JsonSerializerImpl implements JsonSerializer {
     public String removePrefix(String name) {
         Objects.requireNonNull(name);
         if (config.removePrefixAccessors()) {
-            String lowercase = name.toLowerCase();
-            if (lowercase.startsWith("is")) {
-                return name.substring(2);
-            }
-            if (lowercase.startsWith("has") || lowercase.startsWith("get")) {
-                return name.substring(3);
-            }
+            return name.replaceAll("^(is|has|get)(?=[A-Z])", "");
         }
         return name;
     }

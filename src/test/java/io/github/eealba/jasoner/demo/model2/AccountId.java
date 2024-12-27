@@ -1,10 +1,12 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerSingleVO;
 
 /**
  * The account identifier for a PayPal account.
  */
+@JasonerSingleVO
 public record AccountId(String value) {
 
     public AccountId(String value) {

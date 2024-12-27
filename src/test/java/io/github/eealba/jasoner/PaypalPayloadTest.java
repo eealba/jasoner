@@ -1,5 +1,8 @@
 package io.github.eealba.jasoner;
 
+import io.github.eealba.example.Blik;
+import io.github.eealba.example.PaymentInstruction;
+import io.github.eealba.example.ProcessorResponse;
 import io.github.eealba.jasoner.demo.model2.PatchRequest;
 import io.github.eealba.jasoner.demo.model2.Plan;
 import io.github.eealba.jasoner.demo.model2.PlanRequestPOST;
@@ -28,7 +31,7 @@ public class PaypalPayloadTest {
             .pretty(true)
             .build());
     private static final Jasoner JASONER2 = JasonerBuilder.create(JasonerConfig.builder()
-           .pretty(true)
+            .pretty(true)
             .build());
     private static final String EXAMPLES = "/paypal/";
 
@@ -41,6 +44,7 @@ public class PaypalPayloadTest {
     void should_serialize_and_deserialize_paypal_plan() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "plan.json"), Plan.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_plan_request_POST() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "plan_request_POST.json"), PlanRequestPOST.class);
@@ -50,21 +54,25 @@ public class PaypalPayloadTest {
     void should_serialize_and_deserialize_paypal_subscription() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription.json"), Subscription.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_subscription_activate_request() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription_activate_request.json"),
                 SubscriptionActivateRequest.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_subscription_cancel_request() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription_cancel_request.json"),
                 SubscriptionCancelRequest.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_subscription_capture_request() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription_capture_request.json"),
                 SubscriptionCaptureRequest.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_subscription_request_post() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription_request_post.json"),
@@ -76,11 +84,13 @@ public class PaypalPayloadTest {
         executeAndCompare(readResource(EXAMPLES + "subscription_revise_request.json"),
                 SubscriptionReviseRequest.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_subscription_revise_response() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription_revise_response.json"),
                 SubscriptionReviseResponse.class);
     }
+
     @Test
     void should_serialize_and_deserialize_paypal_subscription_suspend_request() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "subscription_suspend_request.json"),
@@ -93,10 +103,27 @@ public class PaypalPayloadTest {
                 UpdatePricingSchemesListRequest.class);
     }
 
+    @Test
+    void should_serialize_and_deserialize_paypal_processor_response() throws IOException, JSONException {
+        executeAndCompare(readResource("/processor_response.json"), ProcessorResponse.class);
+    }
+
+    @Test
+    void should_serialize_and_deserialize_paypal_payment_instruction() throws IOException, JSONException {
+        executeAndCompare(readResource("/payment_instruction.json"), PaymentInstruction.class);
+    }
+
+    @Test
+    void should_serialize_and_deserialize_paypal_blik() throws IOException, JSONException {
+        executeAndCompare(readResource("/blik.json"), Blik.class);
+    }
+
+
     private static void executeAndCompare(String json, Class<?> clazz) throws JSONException {
         executeAndCompare2(json, clazz);
         executeAndCompare1(json, clazz);
     }
+
     private static void executeAndCompare1(String json, Class<?> clazz) throws JSONException {
         var subscription = JASONER.fromJson(json, clazz);
         assertNotNull(subscription);
@@ -104,6 +131,7 @@ public class PaypalPayloadTest {
         JSONAssert.assertEquals(json, newJson, true);
 
     }
+
     private static void executeAndCompare2(String json, Class<?> clazz) throws JSONException {
         var subscription = JASONER2.fromJson(json, clazz);
         assertNotNull(subscription);

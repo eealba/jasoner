@@ -15,6 +15,7 @@ package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerConfig;
 import io.github.eealba.jasoner.JasonerProperty;
+import io.github.eealba.jasoner.JasonerSingleVO;
 import io.github.eealba.jasoner.SerializationStrategy;
 
 import java.io.IOException;
@@ -224,14 +225,16 @@ class JsonSerializerImpl implements JsonSerializer {
         if (singleValue.isPresent()) {
             return singleValue;
         }
-        if (config.unWrapSingleValueClasses()) {
-            var valueDataList = valueDataList(value);
-            if (valueDataList.size() == 1) {
-                var newValue = valueDataList.get(0).getValue();
-                return getSingleValue(newValue);
-            }
+        var valueDataList = valueDataList(value);
+        if (valueDataList.size() == 1 && isSingleVO(value.getClass())) {
+            var newValue = valueDataList.get(0).getValue();
+            return getSingleValue(newValue);
         }
         return Optional.empty();
+    }
+
+    private boolean isSingleVO(Class<?> aClass) {
+        return aClass.getAnnotation(JasonerSingleVO.class) != null;
     }
 
     private static Optional<Token> getSingleValue(Object value) {

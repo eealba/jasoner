@@ -1,0 +1,8 @@
+{
+  "name": "string",
+  "country_code": "ZO",
+  "email": "joe@doe.com",
+  "one_click": {
+    "consumer_reference": "ax123"
+  }
+}

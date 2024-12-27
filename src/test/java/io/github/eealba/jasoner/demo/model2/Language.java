@@ -1,6 +1,7 @@
 package io.github.eealba.jasoner.demo.model2;
 
 
+import io.github.eealba.jasoner.JasonerSingleVO;
 
 /**
  * The [language tag](https://tools.ietf.org/html/bcp47#section-2) for the language in which to localize the error-related 
@@ -9,6 +10,7 @@ code](https://www.loc.gov/standards/iso639-2/php/code_list.php), the optional [I
 tag](https://www.unicode.org/iso15924/codelists.html), and the [ISO-3166 alpha-2 country 
 code](/docs/integration/direct/rest/country-codes/).
  */
+@JasonerSingleVO
 public record Language(String value) {
 
     public Language(String value) {

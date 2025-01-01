@@ -4,6 +4,7 @@ import io.github.eealba.example.Blik;
 import io.github.eealba.example.ErrorDefault;
 import io.github.eealba.example.PaymentInstruction;
 import io.github.eealba.example.ProcessorResponse;
+import io.github.eealba.example.invoices.Template;
 import io.github.eealba.jasoner.demo.model2.PatchRequest;
 import io.github.eealba.jasoner.demo.model2.Plan;
 import io.github.eealba.jasoner.demo.model2.PlanRequestPOST;
@@ -122,7 +123,10 @@ public class PaypalPayloadTest {
     void error_serialize_deserialize() throws IOException, JSONException {
         executeAndCompare(readResource("/error.json"), ErrorDefault.class);
     }
-
+    @Test
+    void template_serialize_deserialize() throws IOException, JSONException {
+        executeAndCompare(readResource(EXAMPLES + "template.json"), Template.class);
+    }
 
     private static void executeAndCompare(String json, Class<?> clazz) throws JSONException {
         executeAndCompare2(json, clazz);

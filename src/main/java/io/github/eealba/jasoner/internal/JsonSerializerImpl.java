@@ -85,6 +85,9 @@ class JsonSerializerImpl implements JsonSerializer {
         var size = list.size();
         for (int i = 0; i < size; i++) {
             Object value = list.get(i);
+            if (isSingleVO(value.getClass())) {
+                value = valueDataList(value).get(0).getValue();
+            }
             if (value instanceof String str) {
                 writer.append(TokenImpl.createTextToken(str));
             } else if (value instanceof Number number) {

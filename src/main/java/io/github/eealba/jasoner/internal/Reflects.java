@@ -339,7 +339,7 @@ class Reflects {
                 throw new JasonerException(String.format("The method '%s' is not accessible", method.getName()));
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-           return  new JasonerException(e);
+           throw new JasonerException(e);
         }
     }
 

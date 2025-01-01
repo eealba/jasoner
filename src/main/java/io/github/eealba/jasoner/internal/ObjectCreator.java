@@ -16,6 +16,7 @@ package io.github.eealba.jasoner.internal;
 import io.github.eealba.jasoner.JasonerException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -96,6 +97,9 @@ class ObjectCreator<T> {
     static Object convertValue(Class<?> parameterClass, Object valueArg) {
         if (parameterClass.isInstance(valueArg)) {
             return valueArg;
+        }
+        if (valueArg instanceof List<?> list ){
+            return list.stream().map(o -> convertValue(parameterClass, o)).toList();
         }
         return ConvertFactory.getConverter(parameterClass).convert(valueArg);
     }

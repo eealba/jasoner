@@ -48,6 +48,16 @@ class JasonerImplTest {
         assertNotNull(obj);
         assertTrue(Objects.deepEquals(demoPojo2, obj));
     }
+    @Test
+    void should_deserialize_empty_object() {
+        var json = "{}";
+
+        assertNotNull(json);
+
+        var obj = PRIVATE_JASONER.fromJson(json, DemoPojo2.class);
+
+        assertNotNull(obj);
+    }
 
     @Test
     void should_serialize_and_deserialize_plan_with_pojo() throws URISyntaxException, IOException {

@@ -124,6 +124,10 @@ public class PaypalPayloadTest {
         executeAndCompare(readResource("/error.json"), ErrorDefault.class);
     }
     @Test
+    void error2_serialize_deserialize() throws IOException, JSONException {
+        executeAndCompare(readResource("/error2.json"), ErrorDefault.class);
+    }
+    @Test
     void template_serialize_deserialize() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "template.json"), Template.class);
     }

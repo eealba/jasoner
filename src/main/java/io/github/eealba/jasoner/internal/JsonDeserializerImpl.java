@@ -123,14 +123,17 @@ class JsonDeserializerImpl implements JsonDeserializer {
 
     private void moveProperties(ObjectCreator<?> obj, JsonTokenizer tokenizer) {
         while (tokenizer.hasNext()) {
-            String name = expectedToken(tokenizer.next(), TokenType.TEXT).stringValue();
+            var token = tokenizer.next();
+            if (token.type() == TokenType.OBJECT_END) {
+                break;
+            }
+            String name = expectedToken(token, TokenType.TEXT).stringValue();
             expectedToken(tokenizer.next(), TokenType.COLON);
             expectedTokenValue(tokenizer.next());
             moveProperty(obj, name, tokenizer);
-            Token token = tokenizer.next();
-            if (token.type() == TokenType.COMMA) {
-                continue;
-            }
+            token = tokenizer.next();
+            expectedTokens(token, TokenType.COMMA, TokenType.OBJECT_END);
+
             if (token.type() == TokenType.OBJECT_END) {
                 break;
             }
@@ -168,16 +171,19 @@ class JsonDeserializerImpl implements JsonDeserializer {
 
     private void moveArrayValues(List<Object> list, JsonTokenizer tokenizer, Class<?> ctype) {
         while (tokenizer.hasNext()) {
-            Token token = expectedTokenValue(tokenizer.next());
+            var token = tokenizer.next();
+            if (token.type() == TokenType.ARRAY_END) {
+                break;
+            }
+            expectedTokenValue(token);
             if (token.type() == TokenType.OBJECT_START) {
                 list.add(createObject(ctype, tokenizer));
             } else {
                 list.add(token.value());
             }
             token = tokenizer.next();
-            if (token.type() == TokenType.COMMA) {
-                continue;
-            }
+            expectedTokens(token, TokenType.COMMA, TokenType.ARRAY_END);
+
             if (token.type() == TokenType.ARRAY_END) {
                 break;
             }
@@ -193,8 +199,19 @@ class JsonDeserializerImpl implements JsonDeserializer {
         }
         return token;
     }
+    private static Token expectedTokens(Token token, TokenType... expected) {
+        if (token == null) {
+            throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, "null"));
+        }
+        for (TokenType t : expected) {
+            if (token.type() == t) {
+                return token;
+            }
+        }
+        throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
+    }
 
-    private static Token expectedTokenValue(Token token) {
+    private static void expectedTokenValue(Token token) {
         if (token == null) {
             throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, "null"));
         }
@@ -203,6 +220,7 @@ class JsonDeserializerImpl implements JsonDeserializer {
                 || token.type() == TokenType.ARRAY_START || token.type() == TokenType.OBJECT_START)) {
             throw new JasonerException(String.format(ERROR_UNEXPECTED_TOKEN, token));
         }
-        return token;
+
+
     }
 }

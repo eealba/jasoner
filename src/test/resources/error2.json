@@ -1,0 +1,13 @@
+{
+  "name": "INVALID_REQUEST",
+  "message": "Request is not well-formed, syntactically incorrect, or violates schema.",
+  "details": [],
+  "debug_id": "string",
+  "links": [
+    {
+      "href": "LMtMoVJuD%C,G&.q%_Y~8)vZv",
+      "rel": "relO",
+      "method": "GET"
+    }
+  ]
+}

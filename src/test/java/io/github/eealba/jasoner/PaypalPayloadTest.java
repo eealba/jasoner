@@ -5,6 +5,9 @@ import io.github.eealba.example.ErrorDefault;
 import io.github.eealba.example.PaymentInstruction;
 import io.github.eealba.example.ProcessorResponse;
 import io.github.eealba.example.invoices.Template;
+import io.github.eealba.jasoner.demo.model2.AddressPortable;
+import io.github.eealba.jasoner.demo.model2.CountryCode;
+import io.github.eealba.jasoner.demo.model2.Patch;
 import io.github.eealba.jasoner.demo.model2.PatchRequest;
 import io.github.eealba.jasoner.demo.model2.Plan;
 import io.github.eealba.jasoner.demo.model2.PlanRequestPOST;
@@ -130,6 +133,43 @@ public class PaypalPayloadTest {
     @Test
     void template_serialize_deserialize() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "template.json"), Template.class);
+    }
+
+    @Test
+    void patch_serialize() throws JSONException {
+        var address = AddressPortable.builder()
+                .addressLine1("123 Townsend St")
+                .addressLine2("Floor 6")
+                .adminArea1("San Francisco")
+                .adminArea2("CA")
+                .postalCode("94107")
+                .countryCode(CountryCode.US)
+                .build();
+
+        var path = Patch.builder()
+            .op(Patch.Op.add)
+            .path("/purchase_units/@reference_id=='default'/shipping/address")
+            .value(address)
+            .build();
+
+        String newJson = JASONER2.toJson(path);
+
+        String json = """
+                {
+                  "op": "add",
+                  "path": "/purchase_units/@reference_id=='default'/shipping/address",
+                  "value": {
+                    "address_line_1": "123 Townsend St",
+                    "address_line_2": "Floor 6",
+                    "admin_area_1": "San Francisco",
+                    "admin_area_2": "CA",
+                    "postal_code": "94107",
+                    "country_code": "US"
+                  }
+                }
+                """;
+
+        JSONAssert.assertEquals(json, newJson, true);
     }
 
     private static void executeAndCompare(String json, Class<?> clazz) throws JSONException {

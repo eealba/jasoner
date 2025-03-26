@@ -14,6 +14,7 @@
 package io.github.eealba.jasoner.internal;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The class ConvertFactory.
@@ -58,6 +60,9 @@ class ConvertFactory {
             case "LocalTime" -> (Object data) -> LocalTime.parse(data.toString());
             case "Date" -> (Object data) -> Date.from(Instant.parse(data.toString()));
             case "OffsetDateTime" -> (Object data) -> OffsetDateTime.parse(data.toString());
+            case "UUID" -> (Object data) -> UUID.fromString(data.toString());
+            case "ZoneOffset" -> (Object data) -> ZoneOffset.of(data.toString());
+            case "URI" -> (Object data) -> URI.create(data.toString());
             default -> null;
         };
         if (convert != null) {

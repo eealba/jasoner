@@ -15,6 +15,7 @@ package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -214,6 +215,7 @@ class TokenImpl implements Token {
             case "String" -> data;
             case "BigDecimal" -> numericValue();
             case "boolean", "Boolean" -> Boolean.parseBoolean(data);
+            case "URI" -> URI.create(data);
             default -> value();
         };
     }

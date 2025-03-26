@@ -9,6 +9,7 @@ import io.github.eealba.jasoner.NamingStrategy;
 import io.github.eealba.jasoner.SerializationStrategy;
 import io.github.eealba.jasoner.demo.model1.DemoPojo;
 import io.github.eealba.jasoner.demo.model1.DemoPojo2;
+import io.github.eealba.jasoner.demo.model3.Person;
 import lombok.Data;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -139,7 +140,12 @@ class JasonerImplTest {
 
     }
 
+    @Test
+    void should_deserialize_and_serialize_person1() throws URISyntaxException, IOException {
+        var json = readResource("person1.json");
+        serializeAndDeserializeCamelCase(json, io.github.eealba.jasoner.demo.model3.Person.class);
 
+    }
 
 
     private static User getUser() {
@@ -164,6 +170,19 @@ class JasonerImplTest {
         jsonAssertEquals(jsonPlanExpected, jsonPlan);
     }
 
+    private void serializeAndDeserializeCamelCase(String jsonPlanExpected, Class<?> clazz) {
+        var jasoner = JasonerBuilder.create(new JasonerConfig.Builder()
+                .pretty(true)
+                .namingStrategy(NamingStrategy.CAMEL_CASE)
+                .build());
+
+        var plan = jasoner.fromJson(jsonPlanExpected, clazz);
+        assertNotNull(plan);
+
+        var jsonPlan = jasoner.toJson(plan);
+
+        jsonAssertEquals(jsonPlanExpected, jsonPlan);
+    }
 
     void jsonAssertEquals(String jsonExpected, String jsonActual) {
         try {

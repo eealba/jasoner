@@ -1,0 +1,60 @@
+{
+  "personId": 1,
+  "personUUID": "123e4567-e89b-12d3-a456-426614174000",
+  "basicData": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "birthday": "1970-01-01",
+    "gender": "MALE",
+    "personType": "NATURAL",
+    "countryOfBirth": "ES",
+    "cityOfBirth": "Madrid",
+    "photo": "https://www.google.com"
+  },
+  "addresses": [
+    {
+      "personAddressId": 1,
+      "country": "ES",
+      "territorial1": "GALICIA",
+      "territorial2": "A CORUÑA",
+      "territorial3": "A CORUÑA",
+      "territorial4": "A CORUÑA",
+      "territorial5": "string",
+      "city": "A Coruña",
+      "streetName": "Rúa de San Andrés",
+      "streetPremise": "12",
+      "floor": "1",
+      "door": "A",
+      "zipCode": "15003",
+      "custom": "Calle de San Andrés, 12, 1A",
+      "typeUse": "WORK"
+    }
+  ],
+  "phones": [
+    {
+      "personPhoneId": 1,
+      "country": "ES",
+      "phoneNumber": 981123456,
+      "phoneExtension": 0,
+      "typeUse": "WORK"
+    }
+  ],
+  "emails": [
+    {
+      "personEmailId": 1,
+      "email": "joe.doe@mail.com",
+      "typeUse": "WORK"
+    }
+  ],
+  "documents": [
+    {
+      "personDocumentId": 1,
+      "country": "ES",
+      "documentType": "PASSPORT",
+      "documentNumber": "12345678Z",
+      "expirationDate": "2025-03-25",
+      "issueDate": "2025-03-25"
+    }
+  ]
+
+}

@@ -73,6 +73,9 @@ class JsonDeserializerImpl implements JsonDeserializer {
                 return Reflects.getSingleRecordParameterClass(clazz).get();
             }
         }
+        if (clazz.isArray()) {
+            return clazz.getComponentType();
+        }
         return HashMap.class;
     }
 
@@ -98,6 +101,10 @@ class JsonDeserializerImpl implements JsonDeserializer {
         expectedToken(tokenizer.current(), TokenType.ARRAY_START);
         List<Object> list = new ArrayList<>();
         moveArrayValues(list, tokenizer, clazz2);
+        if (clazz.isArray()) {
+            // if the type is an array, we need to convert the list to an array
+            return clazz.cast(Reflects.createArray(clazz, list));
+        }
         return clazz.cast(list);
     }
 

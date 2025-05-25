@@ -73,6 +73,9 @@ class JsonSerializerImpl implements JsonSerializer {
                 }
             }
         }
+        if (obj.getClass().isArray()) {
+            obj = List.of((Object[]) obj);
+        }
         if (obj instanceof List<?> list) {
             jsonArray(list, jsonWriter);
         } else {

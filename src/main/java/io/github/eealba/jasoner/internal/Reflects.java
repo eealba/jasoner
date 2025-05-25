@@ -36,19 +36,21 @@ import java.util.stream.Stream;
 
 /**
  * The class Reflects.
- * This class provides utility methods for reflection operations such as getting methods, fields, and creating instances.
- *
- * @since 1.0
- * @version 1.0
+ * This class provides utility methods for reflection operations such as getting methods, fields, and creating
+ * instances.
  *
  * @author Edgar Alba
+ * @version 1.0
+ * @since 1.0
  */
 class Reflects {
     private static final Predicate<Method> staticMethod = (Method method) -> Modifier.isStatic(method.getModifiers());
-    private static final Predicate<Method> instanceMethod = (Method method) -> !Modifier.isStatic(method.getModifiers());
+    private static final Predicate<Method> instanceMethod =
+            (Method method) -> !Modifier.isStatic(method.getModifiers());
 
     private static final Predicate<Method> publicMethod = (Method method) -> Modifier.isPublic(method.getModifiers());
-    private static final Predicate<Method> protectedMethod = (Method method) -> Modifier.isProtected(method.getModifiers());
+    private static final Predicate<Method> protectedMethod =
+            (Method method) -> Modifier.isProtected(method.getModifiers());
     private static final Predicate<Method> privateMethod = (Method method) -> Modifier.isPrivate(method.getModifiers());
 
     private static final Predicate<Field> publicField = (Field field) -> Modifier.isPublic(field.getModifiers());
@@ -59,8 +61,9 @@ class Reflects {
     private static final Predicate<Method> noParameterMethod = (Method method) -> method.getParameterCount() == 0;
     private static final Predicate<Method> returnValueMethod = (Method method) -> method.getReturnType() != Void.TYPE;
 
-    private static final Predicate<Method> noOverridedObjectMethod = (Method method) -> !(method.getName().equals("hashCode")
-                    || method.getName().equals("toString"));
+    private static final Predicate<Method> noOverridedObjectMethod = (Method method) -> !(method.getName().equals(
+            "hashCode")
+            || method.getName().equals("toString"));
 
     private static final Predicate<Method> setterMethod = instanceMethod.and(onceParameterMethod);
     private static final Predicate<Method> getterMethod = instanceMethod
@@ -68,7 +71,7 @@ class Reflects {
             .and(returnValueMethod)
             .and(noOverridedObjectMethod);
 
-    private static final BiPredicate<Parameter, String > hasParameterName = (Parameter p, String name) ->
+    private static final BiPredicate<Parameter, String> hasParameterName = (Parameter p, String name) ->
             p.getName().equals(name)
                     || p.getName().equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
                     || p.getName().equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name));
@@ -104,7 +107,7 @@ class Reflects {
     /**
      * Gets getter methods.
      *
-     * @param entity the entity
+     * @param entity           the entity
      * @param modifierStrategy the modifier strategy
      * @return the getter methods
      */
@@ -126,7 +129,7 @@ class Reflects {
      * Gets the parameter class of a setter method.
      *
      * @param entity the entity
-     * @param name the name of the property
+     * @param name   the name of the property
      * @return an optional containing the parameter class, or empty if not found
      */
     static Optional<Class<?>> getSetterMethodParameterClass(Object entity, String name) {
@@ -137,16 +140,16 @@ class Reflects {
      * Gets the setter method.
      *
      * @param entity the entity
-     * @param name the name of the property
-     * @param value the value to set
+     * @param name   the name of the property
+     * @param value  the value to set
      * @return an optional containing the setter method, or empty if not found
      */
     static Optional<Method> getSetterMethod(Object entity, String name, Object value) {
         var methods = getMethods(entity, setterMethod).stream()
-                .filter(m -> value == null || m.getParameterTypes()[0].isInstance(value))
-                .filter(filterMethodName(name).or(filterMethodWithJasonerProperty(name)))
-                .filter(ignoreTransientMethod())
-                .toList();
+                                                      .filter(m -> value == null || m.getParameterTypes()[0].isInstance(value))
+                                                      .filter(filterMethodName(name).or(filterMethodWithJasonerProperty(name)))
+                                                      .filter(ignoreTransientMethod())
+                                                      .toList();
         return methods.stream().findFirst();
     }
 
@@ -159,6 +162,7 @@ class Reflects {
                 || m.getName().equals("set" + capitalizeFirstLetter(
                 NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)));
     }
+
     private static Predicate<Method> ignoreTransientMethod() {
         return m -> m.getDeclaredAnnotation(JasonerTransient.class) == null;
     }
@@ -169,10 +173,10 @@ class Reflects {
             var mName = annotations != null ? annotations.value() : m.getName();
 
             return mName.equals(name)
-                || mName.equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
-                || mName.equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name))
-                || mName.equals("set" + capitalizeFirstLetter(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name)))
-                || mName.equals("set" + capitalizeFirstLetter(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)));
+                    || mName.equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
+                    || mName.equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name))
+                    || mName.equals("set" + capitalizeFirstLetter(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name)))
+                    || mName.equals("set" + capitalizeFirstLetter(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name)));
         };
     }
 
@@ -200,7 +204,7 @@ class Reflects {
      * Gets all fields of a class, including inherited fields.
      *
      * @param fields the list of fields
-     * @param type the class type
+     * @param type   the class type
      * @return the list of fields
      */
     public static List<Field> getAllFields(List<Field> fields, Class<?> type) {
@@ -216,7 +220,7 @@ class Reflects {
     /**
      * Gets fields with a specific modifier strategy.
      *
-     * @param entity the entity
+     * @param entity           the entity
      * @param modifierStrategy the modifier strategy
      * @return the fields
      */
@@ -240,14 +244,14 @@ class Reflects {
      * Gets a field by name.
      *
      * @param entity the entity
-     * @param name the name of the field
+     * @param name   the name of the field
      * @return an optional containing the field, or empty if not found
      */
     static Optional<Field> getField(Object entity, String name) {
         return getFields(entity).stream()
-                .filter(fieldFieldName(name).or(fieldFieldWithJasonerProperty(name)))
-                .filter(ignoreTransientField())
-                .findFirst();
+                                .filter(fieldFieldName(name).or(fieldFieldWithJasonerProperty(name)))
+                                .filter(ignoreTransientField())
+                                .findFirst();
     }
 
     private static Predicate<Field> fieldFieldName(String name) {
@@ -255,6 +259,7 @@ class Reflects {
                 || f.getName().equals(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name))
                 || f.getName().equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name));
     }
+
     private static Predicate<Field> fieldFieldWithJasonerProperty(String name) {
         return f -> {
             var annotation = f.getDeclaredAnnotation(JasonerProperty.class);
@@ -265,17 +270,17 @@ class Reflects {
                     || fieldName.equals(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name));
         };
     }
+
     private static Predicate<Field> ignoreTransientField() {
         return f -> f.getDeclaredAnnotation(JasonerTransient.class) == null;
     }
-
 
 
     /**
      * Gets the parameter class of a field.
      *
      * @param entity the entity
-     * @param name the name of the field
+     * @param name   the name of the field
      * @return an optional containing the parameter class, or empty if not found
      */
     static Optional<Class<?>> getFieldParameterClass(Object entity, String name) {
@@ -285,12 +290,12 @@ class Reflects {
     /**
      * Sets the value of a field.
      *
-     * @param field the field
+     * @param field  the field
      * @param entity the entity
-     * @param value the value to set
+     * @param value  the value to set
      */
     static void setFieldValue(Field field, Object entity, Object value) {
-        if (field.trySetAccessible()){
+        if (field.trySetAccessible()) {
             try {
                 field.set(entity, value);
             } catch (IllegalAccessException e) {
@@ -302,7 +307,7 @@ class Reflects {
     /**
      * Creates an instance of a class.
      *
-     * @param <T> the type of the class
+     * @param <T>   the type of the class
      * @param clazz the class
      * @return an optional containing the instance, or empty if not created
      */
@@ -312,7 +317,7 @@ class Reflects {
 
     private static Object createObjectInt(Class<?> clazz) {
         for (Constructor<?> c : clazz.getDeclaredConstructors()) {
-            if (c.getParameterCount() == 0 &&  c.trySetAccessible()){
+            if (c.getParameterCount() == 0 && c.trySetAccessible()) {
                 try {
                     return clazz.cast(c.newInstance());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -327,19 +332,19 @@ class Reflects {
      * Invokes a method.
      *
      * @param method the method
-     * @param obj the object
-     * @param args the arguments
+     * @param obj    the object
+     * @param args   the arguments
      * @return the result of the method invocation
      */
     static Object invokeMethod(Method method, Object obj, Object[] args) {
         try {
-            if (method.trySetAccessible()){
+            if (method.trySetAccessible()) {
                 return method.invoke(obj, args);
-            }else{
+            } else {
                 throw new JasonerException(String.format("The method '%s' is not accessible", method.getName()));
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-           throw new JasonerException(e);
+            throw new JasonerException(e);
         }
     }
 
@@ -347,7 +352,7 @@ class Reflects {
      * Invokes a method without arguments.
      *
      * @param method the method
-     * @param obj the object
+     * @param obj    the object
      * @return the result of the method invocation
      */
     static Object invokeMethod(Method method, Object obj) {
@@ -356,8 +361,8 @@ class Reflects {
 
     private static final BiPredicate<Class<?>, Class<?>> hasInstanceMethodWithoutParameterReturnInstanceOfClass =
             (Class<?> c, Class<?> clazz) -> Stream.of(c.getDeclaredMethods())
-            .anyMatch(instanceMethod.and(publicMethod)
-                    .and(m -> m.getReturnType() == clazz && m.getParameterCount() == 0));
+                                                  .anyMatch(instanceMethod.and(publicMethod)
+                                                                          .and(m -> m.getReturnType() == clazz && m.getParameterCount() == 0));
 
     /**
      * Creates a builder instance for a class.
@@ -368,35 +373,35 @@ class Reflects {
     static Optional<Object> createBuilder(Class<?> clazz) {
         //Step 1 - Look for a Builder class
         var builderClass = Stream.of(clazz.getDeclaredClasses())
-                .filter((Class<?> c) -> hasInstanceMethodWithoutParameterReturnInstanceOfClass.test(c, clazz))
-                .findFirst();
-        if (builderClass.isEmpty()){
+                                 .filter((Class<?> c) -> hasInstanceMethodWithoutParameterReturnInstanceOfClass.test(c, clazz))
+                                 .findFirst();
+        if (builderClass.isEmpty()) {
             return Optional.empty();
         }
         //Step 2 - Try to create an instance of the builder class
         var instance = builderClass.map(Reflects::createObjectInt);
-        if (instance.isPresent()){
+        if (instance.isPresent()) {
             return instance;
         }
         //Step 3 - Look for a static method that returns an instance of the builder class
         var method = Stream.of(clazz.getDeclaredMethods())
-                .filter(staticMethod
-                        .and(publicMethod)
-                        .and(m -> m.getReturnType() == builderClass.get() && m.getParameterCount() == 0))
-                .findFirst();
-        return method.filter(Method::trySetAccessible).map((Method m) -> invokeMethod(m, null,null));
+                           .filter(staticMethod
+                                           .and(publicMethod)
+                                           .and(m -> m.getReturnType() == builderClass.get() && m.getParameterCount() == 0))
+                           .findFirst();
+        return method.filter(Method::trySetAccessible).map((Method m) -> invokeMethod(m, null, null));
     }
 
     /**
      * Creates an instance of a class from a builder instance.
      *
-     * @param <T> the type of the class
+     * @param <T>     the type of the class
      * @param builder the builder instance
-     * @param clazz the class
+     * @param clazz   the class
      * @return an optional containing the instance, or empty if not created
      */
     static <T> Optional<T> createObjectFromBuilderInstance(Object builder, Class<T> clazz) {
-        return  getMethods(builder, m -> m.getReturnType() == clazz && m.getParameterCount() == 0)
+        return getMethods(builder, m -> m.getReturnType() == clazz && m.getParameterCount() == 0)
                 .stream()
                 .findFirst().map(m -> invokeMethod(m, builder, null)).map(clazz::cast);
     }
@@ -409,7 +414,7 @@ class Reflects {
      */
     private static Class<?> getClass(Parameter parameter) {
         Class<?> clazz = parameter.getType();
-        if (clazz == List.class){
+        if (clazz == List.class) {
             clazz = getClass(parameter.toString());
         }
         return clazz;
@@ -418,7 +423,7 @@ class Reflects {
     static Class<?> getClass(String str) {
         int p0 = str.indexOf("<");
         int p1 = str.lastIndexOf(">");
-        if (p0 != -1 && p1 != -1){
+        if (p0 != -1 && p1 != -1) {
             try {
                 return Class.forName(str.substring(p0 + 1, p1));
             } catch (ClassNotFoundException e) {
@@ -432,29 +437,30 @@ class Reflects {
      * Gets the parameter class of a record.
      *
      * @param clazz the class
-     * @param name the name of the parameter
+     * @param name  the name of the parameter
      * @return an optional containing the parameter class, or empty if not found
      */
-    static Optional<Class<?>> getRecordParameterClass(Class<?> clazz, String name){
+    static Optional<Class<?>> getRecordParameterClass(Class<?> clazz, String name) {
         if (!clazz.isRecord()) {
             throw new IllegalArgumentException(String.format("The class: '%s' is not a record", clazz.getName()));
         }
         var constructor = clazz.getDeclaredConstructors()[0];
 
         for (var parameter : constructor.getParameters()) {
-            if (hasParameterName.test(parameter, name)){
+            if (hasParameterName.test(parameter, name)) {
                 return Optional.of(getClass(parameter));
             }
         }
         return Optional.empty();
     }
-    static Optional<Class<?>> getSingleRecordParameterClass(Class<?> clazz){
+
+    static Optional<Class<?>> getSingleRecordParameterClass(Class<?> clazz) {
         if (!clazz.isRecord()) {
             throw new IllegalArgumentException(String.format("The class: '%s' is not a record", clazz.getName()));
         }
         var constructor = clazz.getDeclaredConstructors()[0];
         var parameters = constructor.getParameters();
-        if (parameters.length == 1){
+        if (parameters.length == 1) {
             return Optional.of(getClass(parameters[0]));
         }
         return Optional.empty();
@@ -463,17 +469,17 @@ class Reflects {
     /**
      * Creates an instance of a record.
      *
-     * @param <T> the type of the record
+     * @param <T>   the type of the record
      * @param clazz the class of the record
-     * @param map the map of parameter values
+     * @param map   the map of parameter values
      * @return an optional containing the record instance, or empty if not created
      */
-    static <T> Optional<T> createRecord(Class<T> clazz, Map<String, Object> map){
+    static <T> Optional<T> createRecord(Class<T> clazz, Map<String, Object> map) {
         if (!clazz.isRecord()) {
             throw new IllegalArgumentException(String.format("The class: '%s' is not a record", clazz.getName()));
         }
         var constructor = clazz.getDeclaredConstructors()[0];
-        if (constructor.trySetAccessible()){
+        if (constructor.trySetAccessible()) {
             List<Object> values = getConstructorArgs(map, constructor);
             try {
                 return Optional.of(clazz.cast(constructor.newInstance(values.toArray())));
@@ -482,24 +488,25 @@ class Reflects {
             }
         }
         throw new IllegalArgumentException(String.format("The constructor of the record class: '%s' is not accessible",
-                clazz.getName()));
+                                                         clazz.getName()));
     }
-    static <T> Optional<T> createSingleRecord(Class<T> clazz, Object value){
+
+    static <T> Optional<T> createSingleRecord(Class<T> clazz, Object value) {
         if (!clazz.isRecord()) {
             throw new IllegalArgumentException(String.format("The class: '%s' is not a record", clazz.getName()));
         }
         var constructor = clazz.getDeclaredConstructors()[0];
-        if (constructor.trySetAccessible()){
+        if (constructor.trySetAccessible()) {
             try {
                 return Optional.of(clazz.cast(constructor.newInstance(value)));
             } catch (Exception e) {
                 var msg = String.format("Error to create new instance of class: %s with value: %s, cause: %s",
-                        clazz.getName(), value, e.getMessage());
+                                        clazz.getName(), value, e.getMessage());
                 throw new JasonerException(msg);
             }
         }
         throw new IllegalArgumentException(String.format("The constructor of the record class: '%s' is not accessible",
-                clazz.getName()));
+                                                         clazz.getName()));
     }
 
     private static List<Object> getConstructorArgs(Map<String, Object> map, Constructor<?> constructor) {
@@ -516,10 +523,10 @@ class Reflects {
 
     private static Object getParameter(Map<String, Object> map, String name) {
         Object value = map.get(name);
-        if (value == null){
+        if (value == null) {
             value = map.get(NamingFactory.get(NamingStrategy.CAMEL_CASE).apply(name));
         }
-        if (value == null){
+        if (value == null) {
             value = map.get(NamingFactory.get(NamingStrategy.SNAKE_CASE).apply(name));
         }
         return value;
@@ -528,12 +535,12 @@ class Reflects {
     /**
      * Gets the value of a field.
      *
-     * @param field the field
+     * @param field  the field
      * @param source the source object
      * @return the value of the field
      */
     public static Object getFieldValue(Field field, Object source) {
-        if (field.trySetAccessible()){
+        if (field.trySetAccessible()) {
             try {
                 return field.get(source);
             } catch (IllegalAccessException e) {
@@ -552,4 +559,15 @@ class Reflects {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T[] createArray(Class<?> clazz, List<?> list) {
+        if (clazz.isArray()) {
+            T[] array = (T[]) java.lang.reflect.Array.newInstance(clazz.getComponentType(), list.size());
+            for (int i = 0; i < list.size(); i++) {
+                array[i] = (T) list.get(i);
+            }
+            return array;
+        }
+        throw new JasonerException("The class is not an array: " + clazz.getName());
+    }
 }

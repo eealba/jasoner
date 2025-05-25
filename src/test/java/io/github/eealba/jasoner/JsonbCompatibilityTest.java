@@ -53,6 +53,31 @@ public class JsonbCompatibilityTest {
         assertEquals("Falco", arrayList.get(0).name);
     }
 
+    @Test
+    void should_serialize_and_deserialize_dog_array() {
+        String result = serializeDogsList();
+
+        // We can also deserialize back into a raw collection, but since there is no way to infer a type here,
+        // the result will be a list of java.util.Map instances with string keys.
+        Dog[] dogsArray = jasoner.fromJson(result, Dog[].class);
+        assertEquals(2, dogsArray.length);
+        assertInstanceOf(Dog.class, dogsArray[0]);
+        assertEquals("Falco", dogsArray[0].name);
+
+    }
+
+    @Test
+    void should_serialize_and_deserialize_dog_array2() {
+        String result = serializeDogsList2();
+
+        // We can also deserialize back into a raw collection, but since there is no way to infer a type here,
+        // the result will be a list of java.util.Map instances with string keys.
+        Dog[] dogsArray = jasoner.fromJson(result, Dog[].class);
+        assertEquals(2, dogsArray.length);
+        assertInstanceOf(Dog.class, dogsArray[0]);
+        assertEquals("Falco", dogsArray[0].name);
+
+    }
 
     @SuppressWarnings("unchecked")
     private static String serializeDogsList() {
@@ -61,6 +86,13 @@ public class JsonbCompatibilityTest {
         List dogs = new ArrayList();
         dogs.add(falco());
         dogs.add(cassidy());
+
+        // Serialize
+        return jasoner.toJson(dogs);
+    }
+    private static String serializeDogsList2() {
+        // Array of dogs
+        Dog[] dogs = new Dog[]{falco(), cassidy()};
 
         // Serialize
         return jasoner.toJson(dogs);

@@ -15,6 +15,7 @@ package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +26,13 @@ import java.util.Optional;
  * This class is responsible for creating instances of objects, including records and maps.
  *
  * @param <T> the type of the object to create
- * @since 1.0
- * @version 1.0
- *
  * @author Edgar Alba
+ * @version 1.0
+ * @since 1.0
  */
 class ObjectCreator<T> {
     private final Class<T> clazz;
+    private final Class<?> clazzComponentType;
     private final Object obj;
 
     /**
@@ -41,13 +42,18 @@ class ObjectCreator<T> {
      */
     ObjectCreator(Class<T> clazz) {
         this.clazz = clazz;
+        this.clazzComponentType = clazz.isArray() ? clazz.getComponentType() : null;
         if (clazz.isRecord() || Map.class.isAssignableFrom(clazz)) {
             obj = new HashMap<String, Object>();
+        } else if (clazz.isArray()) {
+            obj = Reflects.createBuilder(clazzComponentType).orElseGet(() -> Reflects.createObject(clazzComponentType).orElseThrow(
+                    () -> new JasonerException("Cannot create instance of " + clazz.getName())));
         } else {
             obj = Reflects.createBuilder(clazz).orElseGet(() -> Reflects.createObject(clazz).orElseThrow(
                     () -> new JasonerException("Cannot create instance of " + clazz.getName())));
         }
     }
+
     boolean isMap() {
         return obj instanceof Map;
     }
@@ -64,7 +70,7 @@ class ObjectCreator<T> {
     /**
      * Sets the value of a property.
      *
-     * @param name the name of the property
+     * @param name     the name of the property
      * @param valueArg the value to set
      */
     void setValue(String name, Object valueArg) {
@@ -72,7 +78,7 @@ class ObjectCreator<T> {
         Object value;
         if (parameterClass.isPresent()) {
             value = convertValue(parameterClass.get(), valueArg);
-        }else{
+        } else {
             value = valueArg;
         }
         if (isMap()) {
@@ -91,14 +97,14 @@ class ObjectCreator<T> {
      * Converts a value to the specified type.
      *
      * @param parameterClass the class of the parameter
-     * @param valueArg the value to convert
+     * @param valueArg       the value to convert
      * @return the converted value
      */
     static Object convertValue(Class<?> parameterClass, Object valueArg) {
         if (parameterClass.isInstance(valueArg)) {
             return valueArg;
         }
-        if (valueArg instanceof List<?> list ){
+        if (valueArg instanceof List<?> list) {
             return list.stream().map(o -> convertValue(parameterClass, o)).toList();
         }
         return ConvertFactory.getConverter(parameterClass).convert(valueArg);
@@ -115,7 +121,7 @@ class ObjectCreator<T> {
             return Reflects.getRecordParameterClass(clazz, name);
         } else {
             return Reflects.getSetterMethodParameterClass(obj, name)
-                    .or(() -> Reflects.getFieldParameterClass(obj, name));
+                           .or(() -> Reflects.getFieldParameterClass(obj, name));
         }
     }
 
@@ -136,11 +142,16 @@ class ObjectCreator<T> {
         return Reflects.createRecord(clazz, getMap().orElseThrow()).orElseThrow();
     }
 
+    @SuppressWarnings("unchecked")
     private T createInstance() {
+        if (clazz.isArray()) {
+            return (T) Reflects.createObjectFromBuilderInstance(obj, clazzComponentType)
+                               .orElseThrow(() -> new JasonerException("Cannot create instance of " + clazz.getName()));
+        }
         if (obj.getClass().equals(clazz) || clazz.isInstance(obj)) {
             return clazz.cast(obj);
         }
         return Reflects.createObjectFromBuilderInstance(obj, clazz)
-                .orElseThrow(() -> new JasonerException("Cannot create instance of " + clazz.getName()));
+                       .orElseThrow(() -> new JasonerException("Cannot create instance of " + clazz.getName()));
     }
 }

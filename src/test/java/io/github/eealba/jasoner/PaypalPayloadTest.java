@@ -146,6 +146,10 @@ public class PaypalPayloadTest {
         executeAndCompare(readResource(EXAMPLES + "webhooks-events.resend_response.json"), Event2.class);
     }
 
+    @Test
+    void webhooks_events_resend_response_with_JsonObject() throws IOException, JSONException {
+        executeAndCompare(readResource(EXAMPLES + "webhooks-events.resend_response.json"), JsonObject.class);
+    }
 
     @Test
     void patch_serialize() throws JSONException {

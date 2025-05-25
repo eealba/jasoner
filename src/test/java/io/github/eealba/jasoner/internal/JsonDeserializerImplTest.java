@@ -5,7 +5,11 @@ import io.github.eealba.jasoner.JsonObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -98,6 +102,76 @@ class JsonDeserializerImplTest {
         assertEquals("PROD-XXCD1234QWER65782", jsonObject.getString("product_id"));
         assertFalse(jsonObject.getBoolean("taxes.inclusive"));
         assertEquals("3", jsonObject.getString("billing_cycles.0.pricing_scheme.fixed_price.value"));
+    }
+    @Test
+    void deserialize_with_class_that_implement_JsonObject() throws URISyntaxException, IOException {
+        String data = Helper.readResource("plan.json");
+        var jsonObject = deserialize(data, JsonObject2.class);
+
+        assertEquals("PROD-XXCD1234QWER65782", jsonObject.getString("product_id"));
+    }
+
+    public static class JsonObject2 implements JsonObject {
+        private final Map<String, Object> map;
+        public JsonObject2(Map<String, Object> map) {
+            this.map = map;
+        }
+
+        @Override
+        public Set<String> keys() {
+            return map.keySet();
+        }
+
+        @Override
+        public String getString(String key) {
+            return (String) map.get(key);
+        }
+
+        @Override
+        public Integer getInteger(String key) {
+            return (Integer) map.get(key);
+        }
+
+        @Override
+        public Boolean getBoolean(String key) {
+            return (Boolean) map.get(key);
+        }
+
+        @Override
+        public Long getLong(String key) {
+            return (Long) map.get(key);
+        }
+
+        @Override
+        public Double getDouble(String key) {
+            return (Double) map.get(key);
+        }
+
+        @Override
+        public Float getFloat(String key) {
+            return (Float) map.get(key);
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public JsonObject getJsonObject(String key) {
+            return new JsonObject2((Map<String, Object>) map.get(key));
+        }
+
+        @Override
+        public List<?> getJsonArray(String key) {
+            return (List<?>) map.get(key);
+        }
+
+        @Override
+        public Object get(String key) {
+            return map.get(key);
+        }
+
+        @Override
+        public BigDecimal getBigDecimal(String key) {
+            return (BigDecimal) map.get(key);
+        }
     }
 
 

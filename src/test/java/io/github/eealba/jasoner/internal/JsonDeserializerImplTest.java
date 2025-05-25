@@ -111,7 +111,7 @@ class JsonDeserializerImplTest {
         assertEquals("PROD-XXCD1234QWER65782", jsonObject.getString("product_id"));
     }
 
-    public static class JsonObject2 implements JsonObject {
+    static class JsonObject2 implements JsonObject {
         private final Map<String, Object> map;
         public JsonObject2(Map<String, Object> map) {
             this.map = map;

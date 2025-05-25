@@ -1,12 +1,14 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerProperty;
+import io.github.eealba.jasoner.JsonObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class JsonDeserializerImplTest {
 
@@ -88,6 +90,20 @@ class JsonDeserializerImplTest {
 
         assertEquals("P-5ML4271244454362WXNWU5NQ", res.id());
     }
+    @Test
+    void deserialize_with_JsonObject() throws URISyntaxException, IOException {
+        String data = Helper.readResource("plan.json");
+        var jsonObject = deserialize(data, JsonObject.class);
+
+        assertEquals("PROD-XXCD1234QWER65782", jsonObject.getString("product_id"));
+        assertFalse(jsonObject.getBoolean("taxes.inclusive"));
+        assertEquals("3", jsonObject.getString("billing_cycles.0.pricing_scheme.fixed_price.value"));
+    }
+
+
+
+
+
     private static <T> T deserialize(String data, Class<T> clazz) {
         JsonDeserializer deserializer = new JsonDeserializerImpl();
         return deserializer.deserialize(data, clazz);

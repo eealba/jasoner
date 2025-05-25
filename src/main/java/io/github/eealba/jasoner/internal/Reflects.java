@@ -16,6 +16,7 @@ package io.github.eealba.jasoner.internal;
 import io.github.eealba.jasoner.JasonerException;
 import io.github.eealba.jasoner.JasonerProperty;
 import io.github.eealba.jasoner.JasonerTransient;
+import io.github.eealba.jasoner.JsonObject;
 import io.github.eealba.jasoner.ModifierStrategy;
 import io.github.eealba.jasoner.NamingStrategy;
 
@@ -311,8 +312,31 @@ class Reflects {
      * @param clazz the class
      * @return an optional containing the instance, or empty if not created
      */
-    static <T> Optional<T> createObject(Class<T> clazz) {
+    static <T> Optional<T> createJsonObject(Class<T> clazz) {
         return Optional.ofNullable(clazz.cast(createObjectInt(clazz)));
+    }
+
+    /**
+     * Creates an instance of a class with the specified arguments.
+     *
+     * @param clazz the class
+     * @return an optional containing the instance, or empty if not created
+     */
+    static Optional<JsonObject> createJsonObject(Class<?> clazz, Object... args) {
+        if (!JsonObject.class.isAssignableFrom(clazz)) {
+            throw new IllegalArgumentException(String.format("The class: '%s' is not a JsonObject", clazz.getName()));
+        }
+        for (Constructor<?> c : clazz.getDeclaredConstructors()) {
+            if (c.getParameterCount() == args.length && c.trySetAccessible()) {
+                try {
+                    return Optional.of((JsonObject) (c.newInstance(args)));
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    throw new JasonerException(e);
+                }
+            }
+        }
+        return createJsonObject(JsonObjectImpl.class, args);
+
     }
 
     private static Object createObjectInt(Class<?> clazz) {

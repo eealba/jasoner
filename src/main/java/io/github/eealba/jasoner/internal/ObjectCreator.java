@@ -14,8 +14,8 @@
 package io.github.eealba.jasoner.internal;
 
 import io.github.eealba.jasoner.JasonerException;
+import io.github.eealba.jasoner.JsonObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,13 +43,13 @@ class ObjectCreator<T> {
     ObjectCreator(Class<T> clazz) {
         this.clazz = clazz;
         this.clazzComponentType = clazz.isArray() ? clazz.getComponentType() : null;
-        if (clazz.isRecord() || Map.class.isAssignableFrom(clazz)) {
+        if (clazz.isRecord() || Map.class.isAssignableFrom(clazz) || JsonObject.class.isAssignableFrom(clazz)) {
             obj = new HashMap<String, Object>();
         } else if (clazz.isArray()) {
-            obj = Reflects.createBuilder(clazzComponentType).orElseGet(() -> Reflects.createObject(clazzComponentType).orElseThrow(
+            obj = Reflects.createBuilder(clazzComponentType).orElseGet(() -> Reflects.createJsonObject(clazzComponentType).orElseThrow(
                     () -> new JasonerException("Cannot create instance of " + clazz.getName())));
         } else {
-            obj = Reflects.createBuilder(clazz).orElseGet(() -> Reflects.createObject(clazz).orElseThrow(
+            obj = Reflects.createBuilder(clazz).orElseGet(() -> Reflects.createJsonObject(clazz).orElseThrow(
                     () -> new JasonerException("Cannot create instance of " + clazz.getName())));
         }
     }
@@ -76,7 +76,9 @@ class ObjectCreator<T> {
     void setValue(String name, Object valueArg) {
         var parameterClass = getParameterClass(name);
         Object value;
-        if (parameterClass.isPresent()) {
+        if (JsonObject.class.isAssignableFrom(clazz) && valueArg instanceof Map<?, ?>) {
+            value = Reflects.createJsonObject(clazz, valueArg).orElseThrow(() -> new JasonerException("Cannot create instance of " + clazz.getName()));
+        }else if (parameterClass.isPresent()) {
             value = convertValue(parameterClass.get(), valueArg);
         } else {
             value = valueArg;
@@ -117,7 +119,9 @@ class ObjectCreator<T> {
      * @return an optional containing the parameter class, or empty if not found
      */
     Optional<Class<?>> getParameterClass(String name) {
-        if (clazz.isRecord()) {
+        if (JsonObject.class.isAssignableFrom(clazz)) {
+            return Optional.of(clazz);
+        }else if (clazz.isRecord()) {
             return Reflects.getRecordParameterClass(clazz, name);
         } else {
             return Reflects.getSetterMethodParameterClass(obj, name)
@@ -144,6 +148,10 @@ class ObjectCreator<T> {
 
     @SuppressWarnings("unchecked")
     private T createInstance() {
+        if (JsonObject.class.isAssignableFrom(clazz)) {
+            return (T) Reflects.createJsonObject(clazz, obj)
+                               .orElseThrow(() -> new JasonerException("Cannot create instance of " + clazz.getName()));
+        }
         if (clazz.isArray()) {
             return (T) Reflects.createObjectFromBuilderInstance(obj, clazzComponentType)
                                .orElseThrow(() -> new JasonerException("Cannot create instance of " + clazz.getName()));

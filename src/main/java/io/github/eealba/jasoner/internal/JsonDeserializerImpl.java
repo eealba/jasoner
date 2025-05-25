@@ -143,7 +143,12 @@ class JsonDeserializerImpl implements JsonDeserializer {
     private void moveProperty(final ObjectCreator<?> obj, final String name, final JsonTokenizer tokenizer) {
         var parameterClass = obj.getParameterClass(name);
         if (parameterClass.isPresent()) {
-            Object value = getValue(tokenizer, parameterClass.get());
+            Class<?> ctype = parameterClass.get();
+            Object value = getValue(tokenizer, ctype);
+            if (ctype.isArray() && value instanceof List<?> list) {
+                // if the type is an array, we need to convert the value to an array
+                value = Reflects.createArray(ctype, list);
+            }
             obj.setValue(name, value);
         } else {
             // consume the value

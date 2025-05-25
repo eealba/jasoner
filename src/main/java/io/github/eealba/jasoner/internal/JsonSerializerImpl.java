@@ -94,6 +94,10 @@ class JsonSerializerImpl implements JsonSerializer {
                 writer.append(TokenImpl.createNumberToken(number.toString()));
             } else if (value instanceof Boolean bool) {
                 writer.append(TokenImpl.createBooleanToken(bool.toString()));
+            } else if (value instanceof Map<?,?> map) {
+                jsonMap(map, writer);
+            }else if (value instanceof List<?> list1) {
+                jsonArray(list1, writer);
             } else {
                 json(value, writer);
             }
@@ -207,7 +211,15 @@ class JsonSerializerImpl implements JsonSerializer {
                 writer.append(tokenValue.get());
 
             }else{
-                json(value, writer);
+                if (value instanceof List<?> list) {
+                    jsonArray(list, writer);
+                } else if (value instanceof Map<?,?> map2) {
+                    jsonMap(map2, writer);
+                } else if (value.getClass().isArray()) {
+                    jsonArray(List.of((Object[]) value), writer);
+                } else {
+                    json(value, writer);
+                }
             }
             if (i < size - 1) {
                 writer.append(TokenImpl.COMMA);
@@ -256,6 +268,12 @@ class JsonSerializerImpl implements JsonSerializer {
         }
         if (value instanceof Date date) {
             return Optional.of(TokenImpl.createTextToken(date.toInstant().toString()));
+        }
+        if (value instanceof Map<?,?>){
+            return Optional.empty();
+        }
+        if (value instanceof List<?>){
+            return Optional.empty();
         }
         if(!value.getClass().isArray() && classIgnoredForSerialization(value.getClass())){
             return Optional.of(TokenImpl.createTextToken(value.toString()));

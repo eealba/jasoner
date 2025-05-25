@@ -5,6 +5,8 @@ import io.github.eealba.example.ErrorDefault;
 import io.github.eealba.example.PaymentInstruction;
 import io.github.eealba.example.ProcessorResponse;
 import io.github.eealba.example.invoices.Template;
+import io.github.eealba.example.webhooks.Event;
+import io.github.eealba.example.webhooks.Event2;
 import io.github.eealba.jasoner.demo.model2.AddressPortable;
 import io.github.eealba.jasoner.demo.model2.CountryCode;
 import io.github.eealba.jasoner.demo.model2.Patch;
@@ -134,6 +136,16 @@ public class PaypalPayloadTest {
     void template_serialize_deserialize() throws IOException, JSONException {
         executeAndCompare(readResource(EXAMPLES + "template.json"), Template.class);
     }
+    @Test
+    void webhooks_events_resend_response() throws IOException, JSONException {
+        executeAndCompare(readResource(EXAMPLES + "webhooks-events.resend_response.json"), Event.class);
+    }
+
+    @Test
+    void webhooks_events_resend_response_with_array() throws IOException, JSONException {
+        executeAndCompare(readResource(EXAMPLES + "webhooks-events.resend_response.json"), Event2.class);
+    }
+
 
     @Test
     void patch_serialize() throws JSONException {

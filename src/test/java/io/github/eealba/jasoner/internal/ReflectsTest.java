@@ -20,14 +20,14 @@ class ReflectsTest {
 
     @Test
     void should_return_all_methods() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var methods = Reflects.getMethods(plan);
 
         assertTrue(methods.size() > 10);
     }
     @Test
     void should_filter__methods() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var allMethods = Reflects.getMethods(plan);
         var methods = Reflects.getMethods(plan, (Method m) -> m.getName().contains("name"));
 
@@ -36,21 +36,21 @@ class ReflectsTest {
 
     @Test
     void should_return_all_Fields() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var fields = Reflects.getFields(plan);
 
         assertEquals(7, fields.size());
     }
     @Test
     void should_return_Field() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var field = Reflects.getField(plan, "name");
 
         assertTrue(field.isPresent());
     }
     @Test
     void should_set_Field_value() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var field = Reflects.getField(plan, "name");
         field.ifPresent(value -> Reflects.setFieldValue(value, plan, "Pepe"));
 
@@ -59,12 +59,12 @@ class ReflectsTest {
 
     @Test
     void should_not_create_instance_because_private_default_constructor() {
-        var result = Reflects.createObject(io.github.eealba.jasoner.demo.model2.Plan.class);
+        var result = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model2.Plan.class);
        assertFalse(result.isPresent());
     }
     @Test
     void should_create_instance_because_public_default_constructor() {
-        var result = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class);
+        var result = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class);
         assertTrue(result.isPresent());
     }
 
@@ -103,7 +103,7 @@ class ReflectsTest {
 
     @Test
     void should_get_setter_method() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         findSetterAndVerify(plan, "name", "Hola", "setName");
         findSetterAndVerify(plan, "productId", "123", "setProductId");
         findSetterAndVerify(plan, "product_Id", "123", "setProductId");
@@ -124,7 +124,7 @@ class ReflectsTest {
 
     @Test
     void should_return_parameter_class() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var clazz = Reflects.getSetterMethodParameterClass(plan, "payment_preferences");
 
         assertEquals(io.github.eealba.jasoner.demo.model1.PaymentPreferences.class, clazz.orElseThrow());
@@ -140,7 +140,7 @@ class ReflectsTest {
 
     @Test
     void should_return_parameter_class2() {
-        var plan = Reflects.createObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
+        var plan = Reflects.createJsonObject(io.github.eealba.jasoner.demo.model1.Plan.class).orElseThrow();
         var clazz = Reflects.getSetterMethodParameterClass(plan, "billing_cycles");
 
         assertEquals(io.github.eealba.jasoner.demo.model1.BillingCycle.class, clazz.orElseThrow());

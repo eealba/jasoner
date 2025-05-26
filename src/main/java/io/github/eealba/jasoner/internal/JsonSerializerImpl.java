@@ -16,6 +16,7 @@ package io.github.eealba.jasoner.internal;
 import io.github.eealba.jasoner.JasonerConfig;
 import io.github.eealba.jasoner.JasonerProperty;
 import io.github.eealba.jasoner.JasonerSingleVO;
+import io.github.eealba.jasoner.JsonObject;
 import io.github.eealba.jasoner.SerializationStrategy;
 
 import java.io.IOException;
@@ -117,8 +118,12 @@ class JsonSerializerImpl implements JsonSerializer {
         serializeValueData(valueDataList, writer);
         writer.append(TokenImpl.OBJECT_END);
     }
-
     private ArrayList<ValueData> valueDataList(Object entity) {
+        return JsonObject.class.isAssignableFrom(entity.getClass()) ?
+                valueDataListFromJsonObject((JsonObject) entity) : valueDataListFromEntity(entity);
+    }
+
+    private ArrayList<ValueData> valueDataListFromEntity(Object entity) {
         var valueDataList = new ArrayList<ValueData>();
         if (config.serializationStrategy() == SerializationStrategy.BOTH
                 || config.serializationStrategy() == SerializationStrategy.METHOD) {
@@ -135,6 +140,23 @@ class JsonSerializerImpl implements JsonSerializer {
                     .toList());
         }
         return valueDataList;
+    }
+    private ArrayList<ValueData> valueDataListFromJsonObject(JsonObject entity) {
+        var res = entity.keys().stream().map((String key) -> {
+            var value = entity.get(key);
+            return new ValueData(entity, null, null) {
+                @Override
+                Object getValue() {
+                    return value;
+                }
+                @Override
+                String getName(Function<String, String> namingFunction) {
+                    // Use the key directly as the name
+                    return key;
+                }
+            };
+        }).toList();
+        return new ArrayList<>(res);
     }
 
 

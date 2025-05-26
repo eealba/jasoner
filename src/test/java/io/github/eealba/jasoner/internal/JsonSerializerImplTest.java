@@ -1,10 +1,14 @@
 package io.github.eealba.jasoner.internal;
 
+import io.github.eealba.jasoner.JsonObject;
 import io.github.eealba.jasoner.demo.model1.DemoPojo;
 import io.github.eealba.jasoner.demo.model1.DemoPojo2;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static io.github.eealba.jasoner.internal.Helper.PACKAGE_JSON_SERIALIZER;
 import static io.github.eealba.jasoner.internal.Helper.PRIVATE_JSON_SERIALIZER;
@@ -63,6 +67,15 @@ class JsonSerializerImplTest {
     void should_serialize_object_with_modifier_public()  {
         jsonAssertEquals(JSON_PUBLIC, PUBLIC_JSON_SERIALIZER.serialize(demoPojo));
     }
+
+    @Test
+    void serialize_with_JsonObject() throws URISyntaxException, IOException {
+        String data = Helper.readResource("plan.json");
+        var jsonObject = deserialize(data, JsonObject.class);
+
+        jsonAssertEquals(data, PUBLIC_JSON_SERIALIZER.serialize(jsonObject));
+    }
+
     void jsonAssertEquals(String jsonExpected, String jsonActual) {
         try {
             System.out.println("Expected: " + jsonExpected);
@@ -72,6 +85,11 @@ class JsonSerializerImplTest {
             throw new AssertionError(e);
         }
         
+    }
+
+    private static <T> T deserialize(String data, Class<T> clazz) {
+        JsonDeserializer deserializer = new JsonDeserializerImpl();
+        return deserializer.deserialize(data, clazz);
     }
 
 }

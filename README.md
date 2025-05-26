@@ -18,7 +18,7 @@ thread-safe and ideal for handling immutable objects, DTOs, and POJOs.
 <dependency>
     <groupId>io.github.eealba</groupId>
     <artifactId>jasoner</artifactId>
-    <version>0.7.0</version>
+    <version>0.9.0</version>
 </dependency>
 
 ```
@@ -130,9 +130,80 @@ public class Main {
 }
 ```
 
+#### Mapping and Using JsonObject
 
+Puedes deserializar directamente a la interfaz `JsonObject` para manipular datos JSON de forma dinámica:
 
+```java
+import io.github.eealba.jasoner.Jasoner;
+import io.github.eealba.jasoner.JasonerBuilder;
+import io.github.eealba.jasoner.JsonObject;
 
+public class Main {
+    public static void main(String[] args) {
+        String json = """
+            {
+              "name": "John",
+              "age": 30,
+              "active": true
+            }
+            """;
+        Jasoner jasoner = JasonerBuilder.create();
+
+        // Deserializar a JsonObject
+        JsonObject obj = jasoner.fromJson(json, JsonObject.class);
+        System.out.println(obj.getString("name")); // John
+        System.out.println(obj.getInteger("age")); // 30
+        System.out.println(obj.getBoolean("active")); // true
+    }
+}
+```
+
+También puedes serializar cualquier implementación de `JsonObject`:
+
+```java
+import io.github.eealba.jasoner.Jasoner;
+import io.github.eealba.jasoner.JasonerBuilder;
+import io.github.eealba.jasoner.JsonObject;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.List;
+import java.math.BigDecimal;
+
+public class MyJsonObject implements JsonObject {
+    private final Map<String, Object> map;
+    public MyJsonObject(Map<String, Object> map) { this.map = map; }
+    public Set<String> keys() { return map.keySet(); }
+    public String getString(String key) { return (String) map.get(key); }
+    public Integer getInteger(String key) { return (Integer) map.get(key); }
+    public Boolean getBoolean(String key) { return (Boolean) map.get(key); }
+    public Long getLong(String key) { return (Long) map.get(key); }
+    public Double getDouble(String key) { return (Double) map.get(key); }
+    public Float getFloat(String key) { return (Float) map.get(key); }
+    public JsonObject getJsonObject(String key) { return new MyJsonObject((Map<String, Object>) map.get(key)); }
+    public List<?> getJsonArray(String key) { return (List<?>) map.get(key); }
+    public Object get(String key) { return map.get(key); }
+    public BigDecimal getBigDecimal(String key) { return (BigDecimal) map.get(key); }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("name", "Jane");
+        data.put("age", 28);
+        data.put("active", false);
+
+        JsonObject obj = new MyJsonObject(data);
+        Jasoner jasoner = JasonerBuilder.create();
+
+        // Serializar JsonObject a JSON string
+        String json = jasoner.toJson(obj);
+        System.out.println(json); // {"name":"Jane","age":28,"active":false}
+    }
+}
+```
 
 #### Changing property names with annotations in fields
 ```java
@@ -322,4 +393,3 @@ In this example, the `password` field is annotated with `JasonerTransient`, so i
 - **Records**: Java Records.
 - **Joshua Bloch's Builder Pattern**: Perfect for immutable objects.
 - **Value Objects**: Objects with value semantics.
-
